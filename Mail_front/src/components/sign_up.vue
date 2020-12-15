@@ -1,0 +1,124 @@
+<template>
+  <div class="super">
+    <form>
+      <legend>Sign UP</legend>
+      <label for="fname" class="l">First Name</label>
+      <input type="text" id="fname" name="fname"><br>
+      <label for="lname" class="l">Last Name</label>
+      <input type="text" id="lname" name="lname"><br>
+      <label for="address" class="l" placeholder=" user@system.com">Address</label>
+      <input type="text" id="address" name="address"><br>
+      <label class="l">password</label>
+      <input type="password" ><br>
+      <label for="birthday" class="l">Birthday date</label>
+      <input type="date" id="birthday" name="trip-start" value="2000-01-01" min="1960-01-01" max="2010-12-31"><br>
+      <label class="l">Gender</label>
+      <select><option value="0">Select Your Gender</option><option value="1">Male</option><option value="2">Female</option></select><br>
+      <label class="l">Save</label>
+      <input type="checkbox"><br>
+      <input type="reset" value="Reset">
+    </form>
+  </div>
+  <button onclick="window.location.href='https://www.youtube.com/';" class="zr">Submit</button>
+</template>
+
+<script>
+export default {
+  name: "sign_up"
+}
+</script>
+
+<style scoped>
+body{
+  background-image:url('../assets/logo-icon.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size:50% 100%;
+  background-position:right;
+}
+
+.super{
+  margin-left:110px;
+  margin-top: 130px;
+}
+
+input[type=text],input[type=password],input[type=date]{
+  width: 25%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #DD162D;
+  border-radius: 4px;
+
+}
+
+select{
+  margin-bottom: 1em;
+  padding: .25em;
+  border: 0;
+  border-bottom: 2px solid currentcolor;
+  font-weight: bold;
+  letter-spacing: .15em;
+  border-radius: 0;
+  outline: 0;
+  border-bottom-color: red;
+}
+
+.super .l{
+  background-color: #DD162D;
+  display: inline-block;
+  padding: 10px 10px;
+  font-size: 20px;
+  color: #fff;
+  width: 130px;
+  text-align: center;
+}
+
+.zr{
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #DD162D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  margin-left: 500px;
+  margin-top: 20px;
+}
+
+.zr:hover{background-color: #121412}
+
+.zr:active {
+  background-color: #DD162D;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+input[type=reset]{
+  box-shadow: 3px 4px 0px 0px #DD162D;
+  background:linear-gradient(to bottom, #ededed 5%, #CE4A60 100%);
+  background-color:#ededed;
+  border-radius:15px;
+  border:1px solid #d6bcd6;
+  display:inline-block;
+  font-size:17px;
+  padding:7px 25px;
+  margin-left:400px ;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #e1e2ed;
+}
+input[type=reset]:hover{
+  background:linear-gradient(to bottom, #ededed 5%, #2D2626 100%);
+  background-color:black;
+  outline: none;
+}
+
+.zr , input[type=reset]{
+  font-family:Arial;
+  color:#fff;
+  outline: none;
+  cursor:pointer;
+}
+</style>
