@@ -3,28 +3,69 @@
     <form>
       <legend>Sign UP</legend>
       <label for="fname" class="l">First Name</label>
-      <input type="text" id="fname" name="fname"><br>
+      <input v-model = "fname" type="text" id="fname" name="fname"><br>
       <label for="lname" class="l">Last Name</label>
-      <input type="text" id="lname" name="lname"><br>
+      <input v-model = "lname" type="text" id="lname" name="lname"><br>
       <label for="address" class="l" placeholder=" user@system.com">Address</label>
-      <input type="text" id="address" name="address"><br>
+      <input v-model = "address" type="text" id="address" name="address"><br>
       <label class="l">password</label>
-      <input type="password" ><br>
+      <input v-model = "password" type="password" id="password"><input type="checkbox" @click="showPassword"><br>
       <label for="birthday" class="l">Birthday date</label>
       <input type="date" id="birthday" name="trip-start" value="2000-01-01" min="1960-01-01" max="2010-12-31"><br>
       <label class="l">Gender</label>
-      <select><option value="0">Select Your Gender</option><option value="1">Male</option><option value="2">Female</option></select><br>
-      <label class="l">Save</label>
-      <input type="checkbox"><br>
-      <input type="reset" value="Reset">
+      <select v-model = "gender"><option disabled value="0">Select gender</option>
+        <option value="1">Male</option>
+        <option value="2">Female</option>
+      </select><br>
+      <button @click="reset" id="reset">Reset</button>
     </form>
   </div>
-  <button onclick="window.location.href='https://www.youtube.com/';" class="zr">Submit</button>
+  <button @click="submit" class="zr">Submit</button>
+  <p>{{fname}} {{lname}} {{address}} {{password}} {{gender}} {{date}}</p>
 </template>
 
 <script>
 export default {
-  name: "sign_up"
+  name: "sign_up",
+
+  data(){
+    return({
+      fname:"",
+      lname:"",
+      address:"",
+      password:"",
+      date:"",
+      gender:"",
+    })
+  },
+
+    methods:{
+    reset(){
+      document.getElementById("birthday").setAttribute("value","defaultValue");
+      this.fname = "";
+      this.lname = "";
+      this.address = "";
+      this.date = "";
+      this.gender = "";
+    },
+    showPassword(){
+      var x = document.getElementById("password");
+      if (x.type === 'password'){
+        x.type = "text";
+      }else{
+        x.type = "password";
+      }
+    },
+      submit(){
+              //create post request
+        // sent json containing >> name, address, password, date, gender (number or string ?)
+        // response >> go to another page or display an error message
+        this.$emit('submit');
+        console.log("event emitted");
+       },
+  },
+
+
 }
 </script>
 
@@ -68,6 +109,7 @@ select{
   background-color: #DD162D;
   display: inline-block;
   padding: 10px 10px;
+  margin: 10px;
   font-size: 20px;
   color: #fff;
   width: 130px;
@@ -96,7 +138,7 @@ select{
   transform: translateY(4px);
 }
 
-input[type=reset]{
+#reset{
   box-shadow: 3px 4px 0px 0px #DD162D;
   background:linear-gradient(to bottom, #ededed 5%, #CE4A60 100%);
   background-color:#ededed;
@@ -109,13 +151,13 @@ input[type=reset]{
   text-decoration:none;
   text-shadow:0px 1px 0px #e1e2ed;
 }
-input[type=reset]:hover{
+#reset:hover{
   background:linear-gradient(to bottom, #ededed 5%, #2D2626 100%);
   background-color:black;
   outline: none;
 }
 
-.zr , input[type=reset]{
+.zr , #reset{
   font-family:Arial;
   color:#fff;
   outline: none;

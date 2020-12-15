@@ -1,9 +1,9 @@
 <template>
   <div class="signIn">
     <label for="email">Email address</label>
-    <input type="email" autofocus="autofocus" placeholder=" user@system.com" id="email"><br>
+    <input v-model = "email" type="email" autofocus="autofocus" placeholder=" user@system.com" id="email"><br>
     <label for="password">Password</label>
-    <input type="password" placeholder=" enter password" id="password"><br>
+    <input v-model = "password" type="password" placeholder=" enter password" id="password"><br>
     <div id="showPW">
       <input type="checkbox" @click="showPassword">
       <p>show password</p>
@@ -11,23 +11,29 @@
     <div id="submitButton">
       <button @click="func()">Sign in</button>
     </div>
-    <p id="message">dummy message</p>
+    <p id="message">{{ password }}</p>
   </div>
 </template>
 
 <script>
 export default {
   name: "sign_in",
+  data(){
+    return({
+      email:"",
+      password:"",
+    })
+  },
   methods:{
     showPassword(){
-      var x = document.getElementById("password");
-      if (x.type === 'password'){
-        x.type = "text";
-      }else{
-        x.type = "password";
-      }
+        var x = document.getElementById("password");
+        if (x.type === 'password'){
+          x.type = "text";
+        }else{
+          x.type = "password";
+        }
     }
-  },
+          },
 }
 </script>
 
