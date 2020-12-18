@@ -1,5 +1,7 @@
 package com.example.emailclient.user;
 
+import java.util.ArrayList;
+
 public interface UserBuilder {
     User build() throws Exception;
     UserBuilder setUsername(String name);
@@ -12,4 +14,5 @@ public interface UserBuilder {
     UserBuilder setDateofbirth(String date);
     UserBuilder setAddress(String address);
     UserBuilder setCountry(String country);
+    UserBuilder setContacts(ArrayList<Contact> contacts);
 }

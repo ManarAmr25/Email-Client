@@ -1,5 +1,8 @@
 package com.example.emailclient.user;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,9 +15,15 @@ public class UserBuilding implements UserBuilder {
     public User build() throws Exception {
         //validation of user
         //validation of username and password
-        //regex for special characters
+
         if(user.username==null||user.username.isEmpty()){
             throw new Exception("empty username");
+        }
+        //regex for special characters
+        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(user.username);
+        if(m.find()){
+            throw new Exception("Invalid username");
         }
         if(user.password==null||user.password.isEmpty()){
             throw new Exception("empty password");
@@ -31,6 +40,19 @@ public class UserBuilding implements UserBuilder {
             throw new Exception("wrong email");
         }
         //add default folders  name: username
+
+        String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+user.username+"\\";
+        new File("src\\main\\java\\com\\example\\emailclient\\App\\"+user.username).mkdir();
+        new File(path+"inbox").mkdir();
+        new File(path+"inbox/index.txt").createNewFile();
+        new File(path+"sent").mkdir();
+        new File(path+"sent/index.txt").createNewFile();
+        new File(path+"draft").mkdir();
+        new File(path+"draft/index.txt").createNewFile();
+        new File(path+"starred").mkdir();
+        new File(path+"starred/index.txt").createNewFile();
+        new File(path+"trash").mkdir();
+        new File(path+"trash/index.txt").createNewFile();
         return user;
     }
 
@@ -91,6 +113,12 @@ public class UserBuilding implements UserBuilder {
     @Override
     public UserBuilder setCountry(String country) {
         user.country=country;
+        return this;
+    }
+
+    @Override
+    public UserBuilder setContacts(ArrayList<Contact> contacts) {
+        user.contacts=contacts;
         return this;
     }
 }

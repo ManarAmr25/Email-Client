@@ -1,5 +1,7 @@
 package com.example.emailclient.user;
 
+import java.util.ArrayList;
+
 public class User {
     protected String username;
     protected String password;
@@ -11,5 +13,6 @@ public class User {
     protected String dateOfBirth;
     protected String address;
     protected String country;
+    protected ArrayList<Contact> contacts;
 
 }
