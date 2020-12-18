@@ -1,5 +1,6 @@
 package com.example.emailclient;
 
+import com.example.emailclient.Email.*;
 import com.example.emailclient.user.User;
 import com.example.emailclient.user.UserBuilding;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -136,6 +137,36 @@ public class App {
         System.out.println("Signed in");
 
         return true;
+    }
+
+    public Email[] SortMails(Email[] mails,String type){
+        Sort sorting;
+        switch (type){
+            case "Sender":
+                sorting = new Sort(new SenderSort());
+                break;
+            case "Date":
+               sorting = new Sort(new DateSort());
+                break;
+            case "Receiver":
+                sorting=new Sort(new RecieverSort());
+                break;
+            case "Importance":
+                sorting=new Sort(new ImportanceSort());
+                break;
+            case "Subject":
+                sorting=new Sort(new SubjectSort());
+                break;
+            case "Body":
+                sorting=new Sort(new BodySort());
+                break;
+            case "Attachments":
+                sorting=new Sort(new AttachmentsSort());
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+        return sorting.SortList(mails);
     }
 
 }
