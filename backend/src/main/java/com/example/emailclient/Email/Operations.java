@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -44,9 +46,11 @@ public class Operations extends Email {
     @Override
     public Email composeEmail(Map<String,String> M) throws CloneNotSupportedException {
         setBody(M.get("body"));
-        setDate(M.get("date"));
         setFrom(M.get("from"));
         setSubject(M.get("subject"));
+        setKey(Integer.parseInt(M.get("key")));
+        Date now = new Date();
+        setDate(now);
         String temp = M.get("to");
         String [] arr = temp.split(",");
         Queue reciever = new LinkedList();

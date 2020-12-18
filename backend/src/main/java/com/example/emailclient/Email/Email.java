@@ -2,6 +2,7 @@ package com.example.emailclient.Email;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -10,10 +11,20 @@ public abstract class Email implements Cloneable, Serializable {
 
     protected String body;
     protected String from;
-    protected String date;
+    protected Date date;
     protected Queue to= new LinkedList();
     protected String subject;
     protected int index;
+    protected int key;
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    public int getKey() {
+        return key;
+    }
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -28,7 +39,7 @@ public abstract class Email implements Cloneable, Serializable {
     protected void setFrom(String f){
         this.from=f;
     }
-    protected void setDate(String d){
+    protected void setDate(Date d){
         this.date=d;
     }
     protected void setSubject(String s){
@@ -43,7 +54,7 @@ public abstract class Email implements Cloneable, Serializable {
     protected String getFrom(){
         return from;
     }
-    protected String getDate(){
+    protected Date getDate(){
         return date;
     }
     protected String getSubject(){
