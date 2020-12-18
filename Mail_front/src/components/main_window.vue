@@ -18,7 +18,6 @@ export default {
   margin: 0;
   padding: 0;
 }
-
 body {
   background-image: url("../assets/logo-icon.png");
   background-repeat: no-repeat;
@@ -26,7 +25,6 @@ body {
   background-size: 50% 100%;
   background-position: right;
 }
-
 button {
   width: 100%;
   height: 50px;
@@ -37,13 +35,11 @@ button {
   background-color: white;
   font-size: 20px;
 }
-
 button:hover {
   transition-duration: 0.4s;
   color: white;
   background-color: rgb(223, 18, 18);
 }
-
 .buttons {
   width: 150px;
   margin: 250px;

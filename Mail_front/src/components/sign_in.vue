@@ -10,13 +10,13 @@
       <label class="sp">Show password</label>
       <input type="checkbox" @click="showPassword"><br>
      </form>
-    <button @click="func()">Sign in</button>
+    <button @click="signIn">Sign in</button>
   </div>
   </body>
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 export default {
   name: "sign_in",
   data(){
@@ -52,7 +52,7 @@ export default {
         user['firstname'] = this.fname;
         user['lastname'] = this.lname;
         console.log(user);*/
-        axios.post("http://localhost:8085/").then(response => {return response.data;});
+        //axios.post("http://localhost:8085/").then(response => {return response.data;});
         //create post request
         // sent json containing >> name, address, password, date, gender (number or string ?)
         // response >> go to another page or display an error message

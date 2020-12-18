@@ -1,24 +1,68 @@
-../assets/logo-icon.png<template>
+<template>
   <body>
-    <ul>
-      <div class = "img">
-        <img src="../assets/logo-icon.png" alt="System">
-        <div>System.com</div>
-      </div>
-      <label>User name</label>
-      <li><a href="">&#x2712; Sent</a></li>
-      <li><a href="">&#x2712; Inbox</a></li>
-      <li><a href="">&#x2712; Drafts</a></li>
-      <li><a href="">&#x2712; Trash</a></li>
-      <li><a href="">&#x2712; Compose</a></li>
-      <li><a href="">&#x2712; Contact</a></li>
-    </ul>
+  <ul>
+    <div class = "img">
+      <img src="../assets/logo-icon.png" alt="System">
+      <div>System.com</div>
+    </div>
+    <label>User name</label>
+    <li><button @click="setComponent(1)">&#x2712; Sent</button></li>
+    <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
+    <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
+    <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
+    <li><button @click="setComponent(5)">&#x2712; Compose</button></li>
+    <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
+  </ul>
   </body>
 </template>
 
 <script>
 export default {
-  name: "ver_bar"
+  name: "ver_bar",
+  data(){
+    return({
+      shown: 2,
+    })
+  },
+  methods:{ds:{
+    myFunction(){
+      window.location.href = "/components/sign_up.vue";
+    },
+    setCompenent(num){
+      this.shown = num;
+      console.log("component set");
+      if(num === 5){
+        this
+      }
+    }
+    }
+  },
+  computed:{
+    show1(){
+      if(this.shown == 1){
+        return true;
+      }
+      return false;
+    },
+    show2(){
+      if(this.shown == 2){
+        return true;
+      }
+      return false;
+    },
+    show3(){
+      if(this.shown == 3) {
+        return true;
+      }
+      return false;
+    },
+    show4(){
+      if(this.shown == 4) {
+        return true;
+      }
+      return false;
+    },
+  }
 }
 </script>
 
@@ -33,11 +77,10 @@ ul {
   margin: 0;
   padding: 0;
   width: 15%;
-  height :1000px;
+  height :720px;
   background-color: #f1f1f1;
 }
-
-li a ,label{
+li button,label{
   display: block;
   color: black;
   padding: 10px 20px;
@@ -45,14 +88,12 @@ li a ,label{
   font-size :x-large;
   font-family:monospace;
 }
-
 /* Change the link color on hover */
-li a:hover,label{
+li button:hover,label{
   border-radius: 50px 20px;
   background-color: #DD162D;
   color: white;
 }
-
 img{
   width :120px;
   height:120px;

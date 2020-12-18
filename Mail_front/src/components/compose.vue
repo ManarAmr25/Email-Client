@@ -1,28 +1,33 @@
 <template>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <body>
-  <div>
+  <div id="toContainer">
     <div class="comp" id="to">
       <label for="toInput">To</label>
       <input type="text" id="toInput" placeholder="enter one or more recievers separated by a single space">
     </div>
-    <hr>
+  </div>
+  <div id="subjectContainer">
     <div class="comp" id="subject">
       <label for="subInput">Subject</label>
       <input type="text" id="subInput" placeholder="enter subjest">
     </div>
-    <hr>
+  </div>
+  <div id="mailContainer">
     <div class="comp" id="mail">
       <label for="mailInput">Email</label>
       <textarea name="mail content" id="mailInput" cols="30" rows="10" placeholder="Go ahead.."></textarea>
     </div>
-    <hr>
+  </div>
+  <div id="attachsContainer">
     <div class="comp" id="attachs">
       <label for="fileInput">Attachments</label>
       <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
     </div>
-    <hr>
+  </div>
+  <div id="submitContainer">
     <div class="comp" id="submit">
-      <button>Send</button>
+      <button id="b"><i id="a" class="material-icons">&#xe163;</i>Send</button>
     </div>
   </div>
   </body>
@@ -32,15 +37,12 @@
 export default {
   name: "compose",
   data(){
-      return({
-
-      })
+    return({
+    })
   },
   methods:{
-
   },
   computed:{
-
   },
 }
 </script>
@@ -53,22 +55,69 @@ export default {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   border: solid red 3px;
   border-radius: 7px;
+  min-height: 97%;
+  margin-top: 5px;
+  display: grid;
+  grid-template-rows: 5% 5% 73% 7% 10%;
+}
+
+i{
+  background: whitesmoke;
+}
+
+#toContainer {
+  grid-row: 1/2;
+}
+
+#subjectContainer {
+  grid-row: 2/3;
+}
+
+#mailContainer {
+  grid-row: 3/4;
+}
+
+#attachsContainer {
+  grid-row: 4/5;
+}
+
+#submitContainer {
+  grid-row: 5/6;
 }
 
 label {
-  width: 7%;
+  box-sizing: border-box;
+  width: 20%;
   text-align: center;
   padding: 6px;
   font-weight: 500;
 }
 
+label[for="toInput"],
+label[for="subInput"],
+#toInput,
+#subInput {
+  border-bottom: solid 1px black;
+}
+
+label:hover {
+  transition-duration: 0.2s;
+  color: rgb(201, 12, 12);
+}
+
 input {
+  box-sizing: border-box;
   border: none;
   width: 93%;
   padding: 5px;
+  height: 100%;
 }
 
 input:focus,
@@ -80,21 +129,18 @@ textarea:focus {
 .comp {
   display: flex;
   flex-direction: row;
-  height: 30px;
+  height: 100%;
+  margin: auto;
   text-align: center;
 }
 
-hr {
-  height: 0.5px;
-  border-width: 0;
-  color: grey;
-  background-color: grey;
-}
-
 textarea {
-  padding: 4px;
+  box-sizing: border-box;
+  padding: 5px;
   width: 93%;
+  margin: 8px 0px;
   border: none;
+  height: 150%;
 }
 
 #mail {
@@ -103,28 +149,34 @@ textarea {
 
 button {
   width: 70px;
-  margin: 3px 10px;
+  margin: auto 30px;
   border: solid rgb(223, 18, 18) 0.7px;
-  border-radius: 5px;
+  border-radius: 2px;
   background-color: white;
   color: black;
+  height: 50%;
 }
 
 button:hover {
-  transition-duration: 0.4s;
-  color: white;
-  background-color: rgb(223, 18, 18);
+  transition-duration: 0.3s;
+  border-color: whitesmoke;
+  border-bottom-color: red;
+  color: red;
   cursor: pointer;
-}
-
-button:focus {
   outline: none;
 }
 
 button:active {
   transition-duration: 0.1s;
-  background-color: rgb(138, 11, 11);
-  border-color: rgb(138, 11, 11);
+  border-color: whitesmoke;
+  border-bottom-color: rgb(75, 0, 0);
+  color: rgb(75, 0, 0);
+  cursor: pointer;
+  outline: none;
+}
+
+button:focus {
+  outline: none;
 }
 
 #submit {

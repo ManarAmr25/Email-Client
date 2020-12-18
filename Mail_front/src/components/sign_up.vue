@@ -147,12 +147,10 @@ select{
   width: 130px;
   text-align: center;
 }
-
  .sp{
   border-radius: 50px 20px;
    margin-right:20px;
 }
-
 .title{
   background-color: #BF2D3C;
   display: inline-block;
