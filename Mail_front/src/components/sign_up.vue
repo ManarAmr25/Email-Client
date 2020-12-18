@@ -1,7 +1,7 @@
 <template>
   <div class="super">
     <form>
-      <legend>Sign UP</legend>
+      <legend class="title">Sign UP</legend>
       <label for="fname" class="l">First Name</label>
       <input v-model = "fname" type="text" id="fname" name="fname"><br>
       <label for="lname" class="l">Last Name</label>
@@ -9,11 +9,13 @@
       <label for="address" class="l" placeholder=" user@system.com">Address</label>
       <input v-model = "address" type="text" id="address" name="address"><br>
       <label class="l">password</label>
-      <input v-model = "password" type="password" id="password"><input type="checkbox" @click="showPassword"><br>
+      <input v-model = "password" type="password" id="password"><br>
+      <label class="l">Show password</label>
+      <input type="checkbox" @click="showPassword"><br>
       <label for="birthday" class="l">Birthday date</label>
       <input type="date" id="birthday" name="trip-start" value="2000-01-01" min="1960-01-01" max="2010-12-31"><br>
       <label class="l">Gender</label>
-      <select v-model = "gender"><option disabled value="0">Select gender</option>
+      <select v-model = "gender"><option selected disabled>Select your gender</option>
         <option value="1">Male</option>
         <option value="2">Female</option>
       </select><br>
@@ -25,6 +27,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "sign_up",
 
@@ -34,19 +38,20 @@ export default {
       lname:"",
       address:"",
       password:"",
-      date:"",
+      date:"2000-01-01",
       gender:"",
     })
   },
 
-    methods:{
+  methods:{
     reset(){
       document.getElementById("birthday").setAttribute("value","defaultValue");
       this.fname = "";
       this.lname = "";
       this.address = "";
-      this.date = "";
+      this.date = "2000-01-01";
       this.gender = "";
+      this.password = "";
     },
     showPassword(){
       var x = document.getElementById("password");
@@ -56,13 +61,48 @@ export default {
         x.type = "password";
       }
     },
-      submit(){
-              //create post request
+    submit(){
+      if(this.fname === ""){
+        document.getElementById('fname').style.backgroundColor = '#ffe6e6';
+        alert('first name missing');
+        return;
+      }else if(this.lname === ""){
+        document.getElementById('lname').style.backgroundColor = '#ffe6e6';
+        alert('last name missing');
+        return ;
+      }else if(this.address === "") {
+        document.getElementById('address').style.backgroundColor = '#ffe6e6';
+        alert('address  missing');
+        return;
+      }else if(this.password === ""){
+        document.getElementById('password').style.backgroundColor = '#ffe6e6';
+        alert('password missing');
+        return;
+      }else if(this.gender === ""){
+        document.getElementById('gender').style.backgroundColor = '#ffe6e6';
+        alert('gender missing');
+        return;
+      }else {
+        var user = new Map();
+        user['username'] = this.fname + ' ' + this.lname; //why??
+        user['password'] = this.password;
+        user['email'] = this.address;
+        user['gender'] = this.gender; //number or string ??
+        user['date'] = this.date; //check date format ??
+        user['firstname'] = this.fname;
+        user['lastname'] = this.lname;
+        console.log(user);
+        axios.post("http://localhost:8085/",{
+          params:
+            user,
+        }).then(response => {return response.data;});
+        //create post request
         // sent json containing >> name, address, password, date, gender (number or string ?)
         // response >> go to another page or display an error message
         this.$emit('submit');
         console.log("event emitted");
-       },
+      }
+    },
   },
 
 
@@ -80,7 +120,7 @@ body{
 
 .super{
   margin-left:110px;
-  margin-top: 130px;
+  margin-top:50px;
 }
 
 input[type=text],input[type=password],input[type=date]{
@@ -90,7 +130,10 @@ input[type=text],input[type=password],input[type=date]{
   box-sizing: border-box;
   border: 2px solid #DD162D;
   border-radius: 4px;
+}
 
+input[type=text]:focus,input[type=password]:focus{
+  background-color: white;
 }
 
 select{
@@ -110,6 +153,18 @@ select{
   display: inline-block;
   padding: 10px 10px;
   margin: 10px;
+  font-size: 20px;
+  color: #fff;
+  width: 130px;
+  text-align: center;
+}
+
+.title{
+  background-color: #BF2D3C;
+  display: inline-block;
+  padding: 10px 10px;
+  margin-left:15%;
+  margin-text-outline:-50px;
   font-size: 20px;
   color: #fff;
   width: 130px;

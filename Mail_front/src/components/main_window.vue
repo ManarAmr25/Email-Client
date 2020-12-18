@@ -1,8 +1,10 @@
 <temelate>
+<body>
 <div class="buttons">
   <button>Sign up</button>
   <button>Sign in</button>
 </div>
+</body>
 </temelate>
 
 <script>
