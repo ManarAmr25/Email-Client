@@ -10,7 +10,7 @@
       <input v-model = "address" type="text" id="address" name="address"><br>
       <label class="l">password</label>
       <input v-model = "password" type="password" id="password"><br>
-      <label class="l">Show password</label>
+      <label class="sp">Show password</label>
       <input type="checkbox" @click="showPassword"><br>
       <label for="birthday" class="l">Birthday date</label>
       <input type="date" id="birthday" name="trip-start" value="2000-01-01" min="1960-01-01" max="2010-12-31"><br>
@@ -23,15 +23,12 @@
     </form>
   </div>
   <button @click="submit" class="zr">Submit</button>
-  <p>{{fname}} {{lname}} {{address}} {{password}} {{gender}} {{date}}</p>
 </template>
 
 <script>
 import axios from 'axios';
-
 export default {
   name: "sign_up",
-
   data(){
     return({
       fname:"",
@@ -42,7 +39,6 @@ export default {
       gender:"",
     })
   },
-
   methods:{
     reset(){
       document.getElementById("birthday").setAttribute("value","defaultValue");
@@ -94,7 +90,7 @@ export default {
         console.log(user);
         axios.post("http://localhost:8085/",{
           params:
-            user,
+          user,
         }).then(response => {return response.data;});
         //create post request
         // sent json containing >> name, address, password, date, gender (number or string ?)
@@ -104,8 +100,6 @@ export default {
       }
     },
   },
-
-
 }
 </script>
 
@@ -117,12 +111,10 @@ body{
   background-size:50% 100%;
   background-position:right;
 }
-
 .super{
   margin-left:110px;
   margin-top:50px;
 }
-
 input[type=text],input[type=password],input[type=date]{
   width: 25%;
   padding: 12px 20px;
@@ -131,11 +123,9 @@ input[type=text],input[type=password],input[type=date]{
   border: 2px solid #DD162D;
   border-radius: 4px;
 }
-
 input[type=text]:focus,input[type=password]:focus{
   background-color: white;
 }
-
 select{
   margin-bottom: 1em;
   padding: .25em;
@@ -147,8 +137,7 @@ select{
   outline: 0;
   border-bottom-color: red;
 }
-
-.super .l{
+.super .l,.sp{
   background-color: #DD162D;
   display: inline-block;
   padding: 10px 10px;
@@ -157,6 +146,11 @@ select{
   color: #fff;
   width: 130px;
   text-align: center;
+}
+
+ .sp{
+  border-radius: 50px 20px;
+   margin-right:20px;
 }
 
 .title{
@@ -170,7 +164,6 @@ select{
   width: 130px;
   text-align: center;
 }
-
 .zr{
   display: inline-block;
   padding: 15px 25px;
@@ -184,15 +177,12 @@ select{
   margin-left: 500px;
   margin-top: 20px;
 }
-
 .zr:hover{background-color: #121412}
-
 .zr:active {
   background-color: #DD162D;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
-
 #reset{
   box-shadow: 3px 4px 0px 0px #DD162D;
   background:linear-gradient(to bottom, #ededed 5%, #CE4A60 100%);
@@ -211,7 +201,6 @@ select{
   background-color:black;
   outline: none;
 }
-
 .zr , #reset{
   font-family:Arial;
   color:#fff;

@@ -3,26 +3,20 @@
   <div class="signIn">
     <form>
       <legend class="title">Sign UP</legend>
-      <label for="email">Email address</label>
+      <label class="l" for="email">Email address</label>
       <input v-model = "email" type="email" autofocus="autofocus" placeholder=" user@system.com" id="email"><br>
-      <label for="password">Password</label>
+      <label class="l" for="password">Password</label>
       <input v-model = "password" type="password" placeholder=" enter password" id="password"><br>
-      <div id="showPW">
-        <input type="checkbox" @click="showPassword">
-        <p>show password</p>
-      </div>
-      <div id="submitButton">
-        <button @click="func()">Sign in</button>
-      </div>
-      <p id="message">{{ password }}</p>
-    </form>
+      <label class="sp">Show password</label>
+      <input type="checkbox" @click="showPassword"><br>
+     </form>
+    <button @click="func()">Sign in</button>
   </div>
   </body>
 </template>
 
 <script>
 import axios from "axios";
-
 export default {
   name: "sign_in",
   data(){
@@ -33,12 +27,12 @@ export default {
   },
   methods:{
     showPassword(){
-        var x = document.getElementById("password");
-        if (x.type === 'password'){
-          x.type = "text";
-        }else{
-          x.type = "password";
-        }
+      var x = document.getElementById("password");
+      if (x.type === 'password'){
+        x.type = "text";
+      }else{
+        x.type = "password";
+      }
     },
     signIn(){
       if(this.email === ""){
@@ -76,7 +70,6 @@ export default {
   padding: 0;
   font-size: 17px;
 }
-
 body {
   background-image: url("../assets/logo-icon.png");
   background-repeat: no-repeat;
@@ -84,21 +77,30 @@ body {
   background-size: 50% 100%;
   background-position: right;
 }
-
-label {
-  text-align: left;
+.signIn{
+  margin: 250px;
+  display: flex;
+  flex-direction: column;
+}
+.signIn .l,.sp{
+  background-color: #DD162D;
+  display: inline-block;
+  padding: 10px 10px;
+  margin: 10px;
   font-size: 20px;
+  color: #fff;
+  width: 130px;
+  text-align: center;
 }
 
-#showPW {
-  display: flex;
-  flex-direction: row;
+.sp{
+  border-radius: 50px 20px;
+  margin-right:20px;
 }
 
 input[type="checkbox"] {
   margin-right: 10px;
 }
-
 input {
   height: 25px;
   background-color: white;
@@ -110,41 +112,28 @@ input {
   border-radius: 4px;
 }
 
-.signIn {
-  width: 300px;
-  margin: 250px;
-  display: flex;
-  flex-direction: column;
-}
-
-#submitButton {
-  display: flex;
-  justify-content: center;
-}
-
-button {
-  width: 60%;
+button{
+  width: 10%;
   height: 45px;
+  margin-left: 300px;
   margin-top: 20px;
-  margin-bottom: 20px;
   border: solid rgb(223, 18, 18) 2px;
   border-radius: 5px;
   background-color: rgb(223, 18, 18);
   color: white;
   font-size: 20px;
+  outline: none;
+  cursor:pointer;
 }
-
 button:hover {
   transition-duration: 0.4s;
   color: black;
   background-color: white;
 }
-
 #message {
   text-align: center;
   font-weight: 900;
 }
-
 .title{
   background-color: #BF2D3C;
   display: inline-block;
@@ -156,5 +145,4 @@ button:hover {
   width: 130px;
   text-align: center;
 }
-
 </style>
