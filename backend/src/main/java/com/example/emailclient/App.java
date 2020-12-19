@@ -75,14 +75,14 @@ public class App {
         }
     }
     public boolean signUp(Map<String, String> info){
-        String username=info.get("username");
-        String email=info.get("email");
+         String username=info.get("username");
+         String email=info.get("email");
 
-        if(!validate(username,email,null,1)){
-            return false;
-        }
+         if(!validate(username,email,null,1)){
+             return false;
+         }
 
-        //create new user
+         //create new user
         UserBuilding builder=new UserBuilding();
         for (Map.Entry<String, String> curr : info.entrySet()) {
             switch (curr.getKey()){
@@ -143,25 +143,25 @@ public class App {
         Sort sorting;
         switch (type){
             case "Sender":
-                sorting = new Sort(new SenderSort());
+                sorting = new Sort(new Sender());
                 break;
             case "Date":
-                sorting = new Sort(new DateSort());
+               sorting = new Sort(new Date_());
                 break;
             case "Receiver":
-                sorting=new Sort(new RecieverSort());
+                sorting=new Sort(new Reciever());
                 break;
             case "Importance":
-                sorting=new Sort(new ImportanceSort());
+                sorting=new Sort(new importance());
                 break;
             case "Subject":
-                sorting=new Sort(new SubjectSort());
+                sorting=new Sort(new Subject());
                 break;
             case "Body":
-                sorting=new Sort(new BodySort());
+                sorting=new Sort(new Body());
                 break;
             case "Attachments":
-                sorting=new Sort(new AttachmentsSort());
+                sorting=new Sort(new Attachments());
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
