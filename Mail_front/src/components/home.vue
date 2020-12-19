@@ -1,7 +1,7 @@
 <template>
-  <body>
-  <div id="container">
-    <div id="bar">
+  <body @new-cont="setNew(true)">
+  <div id="container" @new-cont="setNew(true)">
+    <div id="bar" @new-cont="setNew(true)">
       <ul>
         <div class = "img">
           <img src="../assets/logo-icon.png" alt="System">
@@ -16,11 +16,17 @@
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
       </ul>
     </div>
-    <div id="compose" v-if="show5">
+    <div class="c" id="contacts" v-if="show6" @new-cont="setNew(true)">
+      <contact></contact>
+    </div>
+    <div class="c" id="compose" v-if="show5" @new-cont="setNew(true)">
       <compose ></compose>
     </div>
-    <div id="email" v-if="show1">
+    <div class="c" id="email" v-if="show1" @new-cont="setNew(true)">
       <Email folder="getFolder"></Email>
+    </div>
+    <div class="c" id="new_cont" v-if="showNewCont" @new-cont="setNew(true)">
+      <new ></new>
     </div>
   </div>
   </body>
@@ -29,16 +35,22 @@
 <script>
 import compose from "@/components/compose";
 import Email from "@/components/Email";
+import contact from "@/components/contact";
+import New from "@/components/new";
+
 export default {
   name: "home",
   components:{
+    New,
     compose,
     Email,
+    contact,
   },
   data(){
     return({
-      shown: 5,
+      shown: 1,
       folder:1,
+      newCont:false,
     })
   },
   methods:{
@@ -49,6 +61,9 @@ export default {
       }else{
         this.shown = num;
       }
+    },
+    setNew(b){
+      this.newCont = b;
     }
   },
   computed:{
@@ -65,8 +80,17 @@ export default {
       }
       return false;
     },
+    show6(){
+      if(this.shown == 6) {
+        return true;
+      }
+      return false;
+    },
     getFolder(){
       return this.folder;
+    },
+    showNewCont(){
+      return this.newCont;
     }
   }
 }
@@ -90,7 +114,7 @@ body{
   grid-row-start: 1;
   /*grid-row-end: 3;*/
 }
-#compose,#email{
+.c{
   /*grid-area: main;*/
   grid-column-start: 2;
   grid-column-end: 4;

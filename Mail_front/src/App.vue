@@ -30,6 +30,9 @@ export default {
       window.location.href = "/components/sign_up.vue";
     },
     setCompenent(num){
+      if(num === 4){
+        document.body.style.backgroundImage = "none";
+      }
       this.shown = num;
       console.log("component set");
     }
@@ -59,6 +62,7 @@ export default {
       }
       return false;
     },
+
   }
 }
 </script>

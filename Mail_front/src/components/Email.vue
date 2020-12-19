@@ -1,5 +1,6 @@
 <template>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <body>
     <div class="bar">
     <ul>
     <li><button class="zr">&#x219d; Search</button>
@@ -34,9 +35,6 @@
       <li><span><input type="checkbox"></span> list element</li>
       <li><span><input type="checkbox"></span> list element</li>
       <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
     </ul>
   </div>
   <div id="editButtons">
@@ -54,6 +52,7 @@
       <button class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>
     </div>
   </div>
+   </body>
 </template>
 
 <script>
@@ -81,7 +80,7 @@ html {
 
 body {
   display: grid;
-  grid-template-rows: 20% 63% 7% 3% 6% 1%;
+  grid-template-rows: 14% 71% 7% 1% 6% 1%;
   border: solid red 3px;
   border-radius: 7px;
   min-height: 97%;
@@ -140,7 +139,10 @@ input[type="checkbox"] {
 }
 
 #editButtons {
-  margin: auto;
+  background: whitesmoke;
+  display: flex;
+  flex-direction: row ;
+  justify-content: center;
 }
 
 .op {
@@ -149,6 +151,7 @@ input[type="checkbox"] {
   border-radius: 2px;
   box-sizing: border-box;
   padding: 5px;
+  margin: 0 5px;
 }
 
 .op:hover {
@@ -176,13 +179,14 @@ span {
 
 .bar{
   grid-row: 1/2;
+  border-bottom: solid 1px red;
 }
 
 .bar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
- /* margin-left:20%;*/
+  /* margin-left:20%;*/
   overflow: hidden;
   background-color: #f1f1f1;
 }
@@ -190,6 +194,7 @@ span {
 .bar li {
   float: left;
   height: 100%;
+  border: none;
 }
 
 .bar li .zr{
@@ -221,6 +226,18 @@ select{
   border-radius: 0;
   outline: 0;
   border-bottom-color: red;
+}
+
+input[type=text]{
+  width: 200px;
+  padding: 12px 20px;
+  margin: 8px 8px;
+  box-sizing: border-box;
+  border: 2px solid #DD162D;
+  border-radius: 4px;
+}
+input[type=text]:focus{
+  background-color: white;
 }
 
 </style>
