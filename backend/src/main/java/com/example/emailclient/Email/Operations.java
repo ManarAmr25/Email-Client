@@ -156,4 +156,18 @@ public class Operations extends Email {
         data1.write(Integer.toString(x));
         data1.close();
     }
+    @Override
+    Email[] Filtering(Email[] emails, String key, String mode) {
+        if(mode.equals("sender")){
+            return new BySender().meets(emails,key);
+        }
+        else {
+            return new BySubject().meets(emails,key);
+        }
+    }
+
+    @Override
+    Email[] getMails(int page, String foldername, String email) {
+        return new Email[0];
+    }
 }

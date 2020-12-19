@@ -75,14 +75,14 @@ public class App {
         }
     }
     public boolean signUp(Map<String, String> info){
-         String username=info.get("username");
-         String email=info.get("email");
+        String username=info.get("username");
+        String email=info.get("email");
 
-         if(!validate(username,email,null,1)){
-             return false;
-         }
+        if(!validate(username,email,null,1)){
+            return false;
+        }
 
-         //create new user
+        //create new user
         UserBuilding builder=new UserBuilding();
         for (Map.Entry<String, String> curr : info.entrySet()) {
             switch (curr.getKey()){
@@ -146,7 +146,7 @@ public class App {
                 sorting = new Sort(new SenderSort());
                 break;
             case "Date":
-               sorting = new Sort(new DateSort());
+                sorting = new Sort(new DateSort());
                 break;
             case "Receiver":
                 sorting=new Sort(new RecieverSort());
