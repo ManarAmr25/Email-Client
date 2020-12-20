@@ -7,7 +7,7 @@ public class Attachments implements Strategy {
     }
 
     @Override
-    public Email[] Search(Email[] email,String type,String key) {
+    public Email[] Search(Email[] email,String key) {
         return null;
     }
 }

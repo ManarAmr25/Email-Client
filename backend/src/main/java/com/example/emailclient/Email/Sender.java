@@ -1,5 +1,7 @@
 package com.example.emailclient.Email;
 
+import java.util.ArrayList;
+
 public class Sender implements Strategy{
     @Override
     public Email[] Sort(Email[] m) {
@@ -18,7 +20,13 @@ public class Sender implements Strategy{
     }
 
     @Override
-    public Email[] Search(Email[] email,String type,String key) {
-        return new Email[0];
+    public Email[] Search(Email[] email,String key) {
+            ArrayList<Email> searched= new ArrayList<>();
+            for (int j = 0; j < email.length; j++) {
+                if (email[j].getFrom().compareTo(key) == 0) {
+                    searched.add(email[j]);
+                }}
+
+            return (Email[]) searched.toArray();
     }
 }

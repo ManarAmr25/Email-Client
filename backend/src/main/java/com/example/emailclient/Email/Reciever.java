@@ -1,5 +1,8 @@
 package com.example.emailclient.Email;
 
+import java.util.ArrayList;
+import java.util.Queue;
+
 public class Reciever implements Strategy{
     @Override
     public Email[] Sort(Email[] m) {
@@ -17,7 +20,16 @@ public class Reciever implements Strategy{
     }
 
     @Override
-    public Email[] Search(Email[] email,String type,String key) {
-        return new Email[0];
+    public Email[] Search(Email[] email,String key) {
+        ArrayList<Email> searched= new ArrayList<>();
+        for (int j = 0; j < email.length; j++) {
+            Queue receiver = email[j].getTo();
+            while(!receiver.isEmpty()){
+                if(((String)receiver.remove()).compareTo(key)==0){
+                    searched.add(email[j]);
+                    break;
+                } }
+        }
+        return (Email[]) searched.toArray();
     }
 }

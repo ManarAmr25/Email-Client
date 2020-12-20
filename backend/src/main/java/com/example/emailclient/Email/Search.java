@@ -5,7 +5,7 @@ public class Search {
     public Search(Strategy strategy){
         this.strategy=strategy;
     }
-    public Email[] SearchList(Email[] email,String type,String key){
-        return strategy.Search(email,type,key);
+    public Email[] SearchList(Email[] email,String key){
+        return strategy.Search(email,key);
     }
 }

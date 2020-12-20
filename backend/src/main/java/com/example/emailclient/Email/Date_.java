@@ -14,9 +14,10 @@ public class Date_ implements Strategy{
             }
         }
         return m; }
-
+        //String pattern
     @Override
-    public Email[] Search(Email[] email,String type,String key) {
+    public Email[] Search(Email[] email,String key) {
+
         return new Email[0];
     }
 }
