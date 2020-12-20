@@ -168,5 +168,33 @@ public class App {
         }
         return sorting.SortList(mails);
     }
-
+    public Email[] SearchMails(Email[] mails,String type,String key){
+        Search searching;
+        switch (type){
+            case "Sender":
+                searching = new Search(new Sender());
+                break;
+            case "Date":
+                searching = new Search(new Date_());
+                break;
+            case "Receiver":
+                searching=new Search(new Reciever());
+                break;
+            case "Importance":
+                searching=new Search(new importance());
+                break;
+            case "Subject":
+                searching=new Search(new Subject());
+                break;
+            case "Body":
+                searching=new Search(new Body());
+                break;
+            case "Attachments":
+                searching=new Search(new Attachments());
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+        return searching.SearchList(mails,key);
+    }
 }
