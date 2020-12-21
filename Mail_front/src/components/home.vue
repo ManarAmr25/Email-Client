@@ -1,7 +1,7 @@
 <template>
-  <body @new-cont="setNew(true)">
-  <div id="container" @new-cont="setNew(true)">
-    <div id="bar" @new-cont="setNew(true)">
+  <body >
+  <div id="container">
+    <div id="bar">
       <ul>
         <div class = "img">
           <img src="../assets/logo-icon.png" alt="System">
@@ -16,16 +16,16 @@
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
       </ul>
     </div>
-    <div class="c" id="contacts" v-if="show6" @new-cont="setNew(true)">
+    <div class="c" id="contacts" v-if="show6">
       <contact></contact>
     </div>
-    <div class="c" id="compose" v-if="show5" @new-cont="setNew(true)">
+    <div class="c" id="compose" v-if="show5">
       <compose ></compose>
     </div>
-    <div class="c" id="email" v-if="show1" @new-cont="setNew(true)">
+    <div class="c" id="email" v-if="show1">
       <Email folder="getFolder"></Email>
     </div>
-    <div class="c" id="new_cont" v-if="showNewCont" @new-cont="setNew(true)">
+    <div class="c" id="new_cont" v-if="showNewCont" @new-cont=" newCont = true">
       <new ></new>
     </div>
   </div>
@@ -50,7 +50,7 @@ export default {
     return({
       shown: 1,
       folder:1,
-      newCont:false,
+      newCont:true,
     })
   },
   methods:{

@@ -3,25 +3,40 @@
   <body>
   <div id="toContainer">
     <div class="comp" id="to">
-      <label for="toInput">To</label>
+      <label class="fieldLabel" for="toInput">To</label>
       <input type="text" id="toInput" placeholder="enter one or more recievers separated by a single space">
     </div>
   </div>
   <div id="subjectContainer">
     <div class="comp" id="subject">
-      <label for="subInput">Subject</label>
+      <label class="fieldLabel" for="subInput">Subject</label>
       <input type="text" id="subInput" placeholder="enter subjest">
+    </div>
+  </div>
+  <div id="priorityContainer">
+    <div class="comp" id="priority">
+      <label class="fieldLabel"  for="priorityInput">Priority</label>
+      <div id="priorityInput">
+        <input type="radio" name="priority" id="one" value="one" v-model="picked">
+        <label class="radioLabel" for="one">Top </label>
+        <input type="radio" name="priority" id="two" value="two" v-model="picked">
+        <label class="radioLabel" for="two">High </label>
+        <input type="radio" name="priority" id="three" value="three" v-model="picked">
+        <label class="radioLabel" for="three">Normal </label>
+        <input type="radio" name="priority" id="four" value="four" v-model="picked">
+        <label class="radioLabel" for="four">Low </label>
+      </div>
     </div>
   </div>
   <div id="mailContainer">
     <div class="comp" id="mail">
-      <label for="mailInput">Email</label>
+      <label class="fieldLabel" for="mailInput">Email</label>
       <textarea name="mail content" id="mailInput" cols="30" rows="10" placeholder="Go ahead.."></textarea>
     </div>
   </div>
   <div id="attachsContainer">
     <div class="comp" id="attachs">
-      <label for="fileInput">Attachments</label>
+      <label class="fieldLabel" for="fileInput">Attachments</label>
       <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
     </div>
   </div>
@@ -38,6 +53,7 @@ export default {
   name: "compose",
   data(){
     return({
+      picked:'four',
     })
   },
   methods:{
@@ -65,7 +81,7 @@ body {
   min-height: 97%;
   margin-top: 5px;
   display: grid;
-  grid-template-rows: 5% 5% 73% 7% 10%;
+  grid-template-rows: 5% 5% 5% 68% 7% 10%;
 }
 
 i{
@@ -81,15 +97,15 @@ i{
 }
 
 #mailContainer {
-  grid-row: 3/4;
-}
-
-#attachsContainer {
   grid-row: 4/5;
 }
 
-#submitContainer {
+#attachsContainer {
   grid-row: 5/6;
+}
+
+#submitContainer {
+  grid-row: 6/7;
 }
 
 label {
@@ -102,14 +118,16 @@ label {
 
 label[for="toInput"],
 label[for="subInput"],
+label[for="priorityInput"],
 #toInput,
-#subInput {
+#subInput,
+#priorityInput{
   border-bottom: solid 1px black;
 }
 
 label:hover {
   transition-duration: 0.2s;
-  color: rgb(201, 12, 12);
+  color: rgb(205, 12, 12);
 }
 
 input {
@@ -183,4 +201,28 @@ button:focus {
   display: flex;
   flex-direction: row-reverse;
 }
+
+#priorityInput{
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+input[type="radio"]{
+  width: 15px;
+  margin-left: 5px;
+}
+
+.radioLabel{
+  width: 65px;
+  padding-left: 3px;
+  text-align: left;
+}
+
+.radioLabel:hover{
+  transition-duration: 0.5s;
+  color: blue;
+}
+
 </style>
