@@ -1,5 +1,9 @@
 package com.example.emailclient.Email;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 public class Date_ implements Strategy{
     @Override
     public Email[] Sort(Email[] m) {
@@ -17,7 +21,13 @@ public class Date_ implements Strategy{
         //String pattern
     @Override
     public Email[] Search(Email[] email,String key) {
+        ArrayList<Email> searched= new ArrayList<>();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (int j = 0; j < email.length; j++) {
+            if (dateFormat.format(email[j].getDate()).compareTo(key) == 0) {
+                searched.add(email[j]);
+            }}
 
-        return new Email[0];
+        return (Email[]) searched.toArray();
     }
 }
