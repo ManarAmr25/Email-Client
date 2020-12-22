@@ -6,13 +6,16 @@
       <div>System.com</div>
     </div>
     <label>User name</label>
+    <li><button @click="setComponent(6)">&#x2712; logout</button></li>
     <li><button @click="setComponent(1)">&#x2712; Sent</button></li>
     <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
     <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
     <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
     <li><button @click="setComponent(5)">&#x2712; Compose</button></li>
-    <li><button @click="setComponent(6)">&#x2712; Contact</button></li><br>
-    <li><button class="log">Log Out</button></li>
+    <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
+
+    <!--<li><button class="log">Log Out</button></li>
+    <button class="logout">&#x276E;&#x276E; Log Out</button>-->
   </ul>
   </body>
 </template>
@@ -32,9 +35,9 @@ export default {
     setCompenent(num){
       this.shown = num;
       console.log("component set");
-      if(num === 5){
-        this
-      }
+      /*if(num === 5){
+
+      }*/
     }
     }
   },
@@ -95,6 +98,13 @@ li button:hover,label{
   background-color: #DD162D;
   color: white;
 }
+
+li button:focus{
+  border-radius: 50px 20px;
+  background-color: #19181C;
+  color: white;
+}
+
 img{
   width :120px;
   height:120px;
@@ -107,4 +117,32 @@ img{
   text-shadow: 2px 2px 8px #FF0000;
   margin-bottom:20px;
 }
+
+.logout{
+  box-shadow:inset 0px 1px 0px 0px #efdcfb;
+  background:linear-gradient(to bottom, #dfbdfa 5%, #d61111 100%);
+  background-color:#dfbdfa;
+  border-radius:6px;
+  border:1px solid #e63c3c;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 24px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #eb1729;
+  margin-top:150px;
+  margin-left:45px;
+}
+.logout:hover {
+  background: linear-gradient(to bottom, #d61111 5%, #dfbdfa 100%);
+  background-color: #d61111;
+}
+.logout:active {
+  position:relative;
+  top:1px;
+}
+
 </style>

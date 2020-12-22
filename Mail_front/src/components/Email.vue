@@ -155,7 +155,7 @@ export default {
       return false;
     },
     showDlt(){
-      if(this.folder == 2 || this.folder == 3){
+      if(this.folder == 1 || this.folder == 2 || this.folder == 3){
         return true;
       }
       return false;

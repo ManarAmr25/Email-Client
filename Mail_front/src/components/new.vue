@@ -5,15 +5,25 @@
     <label for="name" class="l">Name</label>
     <input type="text" id="name" placeholder="enter Name"><br>
     <label for="email" class="l">E-mail</label>
-    <input type="text" id="email" placeholder="enter E-mail address">
+    <input type="text" id="email" placeholder="enter one or more addresses separated by single comma">
   </div>
-  <button>Add</button>
+  <button @click="add">Add</button>
+  <button @click="close">close</button>
   </body>
 </template>
 
 <script>
 export default {
-  name: "new"
+  name: "new",
+  methods:{
+    add(){
+
+    },
+    close(){
+      this.$emit('close-window');
+      console.log('close window');
+    },
+  }
 }
 </script>
 
@@ -64,6 +74,7 @@ button {
   border-radius: 5px;
   background-color: white;
   color: black;
+  display: block;
 }
 button:hover {
   transition-duration: 0.4s;

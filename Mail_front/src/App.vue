@@ -1,8 +1,8 @@
 <template>
   <body>
-  <sign_in v-if="show2" @submit="setCompenent(4)" @sign-in="setCompenent(4)" @sign-up="setCompenent(3)"></sign_in>
-  <sign_up v-if="show3" @submit="setCompenent(4)" @sign-in="setCompenent(4)"></sign_up>
-  <home v-if="show4"></home>
+  <sign_in v-if="show2" @submit="setCompenent(4);" @sign-in="setCompenent(4)" @sign-up="setCompenent(3)"></sign_in>
+  <sign_up v-if="show3" @submit="setCompenent(4);" @sign-in="setCompenent(4)"></sign_up>
+  <home v-if="show4" @log-out="setCompenent(2);"></home>
   </body>
 </template>
 

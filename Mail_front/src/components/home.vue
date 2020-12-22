@@ -12,30 +12,31 @@
         <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
         <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
-        <li><button @click="setViewMode('editable');setComponent(5)">&#x2712; Compose</button></li>
+        <li><button @click="setViewMode('editable');setComponent(5);">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
+        <button @click="logOut" class="logout">&#x276E;&#x276E; Log Out</button>
       </ul>
     </div>
     <div class="c" id="contacts" v-if="show6"  >
-      <contact @new-cont="newCont = true; console.log('event listened')"></contact>
+      <contact @new-cont="newCont = true; console.log('event listened');"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
       <compose :mode="getViewMode"></compose>
     </div>
     <div class="c" id="email1" v-if="show1"> <!--sent : view-->
-      <Email @view="setViewMode('readOnly');setComponent(5)" :folder = "getFolder" ></Email>
+      <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email2" v-if="show2"> <!--inbox : view, delete-->
-      <Email @view="setViewMode('readOnly');setComponent(5)" :folder = "getFolder" ></Email>
+      <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email3" v-if="show3"> <!--draft : edit, delete-->
-      <Email @edit="setViewMode('editable');setComponent(5)" :folder = "getFolder" ></Email>
+      <Email @edit="setViewMode('editable');setComponent(5);" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
-      <Email @view="setViewMode('readOnly');setComponent(5)" :folder = "getFolder" ></Email>
+      <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="new_cont" v-if="newCont">
-      <new ></new>
+      <new @close-window="newCont = false;" ></new>
     </div>
   </div>
   </body>
@@ -80,6 +81,10 @@ export default {
     setViewMode(mode){
       this.viewMode = mode;
       console.log(this.viewMode);
+    },
+    logOut(){
+      this.$emit('log-out');
+      console.log('logOut');
     }
   },
   computed:{
@@ -191,6 +196,12 @@ li button:hover,label{
   background-color: #DD162D;
   color: white;
 }
+li button:focus{
+  border-radius: 50px 20px;
+  background-color: #19181C;
+  color: white;
+}
+
 img{
   width :120px;
   height:120px;
@@ -202,5 +213,34 @@ img{
   font-size : large;
   text-shadow: 2px 2px 8px #FF0000;
   margin-bottom:20px;
+}
+
+.logout{
+  box-shadow:inset 0px 1px 0px 0px #efdcfb;
+  background:linear-gradient(to bottom, #dfbdfa 5%, #d61111 100%);
+  background-color:#dfbdfa;
+  border-radius:6px;
+  border:1px solid #e63c3c;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 24px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #eb1729;
+  margin-top:150px;
+  margin-left:45px;
+  border: none;
+  outline: none;
+}
+.logout:hover {
+  background: linear-gradient(to bottom, #d61111 5%, #dfbdfa 100%);
+  background-color: #d61111;
+}
+.logout:active {
+  position:relative;
+  top:1px;
 }
 </style>
