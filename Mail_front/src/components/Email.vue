@@ -116,7 +116,6 @@ export default {
       console.log('view event is emitted');
     },
     send(){
-
     },
     restore(){
 

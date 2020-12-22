@@ -2,7 +2,7 @@
   <body>
   <div class="signIn">
     <form>
-      <legend class="title">Sign UP</legend>
+      <legend class="title">Sign In</legend>
       <label class="l" for="email">Email address</label>
       <input v-model = "email" type="email" autofocus="autofocus" placeholder=" user@system.com" id="email"><br>
       <label class="l" for="password">Password</label>
@@ -10,7 +10,10 @@
       <label class="sp">Show password</label>
       <input type="checkbox" @click="showPassword"><br>
      </form>
-    <button @click="signIn">Sign in</button>
+    <div class="buttons">
+      <button @click="goToSignUp" id="signUp">don't have an account yet?</button>
+      <button @click="signIn">Sign in</button>
+    </div>
   </div>
   </body>
 </template>
@@ -55,6 +58,10 @@ export default {
         this.$emit('sign-in');
         console.log("event emitted");
       }
+    },
+    goToSignUp(){
+      this.$emit('sign-up');
+      console.log('goToSignUp');
     }
   },
 }
@@ -108,10 +115,16 @@ input {
   border-radius: 4px;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
 button{
-  width: 10%;
+  width: 90px;
   height: 45px;
-  margin-left: 300px;
+  /*margin-left: 300px;*/
   margin-top: 20px;
   border: solid rgb(223, 18, 18) 2px;
   border-radius: 5px;
@@ -141,4 +154,12 @@ button:hover {
   width: 130px;
   text-align: center;
 }
+
+#signUp{
+  background-color: transparent;
+  border: none;
+  color: blue;
+  width: 300px;
+}
+
 </style>

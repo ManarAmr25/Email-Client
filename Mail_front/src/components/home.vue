@@ -12,12 +12,12 @@
         <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
         <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
-        <li><button @click="setComponent(5,'editable');">&#x2712; Compose</button></li>
+        <li><button @click="setViewMode('editable');setComponent(5)">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
       </ul>
     </div>
     <div class="c" id="contacts" v-if="show6"  >
-      <contact  @new-cont="newCont = true; console.log('event listened')"></contact>
+      <contact @new-cont="newCont = true; console.log('event listened')"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
       <compose :mode="getViewMode"></compose>

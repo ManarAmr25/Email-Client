@@ -1,21 +1,18 @@
 <template>
   <body>
-  <main_window v-if="show1" @submit="setCompenent(4)" @sign-in="setCompenent(4)"></main_window>
-  <sign_in v-if="show2" @submit="setCompenent(4)" @sign-in="setCompenent(4)"></sign_in>
+  <sign_in v-if="show2" @submit="setCompenent(4)" @sign-in="setCompenent(4)" @sign-up="setCompenent(3)"></sign_in>
   <sign_up v-if="show3" @submit="setCompenent(4)" @sign-in="setCompenent(4)"></sign_up>
-  <home v-if="show4" @submit="setCompenent(4)" @sign-in="setCompenent(4)"></home>
+  <home v-if="show4"></home>
   </body>
 </template>
 
 <script>
-import main_window from './components/main_window.vue';
 import sign_in from "@/components/sign_in";
 import sign_up from "@/components/sign_up";
 import home from "@/components/home";
 export default {
   name: 'App',
   components: {
-    main_window,
     sign_in,
     sign_up,
     home,
