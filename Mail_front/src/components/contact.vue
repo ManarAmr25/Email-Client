@@ -25,17 +25,21 @@
     </ul></div>
   <div id="list">
     <ul>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
+      <li v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="mail" v-model="checkList">{{index+1}} {{ mail }}</label></li>
+      <!--<li><span><input id="one" value="one" type="checkbox" v-model="checkList" ></span> <label for="one">1 list element</label></li>
+      <li><span><input id="two" value="two" type="checkbox" v-model="checkList" ></span> <label for="two">2 list element</label></li>
+      <li><span><input id="three" value="three" type="checkbox" v-model="checkList" ></span> <label for="three">3 list element</label></li>
+      <li><span><input id="four" value="four" type="checkbox" v-model="checkList" ></span> <label for="four">4 list element</label></li>
+      <li><span><input id="five" value="five" type="checkbox" v-model="checkList" ></span> <label for="five">5 list element</label></li>
+      <li><span><input id="six" value="six" type="checkbox" v-model="checkList" ></span> <label for="six">6 list element</label></li>
+      <li><span><input id="seven" value="seven" type="checkbox" v-model="checkList" ></span> <label for="seven">7 list element</label></li>
+      <li><span><input id="eight" value="eight" type="checkbox" v-model="checkList" ></span> <label for="eight">8 list element</label></li>
+      <li><span><input id="nine" value="nine" type="checkbox" v-model="checkList" ></span> <label for="nine">9 list element</label></li>
+      <li><span><input id="ten" value="ten" type="checkbox" v-model="checkList" ></span><label for="ten">10 list element</label></li>-->
     </ul>
+    <span><button class="check" @click="selectAll">all</button></span>
+    <span><button class="check" @click="deselectAll">remove</button></span>
+    <span>Checked: {{ checkList }}</span>
   </div>
   <div id="editButtons">
     <button class="op"><i class="material-icons">&#xe3c9;</i> <span>edit</span></button>
@@ -45,11 +49,11 @@
   </div>
   <div id="container">
     <div id="pages">
-      <button class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>
-      <button class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
-      <p id="num">page</p>
-      <button class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
-      <button class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>
+      <button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>
+      <button @click="decreaseP" class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
+      <p id="num">{{ pageNum }}</p>
+      <button @click="increaseP" class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
+      <button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>
     </div>
   </div>
   </body>
@@ -61,12 +65,58 @@ export default {
   data(){
     return({
       showNewCont:true,
+      s : '0',
+      sort : '0',
+      f : '0',
+      List:['one','two','three','four','five','six','seven','eight','nine','ten'],
+      pageNum:1,
+      checkList:[],
     })
   },
   methods:{
     newC(){
      this.$emit('new-cont');
      console.log('new contact');
+    },
+    edit(){
+
+    },
+    view() {
+    },
+    delete(){
+
+    },
+    selectAll(){
+      this.checkList = this.List;
+    },
+    deselectAll(){
+      this.checkList = [];
+    },
+    setPageList(page){
+      console.log(page);
+      //send a get request to backend to get a new list of emails
+      /*axios.get("http://localhost:8085/",{
+        params:
+
+      }).then(response => {return response.data;});*/
+      //return false if there is no such page or set list and return true
+      return true;
+    },
+    getFirstP(){
+
+    },
+    decreaseP(){
+      if(this.setPageList()) {
+        this.pageNum--;
+      }
+    },
+    increaseP(){
+      if(this.setPageList()) {
+        this.pageNum++;
+      }
+    },
+    getLastP(){
+
     },
   }
 }

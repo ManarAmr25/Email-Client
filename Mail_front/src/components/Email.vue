@@ -25,17 +25,21 @@
     </ul></div>
   <div id="list">
     <ul>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
-      <li><span><input type="checkbox"></span> list element</li>
+      <li v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="mail" v-model="checkList">{{index+1}} {{ mail }}</label></li>
+      <!--<li><span><input id="one" value="one" type="checkbox" v-model="checkList" ></span> <label for="one">1 list element</label></li>
+      <li><span><input id="two" value="two" type="checkbox" v-model="checkList" ></span> <label for="two">2 list element</label></li>
+      <li><span><input id="three" value="three" type="checkbox" v-model="checkList" ></span> <label for="three">3 list element</label></li>
+      <li><span><input id="four" value="four" type="checkbox" v-model="checkList" ></span> <label for="four">4 list element</label></li>
+      <li><span><input id="five" value="five" type="checkbox" v-model="checkList" ></span> <label for="five">5 list element</label></li>
+      <li><span><input id="six" value="six" type="checkbox" v-model="checkList" ></span> <label for="six">6 list element</label></li>
+      <li><span><input id="seven" value="seven" type="checkbox" v-model="checkList" ></span> <label for="seven">7 list element</label></li>
+      <li><span><input id="eight" value="eight" type="checkbox" v-model="checkList" ></span> <label for="eight">8 list element</label></li>
+      <li><span><input id="nine" value="nine" type="checkbox" v-model="checkList" ></span> <label for="nine">9 list element</label></li>
+      <li><span><input id="ten" value="ten" type="checkbox" v-model="checkList" ></span><label for="ten">10 list element</label></li>-->
     </ul>
+    <span><button class="check" @click="selectAll">all</button></span>
+    <span><button class="check" @click="deselectAll">remove</button></span>
+    <span>Checked: {{ checkList }}</span>
   </div>
   <div id="editButtons">
     <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
@@ -69,8 +73,12 @@ export default {
   },
   data(){
     return({
-      list:[],
+      s : '0',
+      sort : '0',
+      f : '0',
+      List:['one','two','three','four','five','six','seven','eight','nine','ten'],
       pageNum:1,
+      checkList:[],
     })
   },
   created(){
@@ -96,24 +104,41 @@ export default {
   },
   beforeUpdate() {
     if(this.folder == 3){ //draft
-      document.getElementById("e").style.visibility = "hidden";
-      document.getElementById("s").style.visibility = "hidden";
+      //document.getElementById("e").style.visibility = "hidden";
+      //document.getElementById("s").style.visibility = "hidden";
       console.log('updated method is called');
     }
   },
   methods:{
+    selectAll(){
+      this.checkList = this.List;
+    },
+    deselectAll(){
+      this.checkList = [];
+    },
     edit(){//view an email in editable mode, only one email should be selected
-      //send a request to the backend to set which email to be read & edited
-      this.$emit('edit');
-      console.log('edit event is emitted');
+      if(this.checkList.length == 0){
+        alert('select an email to edit');
+      }else if(this.checkList.length > 1){
+        alert('only one email must be selected to edit');
+      }else {
+        //send a request to the backend to set which email to be read & edited
+        this.$emit('edit');
+        console.log('edit event is emitted');
+      }
     },
     dlt(){
-      console.log(this.folder);
     },
     view(){ //view an email in read only mode, only one email should be selected
-      //send a request to the backend to set which email to be read
-      this.$emit('view');
-      console.log('view event is emitted');
+      if(this.checkList.length == 0){
+        alert('select an email to view');
+      }else if(this.checkList.length > 1){
+        alert('only one email must be selected to view');
+      }else {
+        //send a request to the backend to set which email to be read
+        this.$emit('view');
+        console.log('view event is emitted');
+      }
     },
     send(){
     },
@@ -351,6 +376,19 @@ input[type=text]{
 }
 input[type=text]:focus{
   background-color: white;
+}
+
+.bar li .zr:focus{
+  background-color: #000000;
+  border-radius: 50px 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.check{
+  cursor: pointer;
+  border: 2px solid black;
+  outline: none;
 }
 
 </style>

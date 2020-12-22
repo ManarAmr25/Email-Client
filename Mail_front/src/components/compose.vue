@@ -43,6 +43,7 @@
   <div id="submitContainer">
     <div class="comp" id="submit">
       <button v-if="canSend" @click="send" id="b"><i id="a" class="material-icons">&#xe163;</i>Send</button>
+      <button v-if="canSend" @click="draft" id="d"><i id="c" class="material-icons">&#xe163;</i>Draft</button>
     </div>
   </div>
   </body>
@@ -86,8 +87,8 @@ export default {
         var email = new Map();
         email['to'] = this.to; //why??
         email['subject'] = this.subject;
-        email['mail'] = this.mail;
-        email['priority'] = this.priority; //number or string ??
+        email['body'] = this.mail;
+        email['key'] = this.priority; //number or string ??
         //email['attachs'] = this.attachs;
         console.log(email);
         axios.post("http://localhost:8085/",{
@@ -102,6 +103,9 @@ export default {
         this.disableInputField();
         console.log("event emitted");
       }
+    },
+    draft(){
+
     },
     disableInputField(){
       document.getElementById('toInput').disabled = true;
@@ -130,7 +134,7 @@ export default {
         return false;
       }
       return true;
-    }
+    },
   },
 }
 </script>

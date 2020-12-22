@@ -6,10 +6,10 @@
       <input v-model = "fname" type="text" id="fname" name="fname"><br>
       <label for="lname" class="l">Last Name</label>
       <input v-model = "lname" type="text" id="lname" name="lname"><br>
-      <label for="address" class="l" placeholder=" user@system.com">Address</label>
-      <input v-model = "address" type="text" id="address" name="address"><br>
+      <label for="address" class="l" >Address</label>
+      <input v-model = "address" type="text" id="address" name="address" placeholder=" user@system.com"><br>
       <label class="l">password</label>
-      <input v-model = "password" type="password" id="password"><br>
+      <input v-model = "password" type="password" id="password" placeholder="cannot be less than 8 characters"><br>
       <label class="sp">Show password</label>
       <input type="checkbox" @click="showPassword"><br>
       <label for="birthday" class="l">Birthday date</label>
@@ -72,9 +72,9 @@ export default {
         document.getElementById('address').style.backgroundColor = '#ffe6e6';
         alert('address  missing');
         return;
-      }else if(this.password === ""){
+      }else if(this.password.length < 8){
         document.getElementById('password').style.backgroundColor = '#ffe6e6';
-        alert('password missing');
+        alert('too short password');
         return;
       }else if(this.gender === ""){
         document.getElementById('gender').style.backgroundColor = '#ffe6e6';
@@ -82,7 +82,7 @@ export default {
         return;
       }else {
         var user = new Map();
-        user['username'] = this.fname + ' ' + this.lname; //why??
+        //user['username'] = this.fname + ' ' + this.lname; //why??
         user['password'] = this.password;
         user['email'] = this.address;
         user['gender'] = this.gender; //number or string ??
