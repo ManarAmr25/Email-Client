@@ -53,13 +53,26 @@ import axios from "axios";
 
 export default {
   name: "compose",
+  props:{
+    mode:{
+      type: String,
+      required:true,
+    },
+  },
   data(){
     return({
-      picked:'four',
+      picked:'three',
       to:'',
       subject:'',
       mail:'',
     })
+  },
+  mounted() {
+    if(this.mode === 'readOnly'){
+      this.disableInputField();
+    }else if(this.mode === 'edit'){
+      this.enableInputField();
+    }
   },
   methods:{
     send(){
@@ -86,17 +99,30 @@ export default {
         // response >> go to another page or display an error message
         this.$emit('send');
         alert('sent');
-        document.getElementById('toInput').disabled = true;
-        document.getElementById('subInput').disabled = true;
-        document.getElementById('one').disabled = true;
-        document.getElementById('two').disabled = true;
-        document.getElementById('three').disabled = true;
-        document.getElementById('four').disabled = true;
-        document.getElementById('mailInput').disabled = true;
-        document.getElementById('fileInput').disabled =true;
+        this.disableInputField();
         console.log("event emitted");
       }
-    }
+    },
+    disableInputField(){
+      document.getElementById('toInput').disabled = true;
+      document.getElementById('subInput').disabled = true;
+      document.getElementById('one').disabled = true;
+      document.getElementById('two').disabled = true;
+      document.getElementById('three').disabled = true;
+      document.getElementById('four').disabled = true;
+      document.getElementById('mailInput').disabled = true;
+      document.getElementById('fileInput').disabled =true;
+    },
+    enableInputField(){
+      document.getElementById('toInput').disabled = false;
+      document.getElementById('subInput').disabled = false;
+      document.getElementById('one').disabled = false;
+      document.getElementById('two').disabled = false;
+      document.getElementById('three').disabled = false;
+      document.getElementById('four').disabled = false;
+      document.getElementById('mailInput').disabled = false;
+      document.getElementById('fileInput').disabled =false;
+    },
   },
   computed:{
   },

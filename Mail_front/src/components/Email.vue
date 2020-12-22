@@ -38,10 +38,11 @@
     </ul>
   </div>
   <div id="editButtons">
-    <button id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
-    <button @click="dlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
-    <button id="v" class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
-    <button id="s" class="op"><i class="material-icons">&#xe163;</i> <span>send</span></button>
+    <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
+    <button @click="dlt"  v-if="showDlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
+    <button @click="view" v-if="showView" id="v" class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
+    <button @click="send" v-if="showSend" id="s" class="op"><i class="material-icons">&#xe163;</i> <span>send</span></button>
+    <button @click="restore" v-if="showRes" id="r" class="op"><i class="material-icons">&#xe163;</i> <span>restore</span></button>
   </div>
   <div id="container">
     <div id="pages">
@@ -68,11 +69,12 @@ export default {
   },
   data(){
     return({
-
+      list:[],
     })
   },
   created(){
     //send request to backend depending on folder type
+    //response should be a list
     console.log(this.folder);
     /*axios.get("http://localhost:8085/",{
       params:
@@ -85,9 +87,7 @@ export default {
     }else if(this.folder == 2){ //inbox
 
     }else if(this.folder == 3){ //draft
-      //document.getElementById("e").style.visibility = "hidden";
-      //document.getElementById('s').visibility = 'hidden';
-      console.log(this.folder);
+
     }else if(this.folder == 4){ //trash
 
     }
@@ -101,8 +101,51 @@ export default {
     }
   },
   methods:{
+    edit(){
+
+    },
     dlt(){
       console.log(this.folder);
+    },
+    view(){ //view an email in read only mode, only one email should be selected
+      //send a request to the backend to set which email to be read
+      this.$emit('view');
+      console.log('view event is emitted');
+    },
+    send(){
+
+    },
+    restore(){
+
+    },
+  },
+  computed:{
+    showEdit(){
+      if(this.folder == 3){
+        return true;
+      }
+      return false;
+    },
+    showDlt(){
+      if(this.folder == 2 || this.folder == 3){
+        return true;
+      }
+      return false;
+    },
+    showView(){
+      if(this.folder == 1 || this.folder == 2 || this.folder == 4){
+        return true;
+      }
+      return false;
+    },
+    showSend(){
+      return false;
+    },
+    showRes(){
+      if(this.folder == 4){
+        return true;
+      }
+      return false;
     }
   }
 }

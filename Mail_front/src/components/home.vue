@@ -20,10 +20,10 @@
       <contact  @new-cont="newCont = true; console.log('event listened')"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
-      <compose ></compose>
+      <compose :mode="getViewMode"></compose>
     </div>
     <div class="c" id="email1" v-if="show1">
-      <Email :folder = "getFolder" ></Email>
+      <Email @view="setViewMode('readOnly');setComponent(5)"  :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email2" v-if="show2">
       <Email :folder = "getFolder" ></Email>
@@ -60,6 +60,7 @@ export default {
       shown: 1,
       folder:1,
       newCont:false,
+      viewMode:'editable',
     })
   },
   methods:{
@@ -75,8 +76,8 @@ export default {
         this.newCont = false;
       }
     },
-    setNew(b){
-      this.newCont = b;
+    setViewMode(mode){
+      this.viewMode = mode;
     }
   },
   computed:{
@@ -121,6 +122,9 @@ export default {
     },
     showNewCont(){
       return this.newCont;
+    },
+    getViewMode(){
+      return this.viewMode;
     }
   }
 }
