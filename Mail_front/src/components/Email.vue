@@ -46,11 +46,11 @@
   </div>
   <div id="container">
     <div id="pages">
-      <button class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>
-      <button class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
-      <p id="num">page</p>
-      <button class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
-      <button class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>
+      <button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>
+      <button @click="decreaseP" class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
+      <p id="num">{{ pageNum }}</p>
+      <button @click="increaseP" class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
+      <button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>
     </div>
   </div>
    </body>
@@ -70,6 +70,7 @@ export default {
   data(){
     return({
       list:[],
+      pageNum:1,
     })
   },
   created(){
@@ -101,8 +102,10 @@ export default {
     }
   },
   methods:{
-    edit(){
-
+    edit(){//view an email in editable mode, only one email should be selected
+      //send a request to the backend to set which email to be read & edited
+      this.$emit('edit');
+      console.log('edit event is emitted');
     },
     dlt(){
       console.log(this.folder);
@@ -116,6 +119,32 @@ export default {
 
     },
     restore(){
+
+    },
+    setPageList(page){
+      console.log(page);
+      //send a get request to backend to get a new list of emails
+      /*axios.get("http://localhost:8085/",{
+        params:
+
+      }).then(response => {return response.data;});*/
+      //return false if there is no such page or set list and return true
+      return true;
+    },
+    getFirstP(){
+
+    },
+    decreaseP(){
+      if(this.setPageList()) {
+        this.pageNum--;
+      }
+    },
+    increaseP(){
+      if(this.setPageList()) {
+        this.pageNum++;
+      }
+    },
+    getLastP(){
 
     },
   },

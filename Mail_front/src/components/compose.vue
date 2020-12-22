@@ -42,7 +42,7 @@
   </div>
   <div id="submitContainer">
     <div class="comp" id="submit">
-      <button @click="send" id="b"><i id="a" class="material-icons">&#xe163;</i>Send</button>
+      <button v-if="canSend" @click="send" id="b"><i id="a" class="material-icons">&#xe163;</i>Send</button>
     </div>
   </div>
   </body>
@@ -70,7 +70,7 @@ export default {
   mounted() {
     if(this.mode === 'readOnly'){
       this.disableInputField();
-    }else if(this.mode === 'edit'){
+    }else if(this.mode === 'editable'){
       this.enableInputField();
     }
   },
@@ -84,10 +84,10 @@ export default {
         return;
       }else {
         var email = new Map();
-        email['to'] = this.fname + ' ' + this.lname; //why??
-        email['subject'] = this.password;
-        email['mail'] = this.address;
-        email['priority'] = this.gender; //number or string ??
+        email['to'] = this.to; //why??
+        email['subject'] = this.subject;
+        email['mail'] = this.mail;
+        email['priority'] = this.priority; //number or string ??
         //email['attachs'] = this.attachs;
         console.log(email);
         axios.post("http://localhost:8085/",{
@@ -98,7 +98,7 @@ export default {
         // sent json containing >> name, address, password, date, gender (number or string ?)
         // response >> go to another page or display an error message
         this.$emit('send');
-        alert('sent');
+        alert('email sent successfully');
         this.disableInputField();
         console.log("event emitted");
       }
@@ -125,6 +125,12 @@ export default {
     },
   },
   computed:{
+    canSend(){
+      if(this.mode === 'readOnly'){
+        return false;
+      }
+      return true;
+    }
   },
 }
 </script>

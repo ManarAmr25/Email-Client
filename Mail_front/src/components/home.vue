@@ -12,7 +12,7 @@
         <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
         <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
-        <li><button @click="setComponent(5)">&#x2712; Compose</button></li>
+        <li><button @click="setComponent(5,'editable');">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
       </ul>
     </div>
@@ -22,17 +22,17 @@
     <div class="c" id="compose" v-if="show5">
       <compose :mode="getViewMode"></compose>
     </div>
-    <div class="c" id="email1" v-if="show1">
-      <Email @view="setViewMode('readOnly');setComponent(5)"  :folder = "getFolder" ></Email>
+    <div class="c" id="email1" v-if="show1"> <!--sent : view-->
+      <Email @view="setViewMode('readOnly');setComponent(5)" :folder = "getFolder" ></Email>
     </div>
-    <div class="c" id="email2" v-if="show2">
-      <Email :folder = "getFolder" ></Email>
+    <div class="c" id="email2" v-if="show2"> <!--inbox : view, delete-->
+      <Email @view="setViewMode('readOnly');setComponent(5)" :folder = "getFolder" ></Email>
     </div>
-    <div class="c" id="email3" v-if="show3">
-      <Email :folder = "getFolder" ></Email>
+    <div class="c" id="email3" v-if="show3"> <!--draft : edit, delete-->
+      <Email @edit="setViewMode('editable');setComponent(5)" :folder = "getFolder" ></Email>
     </div>
-    <div class="c" id="email4" v-if="show4">
-      <Email :folder = "getFolder" ></Email>
+    <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
+      <Email @view="setViewMode('readOnly');setComponent(5)" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="new_cont" v-if="newCont">
       <new ></new>
@@ -64,20 +64,22 @@ export default {
     })
   },
   methods:{
-    setComponent(num){
+    setComponent(num, mode=''){
       if(num === 1 || num === 2 || num === 3 || num === 4){
         this.folder=num;
         this.newCont = false;
-        this.shown = num;
-      }else{
-        this.shown = num;
-      }
-      if(num === 5){
+      }else if(num === 5){
         this.newCont = false;
+        if(mode !== ''){
+          this.setViewMode(mode);
+        }
       }
+      this.shown = num;
+      console.log(this.shown);
     },
     setViewMode(mode){
       this.viewMode = mode;
+      console.log(this.viewMode);
     }
   },
   computed:{
