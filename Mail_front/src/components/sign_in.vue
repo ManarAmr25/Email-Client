@@ -9,7 +9,7 @@
       <input v-model = "password" type="password" placeholder=" enter password" id="password"><br>
       <label class="sp">Show password</label>
       <input type="checkbox" @click="showPassword"><br>
-     </form>
+    </form>
     <div class="buttons">
       <button @click="goToSignUp" id="signUp">don't have an account yet?</button>
       <button @click="signIn">Sign in</button>
@@ -95,12 +95,10 @@ body {
   width: 130px;
   text-align: center;
 }
-
 .sp{
   border-radius: 50px 20px;
   margin-right:20px;
 }
-
 input[type="checkbox"] {
   margin-right: 10px;
 }
@@ -114,13 +112,11 @@ input {
   border: 2px solid #DD162D;
   border-radius: 4px;
 }
-
 .buttons {
   display: flex;
   flex-direction: row;
   justify-content: left;
 }
-
 button{
   width: 90px;
   height: 45px;
@@ -154,12 +150,16 @@ button:hover {
   width: 130px;
   text-align: center;
 }
-
 #signUp{
   background-color: transparent;
   border: none;
-  color: blue;
+  color: #0e0101;
   width: 300px;
+}
+
+#signUp:hover{
+  color: #DD162D;
+  text-decoration: underline;
 }
 
 </style>

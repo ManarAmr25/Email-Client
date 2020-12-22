@@ -15,13 +15,15 @@
       <label for="birthday" class="l">Birthday date</label>
       <input type="date" id="birthday" name="trip-start" value="2000-01-01" min="1960-01-01" max="2010-12-31"><br>
       <label class="l">Gender</label>
-      <select v-model = "gender"><option selected disabled>Select your gender</option>
+      <select v-model = "gender">
+        <option value="0" disabled>Select gender</option>
         <option value="1">Male</option>
         <option value="2">Female</option>
       </select><br>
       <button @click="reset" id="reset">Reset</button>
     </form>
   </div>
+  <button @click="goToSignIn" id="signIn"> have an account yet?</button>
   <button @click="submit" class="zr">Submit</button>
 </template>
 
@@ -36,7 +38,7 @@ export default {
       address:"",
       password:"",
       date:"2000-01-01",
-      gender:"",
+      gender:"0",
     })
   },
   methods:{
@@ -46,7 +48,7 @@ export default {
       this.lname = "";
       this.address = "";
       this.date = "2000-01-01";
-      this.gender = "";
+      this.gender = "0";
       this.password = "";
     },
     showPassword(){
@@ -99,6 +101,10 @@ export default {
         console.log("event emitted");
       }
     },
+    goToSignIn(){
+      this.$emit('sign');
+      console.log('goToSignIn');
+    }
   },
 }
 </script>
@@ -172,10 +178,11 @@ select{
   border: none;
   border-radius: 15px;
   box-shadow: 0 9px #999;
-  margin-left: 500px;
+  margin-left: 100px;
   margin-top: 20px;
 }
 .zr:hover{background-color: #121412}
+
 .zr:active {
   background-color: #DD162D;
   box-shadow: 0 5px #666;
@@ -205,4 +212,21 @@ select{
   outline: none;
   cursor:pointer;
 }
+
+#signIn{
+  background-color: transparent;
+  border: none;
+  color: #0e0101;
+  width: 300px;
+  font-size : large;
+  margin-left: 100px;
+  border: none;
+  outline: none;
+}
+
+#signIn:hover{
+  color: #DD162D;
+  text-decoration: underline;
+}
+
 </style>
