@@ -46,11 +46,7 @@ export default {
       }else {
         /*var user = new Map();
         user['password'] = this.password;
-        user['email'] = this.address;
-        user['gender'] = this.gender; //number or string ??
-        user['date'] = this.date; //check date format ??
-        user['firstname'] = this.fname;
-        user['lastname'] = this.lname;
+        user['email'] = this.email;
         console.log(user);*/
         //axios.post("http://localhost:8085/").then(response => {return response.data;});
         //create post request

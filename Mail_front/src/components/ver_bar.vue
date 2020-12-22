@@ -11,7 +11,8 @@
     <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
     <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
     <li><button @click="setComponent(5)">&#x2712; Compose</button></li>
-    <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
+    <li><button @click="setComponent(6)">&#x2712; Contact</button></li><br>
+    <li><button class="log">Log Out</button></li>
   </ul>
   </body>
 </template>

@@ -4,13 +4,13 @@
   <div id="toContainer">
     <div class="comp" id="to">
       <label class="fieldLabel" for="toInput">To</label>
-      <input type="text" id="toInput" placeholder="enter one or more recievers separated by a single space">
+      <input type="text" id="toInput" v-model="to" placeholder="enter one or more recievers separated by a single comma">
     </div>
   </div>
   <div id="subjectContainer">
     <div class="comp" id="subject">
       <label class="fieldLabel" for="subInput">Subject</label>
-      <input type="text" id="subInput" placeholder="enter subjest">
+      <input type="text" id="subInput" v-model="subject" placeholder="enter subjest">
     </div>
   </div>
   <div id="priorityContainer">
@@ -31,7 +31,7 @@
   <div id="mailContainer">
     <div class="comp" id="mail">
       <label class="fieldLabel" for="mailInput">Email</label>
-      <textarea name="mail content" id="mailInput" cols="30" rows="10" placeholder="Go ahead.."></textarea>
+      <textarea name="mail content" id="mailInput" v-model="mail" cols="30" rows="10" placeholder="Go ahead.."></textarea>
     </div>
   </div>
   <div id="attachsContainer">
@@ -42,21 +42,61 @@
   </div>
   <div id="submitContainer">
     <div class="comp" id="submit">
-      <button id="b"><i id="a" class="material-icons">&#xe163;</i>Send</button>
+      <button @click="send" id="b"><i id="a" class="material-icons">&#xe163;</i>Send</button>
     </div>
   </div>
   </body>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "compose",
   data(){
     return({
       picked:'four',
+      to:'',
+      subject:'',
+      mail:'',
     })
   },
   methods:{
+    send(){
+      if(this.to === ''){
+        alert('enter one or more receivers');
+        return;
+      }else if(this.mail === ''){
+        alert('enter body or attachments');
+        return;
+      }else {
+        var email = new Map();
+        email['to'] = this.fname + ' ' + this.lname; //why??
+        email['subject'] = this.password;
+        email['mail'] = this.address;
+        email['priority'] = this.gender; //number or string ??
+        //email['attachs'] = this.attachs;
+        console.log(email);
+        axios.post("http://localhost:8085/",{
+          params:
+          email,
+        }).then(response => {return response.data;});
+        //create post request
+        // sent json containing >> name, address, password, date, gender (number or string ?)
+        // response >> go to another page or display an error message
+        this.$emit('send');
+        alert('sent');
+        document.getElementById('toInput').disabled = true;
+        document.getElementById('subInput').disabled = true;
+        document.getElementById('one').disabled = true;
+        document.getElementById('two').disabled = true;
+        document.getElementById('three').disabled = true;
+        document.getElementById('four').disabled = true;
+        document.getElementById('mailInput').disabled = true;
+        document.getElementById('fileInput').disabled =true;
+        console.log("event emitted");
+      }
+    }
   },
   computed:{
   },

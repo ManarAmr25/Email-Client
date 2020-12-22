@@ -38,10 +38,10 @@
     </ul>
   </div>
   <div id="editButtons">
-    <button class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
-    <button class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
-    <button class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
-    <button class="op"><i class="material-icons">&#xe163;</i> <span>send</span></button>
+    <button id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
+    <button @click="dlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
+    <button id="v" class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
+    <button id="s" class="op"><i class="material-icons">&#xe163;</i> <span>send</span></button>
   </div>
   <div id="container">
     <div id="pages">
@@ -56,12 +56,54 @@
 </template>
 
 <script>
+//import axios from 'axios';
+
 export default {
   name: "Email",
   props:{
     folder:{
+      type: Number,
       required:true,
     },
+  },
+  data(){
+    return({
+
+    })
+  },
+  created(){
+    //send request to backend depending on folder type
+    console.log(this.folder);
+    /*axios.get("http://localhost:8085/",{
+      params:
+      this.folder,
+    }).then(response => {return response.data;});*/
+  },
+  mounted(){
+    if(this.folder == 1){ //sent
+
+    }else if(this.folder == 2){ //inbox
+
+    }else if(this.folder == 3){ //draft
+      //document.getElementById("e").style.visibility = "hidden";
+      //document.getElementById('s').visibility = 'hidden';
+      console.log(this.folder);
+    }else if(this.folder == 4){ //trash
+
+    }
+    console.log('mounted');
+  },
+  beforeUpdate() {
+    if(this.folder == 3){ //draft
+      document.getElementById("e").style.visibility = "hidden";
+      document.getElementById("s").style.visibility = "hidden";
+      console.log('updated method is called');
+    }
+  },
+  methods:{
+    dlt(){
+      console.log(this.folder);
+    }
   }
 }
 </script>

@@ -58,7 +58,11 @@
 <script>
 export default {
   name: "contact",
-
+  data(){
+    return({
+      showNewCont:true,
+    })
+  },
   methods:{
     newC(){
      this.$emit('new-cont');
@@ -82,7 +86,7 @@ html {
 
 body {
   display: grid;
-  grid-template-rows: 14% 69% 7% 3% 6% 1%;
+  grid-template-rows: 14% 15% 54% 7% 3% 6% 1%;
   border: solid red 3px;
   border-radius: 7px;
   min-height: 97%;
@@ -90,11 +94,11 @@ body {
 }
 
 #list {
-  grid-row: 2/3;
+  grid-row: 2/4;
 }
 
 #container {
-  grid-row: 5/6;
+  grid-row: 6/7;
 }
 
 li {

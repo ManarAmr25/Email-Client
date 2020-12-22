@@ -16,16 +16,25 @@
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
       </ul>
     </div>
-    <div class="c" id="contacts" v-if="show6">
-      <contact></contact>
+    <div class="c" id="contacts" v-if="show6"  >
+      <contact  @new-cont="newCont = true; console.log('event listened')"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
       <compose ></compose>
     </div>
-    <div class="c" id="email" v-if="show1">
-      <Email folder="getFolder"></Email>
+    <div class="c" id="email1" v-if="show1">
+      <Email :folder = "getFolder" ></Email>
     </div>
-    <div class="c" id="new_cont" v-if="showNewCont" @new-cont=" newCont = true">
+    <div class="c" id="email2" v-if="show2">
+      <Email :folder = "getFolder" ></Email>
+    </div>
+    <div class="c" id="email3" v-if="show3">
+      <Email :folder = "getFolder" ></Email>
+    </div>
+    <div class="c" id="email4" v-if="show4">
+      <Email :folder = "getFolder" ></Email>
+    </div>
+    <div class="c" id="new_cont" v-if="newCont">
       <new ></new>
     </div>
   </div>
@@ -50,16 +59,20 @@ export default {
     return({
       shown: 1,
       folder:1,
-      newCont:true,
+      newCont:false,
     })
   },
   methods:{
     setComponent(num){
       if(num === 1 || num === 2 || num === 3 || num === 4){
-        this.shown = 1;
         this.folder=num;
+        this.newCont = false;
+        this.shown = num;
       }else{
         this.shown = num;
+      }
+      if(num === 5){
+        this.newCont = false;
       }
     },
     setNew(b){
@@ -73,7 +86,24 @@ export default {
       }
       return false;
     },
-
+    show2(){
+      if(this.shown == 2){
+        return true;
+      }
+      return false;
+    },
+    show3(){
+      if(this.shown == 3){
+        return true;
+      }
+      return false;
+    },
+    show4(){
+      if(this.shown == 4){
+        return true;
+      }
+      return false;
+    },
     show5(){
       if(this.shown == 5) {
         return true;
