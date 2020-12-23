@@ -1,7 +1,14 @@
 package com.example.emailclient.user;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +60,11 @@ public class UserBuilding implements UserBuilder {
         new File(path+"starred/index.txt").createNewFile();
         new File(path+"trash").mkdir();
         new File(path+"trash/index.txt").createNewFile();
+        user.contacts=new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        writer.writeValue(Paths.get(path+"info.json").toFile(), this.user);
         return user;
     }
 
