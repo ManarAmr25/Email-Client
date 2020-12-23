@@ -47,15 +47,24 @@ export default {
         alert('password missing');
         return;
       }else {
-        /*var user = new Map();
+        var user = new Map();
         user['password'] = this.password;
         user['email'] = this.email;
-        console.log(user);*/
-        //axios.post("http://localhost:8085/").then(response => {return response.data;});
-        //create post request
-        // sent json containing >> name, address, password, date, gender (number or string ?)
-        // response >> go to another page or display an error message
-        this.$emit('sign-in');
+        console.log(user);
+        /*axios.post("http://localhost:8085/", {
+          params: {
+            user,
+          }
+        }).then(response => {
+          if(response.data == ''){
+            alert('incorrect address or password');
+          }else {
+            this.$emit('sign-in',response.data);
+            console.log("event emitted");
+          }
+        });*/
+        var x = {'user':"sign in name"};
+        this.$emit('sign-in',x);
         console.log("event emitted");
       }
     },

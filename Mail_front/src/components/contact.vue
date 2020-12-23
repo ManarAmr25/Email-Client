@@ -3,7 +3,7 @@
   <body>
   <div class="bar">
     <ul>
-      <li><button class="zr">&#x219d; Search</button>
+      <li><button @click="Search" class="zr">&#x219d; Search</button>
         <select v-model = "s">
           <option value="0" disabled>By</option>
           <option value="sender" >Sender</option>
@@ -14,9 +14,9 @@
           <option value="receiver" >Receiver</option>
           <option value="importance" >Importance</option>
         </select>
-        <input name="search" type="text">
+        <input v-model="searchInput" name="search" type="text">
       </li>
-      <li><button class="zr">&#x219d; Sort</button>
+      <li><button @click="Sort" class="zr">&#x219d; Sort</button>
         <select v-model = "sort">
           <option value="0" disabled>By</option>
           <option value="sender" >Sender</option>
@@ -28,7 +28,7 @@
           <option value="importance" >Importance</option>
         </select>
       </li>
-      <li><button class="zr">&#x219d; Filter</button>
+      <li><button @click="filter" class="zr">&#x219d; Filter</button>
         <select v-model = "f">
           <option value="0" disabled>By</option>
           <option value="sender" >Sender</option>
@@ -78,6 +78,7 @@ export default {
     return({
       showNewCont:true,
       s : '0',
+      searchInput : ' ',
       sort : '0',
       f : '0',
       List:['one','two','three','four','five','six','seven','eight','nine','ten'],
@@ -97,7 +98,11 @@ export default {
         alert('only one contact must be selected to edit');
       }else {
         //send a request to the backend to set which email to be read & edited
-        this.$emit('editC');
+        var x = {
+          'Cname':'user',
+          'address':'user1,user2,user3',
+        }
+        this.$emit('editC',x);
         console.log('edit event is emitted');
       }
     },
@@ -108,7 +113,11 @@ export default {
         alert('only one contact must be selected to view');
       }else {
         //send a request to the backend to set which email to be read
-        this.$emit('viewC');
+        var x = {
+          'Cname':'user',
+          'address':'user1,user2,user3',
+        }
+        this.$emit('viewC',x);
         console.log('view event is emitted');
       }
     },
@@ -131,9 +140,6 @@ export default {
       //return false if there is no such page or set list and return true
       return true;
     },
-    getFirstP(){
-
-    },
     decreaseP(){
       if(this.setPageList()) {
         this.pageNum--;
@@ -144,7 +150,17 @@ export default {
         this.pageNum++;
       }
     },
-    getLastP(){
+    Search(){
+      if(this.s === 'date'){
+        if(!this.searchInput.match("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|(1|2)[0-9]|3[0-1])")){
+          alert('Invalid date format. enter date as yyyy-mm-dd');
+        }
+      }
+    },
+    Sort(){
+
+    },
+    filter(){
 
     },
   }

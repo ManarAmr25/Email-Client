@@ -1,8 +1,8 @@
 <template>
   <body>
-  <sign_in v-if="show2" @submit="setCompenent(4);" @sign-in="setCompenent(4)" @sign-up="setCompenent(3)"></sign_in>
-  <sign_up v-if="show3" @submit="setCompenent(4);" @sign-in="setCompenent(4)" @sign="setCompenent(2)"></sign_up>
-  <home v-if="show4" @log-out="setCompenent(2);"></home>
+  <sign_in v-if="show2" @submit="setCompenent(4);" @sign-in="signIn" @sign-up="signUp()"></sign_in>
+  <sign_up v-if="show3" @submit="setCompenent(4);" @sign-in="signIn" @sign="setCompenent(2)"></sign_up>
+  <home :userName="getUname" v-if="show4" @log-out="logOut"></home>
   </body>
 </template>
 
@@ -20,18 +20,28 @@ export default {
   data(){
     return({
       shown: 2,
+      myString:'myName',
     })
   },
   methods:{
-    myFunction(){
-      window.location.href = "/components/sign_up.vue";
-    },
     setCompenent(num){
       if(num === 4){
         document.body.style.backgroundImage = "none";
       }
       this.shown = num;
       console.log("component set");
+    },
+    signIn(x){
+      this.setCompenent(4);
+      this.Uname = x;
+      console.log("loaded name = "+x.user);
+    },
+    signUp(x){
+      this.setCompenent(3);
+      this.Uname = x;
+    },
+    logOut(){
+      this.setCompenent(2);
     }
   },
   computed:{
@@ -59,6 +69,9 @@ export default {
       }
       return false;
     },
+    getUname(){
+      return this.Uname.user;
+    }
   }
 }
 </script>

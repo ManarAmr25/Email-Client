@@ -3,7 +3,7 @@
   <body>
   <div class="bar">
     <ul>
-      <li><button class="zr">&#x219d; Search</button>
+      <li><button @click="Search" class="zr">&#x219d; Search</button>
         <select v-model = "s">
           <option value="0" disabled>By</option>
           <option value="sender" >Sender</option>
@@ -14,9 +14,9 @@
           <option value="receiver" >Receiver</option>
           <option value="importance" >Importance</option>
         </select>
-        <input name="search" type="text">
+        <input v-model="searchInput" name="search" type="text">
       </li>
-      <li><button class="zr">&#x219d; Sort</button>
+      <li><button @click="Sort" class="zr">&#x219d; Sort</button>
         <select v-model = "sort">
           <option value="0" disabled>By</option>
           <option value="sender" >Sender</option>
@@ -28,7 +28,7 @@
           <option value="importance" >Importance</option>
         </select>
       </li>
-      <li><button class="zr">&#x219d; Filter</button>
+      <li><button @click="filter" class="zr">&#x219d; Filter</button>
         <select v-model = "f">
           <option value="0" disabled>By</option>
           <option value="sender" >Sender</option>
@@ -38,7 +38,7 @@
     </ul></div>
   <div id="list">
     <ul>
-      <li v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="mail" v-model="checkList">{{index+1}} {{ mail }}</label></li>
+      <li v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="index" v-model="checkList">{{index+1}} {{ mail }}</label></li>
       <!--<li><span><input id="one" value="one" type="checkbox" v-model="checkList" ></span> <label for="one">1 list element</label></li>
       <li><span><input id="two" value="two" type="checkbox" v-model="checkList" ></span> <label for="two">2 list element</label></li>
       <li><span><input id="three" value="three" type="checkbox" v-model="checkList" ></span> <label for="three">3 list element</label></li>
@@ -52,13 +52,13 @@
     </ul>
     <span><button class="check" @click="selectAll">Select All</button></span>
     <span><button class="check" @click="deselectAll">Deselect All</button></span>
+    <span>{{checkList}}</span>
   </div>
   <div id="editButtons">
     <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
     <button @click="dlt"  v-if="showDlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
     <button @click="view" v-if="showView" id="v" class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
     <button @click="send" v-if="showSend" id="s" class="op"><i class="material-icons">&#xe163;</i> <span>send</span></button>
-    <button @click="restore" v-if="showRes" id="r" class="op"><i class="material-icons">&#xe163;</i> <span>restore</span></button>
   </div>
   <div id="container">
     <div id="pages">
@@ -85,10 +85,11 @@ export default {
   data(){
     return({
       s : '0',
+      searchInput : ' ',
       sort : '0',
       f : '0',
       List:['one','two','three','four','five','six','seven','eight','nine','ten'],
-      list:[],
+      /*list:[],*/
       pageNum:1,
       checkList:[],
     })
@@ -103,12 +104,10 @@ export default {
     }).then(response => {return response.data;});*/
   },
   mounted(){
-    if(this.folder == 1){ //sent
-    }else if(this.folder == 2){ //inbox
-    }else if(this.folder == 3){ //draft
-    }else if(this.folder == 4){ //trash
-    }
-    console.log('mounted');
+    /*axios.get("http://localhost:8085/",{
+      params:
+      this.folder,
+    }).then(response => {this.list = response.data});*/
   },
   beforeUpdate() {
     if(this.folder == 3){ //draft
@@ -119,7 +118,7 @@ export default {
   },
   methods:{
     selectAll(){
-      this.checkList = this.List;
+      this.checkList = [0,1,2,3,4,5,6,7,8,9];
     },
     deselectAll(){
       this.checkList = [];
@@ -131,7 +130,14 @@ export default {
         alert('only one email must be selected to edit');
       }else {
         //send a request to the backend to set which email to be read & edited
-        this.$emit('edit');
+        var x = {
+          'from':'manar',
+          'to':'nour',
+          'subject':'eee',
+          'body':'this is a message',
+          'priority':'one'
+        }
+        this.$emit('edit',x);
         console.log('edit event is emitted');
       }
     },
@@ -157,8 +163,6 @@ export default {
     },
     send(){
     },
-    restore(){
-    },
     setPageList(page){
       console.log(page);
       //send a get request to backend to get a new list of emails
@@ -167,8 +171,6 @@ export default {
       }).then(response => {return response.data;});*/
       //return false if there is no such page or set list and return true
       return true;
-    },
-    getFirstP(){
     },
     decreaseP(){
       if(this.setPageList()) {
@@ -180,7 +182,18 @@ export default {
         this.pageNum++;
       }
     },
-    getLastP(){
+    Search(){
+      if(this.s === 'date'){
+        if(!this.searchInput.match("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|(1|2)[0-9]|3[0-1])")){
+          alert('Invalid date format. enter date as yyyy-mm-dd');
+        }
+      }
+    },
+    Sort(){
+
+    },
+    filter(){
+
     },
   },
   computed:{

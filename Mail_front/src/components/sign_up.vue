@@ -93,12 +93,14 @@ export default {
         axios.post("http://localhost:8085/",{
           params:
           user,
-        }).then(response => {return response.data;});
-        //create post request
-        // sent json containing >> name, address, password, date, gender (number or string ?)
-        // response >> go to another page or display an error message
-        this.$emit('submit');
-        console.log("event emitted");
+        }).then(response => {
+          if(response.data == ''){
+            alert('address already exists');
+          }else {
+            this.$emit('submit',response.data);
+            console.log("event emitted");
+          }
+        });
       }
     },
     goToSignIn(){

@@ -7,18 +7,18 @@
           <img src="../assets/logo-icon.png" alt="System">
           <div>System.com</div>
         </div>
-        <label>User name</label>
+        <label>{{ Uname }}</label>
         <li><button @click="setComponent(1)">&#x2712; Sent</button></li>
         <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
         <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
-        <li><button @click="setViewMode('editable');setComponent(5);">&#x2712; Compose</button></li>
+        <li><button @click="setViewMode('editable');setComponent(5);clearEcontent();">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
         <button @click="logOut" class="logout">&#x276E;&#x276E; Log Out</button>
       </ul>
     </div>
     <div class="c" id="contacts" v-if="show6"  >
-      <contact @new-cont="openNewCont(1)" @editC="openNewCont(1)" @viewC="openNewCont(2)"></contact>
+      <contact @new-cont="openNewCont(1);clearCcontent();" @editC="editNew" @viewC="viewNew"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
       <compose :mode="getViewMode" :content="email"></compose>
@@ -30,7 +30,7 @@
       <Email @view="view" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email3" v-if="show3"> <!--draft : edit, delete-->
-      <Email @edit="setViewMode('editable');setComponent(5);" :folder = "getFolder" ></Email>
+      <Email @edit="edit" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
       <Email @view="view" :folder = "getFolder" ></Email>
@@ -56,15 +56,36 @@ export default {
     Email,
     contact,
   },
+  props:{
+    userName:{
+      required:true,
+    },
+  },
   data(){
     return({
+      Uname:'',
       shown: 1,
       folder:1,
       newCont:false,
       viewMode:'editable',
       viewModeC:'editable',
-      Econtenet:null,
+      Econtent: {
+        'from':'',
+        'to':'',
+        'subject':'',
+        'body':'',
+        'priority':'three'
+      },
+      Ccontent:{
+        'Cname':'',
+        'address':'',
+      },
     })
+  },
+  mounted() {
+    console.log(this.userName);
+    this.Uname = this.userName;
+    console.log("current = " + this.Uname);
   },
   methods:{
     setComponent(num, mode=''){
@@ -104,6 +125,35 @@ export default {
       this.setViewMode('readOnly');
       this.setComponent(5);
       this.Econtent = x;
+    },
+    edit(x){
+      this.setViewMode('editable');
+      this.setComponent(5);
+      this.Econtent = x;
+      console.log(x);
+    },
+    viewNew(x){
+      this.openNewCont(2);
+      this.Ccontent = x;
+    },
+    editNew(x){
+      this.openNewCont(1);
+      this.Ccontent = x;
+    },
+    clearEcontent(){
+      this.Econtent = {
+        'from':'',
+        'to':'',
+        'subject':'',
+        'body':'',
+        'priority':'three'
+      };
+    },
+    clearCcontent(){
+      this.Ccontent = {
+        'Cname':'',
+        'address':'',
+      };
     }
   },
   computed:{
@@ -166,10 +216,11 @@ export default {
       return this.Econtent;
     },
     contact(){
-      return{
+      /*return{
         'Cname':'user',
         'address':'user1,user2,user3',
-      }
+      }*/
+      return this.Ccontent;
     }
   }
 }
