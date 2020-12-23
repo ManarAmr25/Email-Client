@@ -1,18 +1,17 @@
 package com.example.emailclient.Email;
 
+import com.example.emailclient.Main;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class Operations extends Email {
     @Override
@@ -91,7 +90,9 @@ public class Operations extends Email {
     @Override
     public Boolean DeleteEmail(Email[] m, String source, String email) {
         if(m == null){return false;}
-        Copy(m, source,"trash",email);
+        if(source.compareTo("trash")!=0) {
+            Copy(m, source, "trash", email);
+        }
         for(int i=0; i<m.length;i++){
             try {
                 int mailindex=m[i].getMailindex();
@@ -124,7 +125,7 @@ public class Operations extends Email {
     }
 
     @Override
-    int getIndex(String Foldername, String username) {
+    public int getIndex(String Foldername, String username) {
         int index = 0;
         File f2 = new File("src\\main\\java\\com\\example\\emailclient\\App\\"+username+"\\"+Foldername+"\\"+ "index.txt");
         BufferedReader in = null;
@@ -149,15 +150,15 @@ public class Operations extends Email {
     }
 
     @Override
-    void setIndex(String Foldername, String username) throws IOException {
+    public void setIndex(String Foldername, String username) throws IOException {
         int x= getIndex(Foldername,username);
         x++;
-        FileWriter data1 = new FileWriter("src\\main\\java\\com\\example\\emailclient\\App\\"+username+"\\"+Foldername+"\\index.txt",true);
+        FileWriter data1 = new FileWriter("src\\main\\java\\com\\example\\emailclient\\App\\"+username+"\\"+Foldername+"\\index.txt",false);
         data1.write(Integer.toString(x));
         data1.close();
     }
     @Override
-    Email[] Filtering(Email[] emails, String key, String mode) {
+    public Email[] Filtering(Email[] emails, String key, String mode) {
         if(mode.equals("sender")){
             return new BySender().meets(emails,key);
         }
@@ -167,7 +168,29 @@ public class Operations extends Email {
     }
 
     @Override
-    Email[] getMails(int page, String foldername, String email) {
-        return new Email[0];
+    public Map<String,Email> getMails(int page, String foldername, String email) throws IOException {
+        String[] content=new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+foldername).list();
+        Collections.reverse(Arrays.asList(content));
+        int len=content.length;
+        Map<String,Email> res=new HashMap<>();
+        int start =10*(page-1);
+        int end=10+start;
+
+        //get all mails if mode is true
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        String path="src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+foldername;
+        for(int i=start;i<end&&i<len;i++){
+            if(content[i].compareTo("index.txt")==0){
+                continue;
+            }
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            Email curr=mapper.readValue(Paths.get(path+"\\"+content[i]).toFile(),Operations.class);
+            res.put(String.valueOf(curr.index),curr);
+        }
+        
+        return res;
     }
+
 }
