@@ -1,11 +1,10 @@
 package com.example.emailclient.Email;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public abstract class Email implements Cloneable, Serializable {
 
@@ -48,19 +47,19 @@ public abstract class Email implements Cloneable, Serializable {
     protected void setTo(Queue t){
         this.to=t;
     }
-    protected String getBody(){
+    public String getBody(){
         return body;
     }
-    protected String getFrom(){
+    public String getFrom(){
         return from;
     }
-    protected Date getDate(){
+    public Date getDate(){
         return date;
     }
-    protected String getSubject(){
+    public String getSubject(){
         return subject;
     }
-    protected Queue getTo(){
+    public Queue getTo(){
         return to;
     }
     protected Email getEmail() throws CloneNotSupportedException {
@@ -73,5 +72,5 @@ public abstract class Email implements Cloneable, Serializable {
     abstract int getIndex(String Foldername , String username);
     abstract void setIndex(String Foldername , String username) throws IOException;
     abstract Email[] Filtering(Email[] emails, String Key, String mode);
-    abstract Email[] getMails(int page,String foldername,String email);
+    abstract Map<String,Email> getMails(int page, String foldername, String email) throws IOException;
 }
