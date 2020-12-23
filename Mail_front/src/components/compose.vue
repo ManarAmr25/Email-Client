@@ -59,6 +59,8 @@ export default {
       type: String,
       required:true,
     },
+    content:{
+    }
   },
   data(){
     return({
@@ -74,6 +76,11 @@ export default {
     }else if(this.mode === 'editable'){
       this.enableInputField();
     }
+    this.to = this.content.to;
+    this.subject = this.content.subject;
+    this.mail = this.content.body;
+    this.picked = this.content.priority;
+    console.log(this.content.from);
   },
   methods:{
     send(){

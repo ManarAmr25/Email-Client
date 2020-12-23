@@ -18,25 +18,25 @@
       </ul>
     </div>
     <div class="c" id="contacts" v-if="show6"  >
-      <contact @new-cont="newCont = true;" @editC="setViewMode2" @viewC="setViewMode2"></contact>
+      <contact @new-cont="openNewCont(1)" @editC="openNewCont(1)" @viewC="openNewCont(2)"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
-      <compose :mode="getViewMode"></compose>
+      <compose :mode="getViewMode" :content="email"></compose>
     </div>
     <div class="c" id="email1" v-if="show1"> <!--sent : view-->
-      <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
+      <Email @view="view" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email2" v-if="show2"> <!--inbox : view, delete-->
-      <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
+      <Email @view="view" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email3" v-if="show3"> <!--draft : edit, delete-->
       <Email @edit="setViewMode('editable');setComponent(5);" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
-      <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
+      <Email @view="view" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="new_cont" v-if="newCont">
-      <new :mode="getViewMode2" @close-window="newCont = false;" ></new>
+      <new :content="contact" :mode="getViewMode2" @close-window="newCont = false;" ></new>
     </div>
   </div>
   </body>
@@ -62,7 +62,8 @@ export default {
       folder:1,
       newCont:false,
       viewMode:'editable',
-      viewMode2:'editable',
+      viewModeC:'editable',
+      Econtenet:null,
     })
   },
   methods:{
@@ -84,12 +85,25 @@ export default {
       console.log(this.viewMode);
     },
     setViewMode2(mode){
-      this.viewMode = mode;
-      console.log(this.viewMode);
+      this.viewModeC = mode;
+      console.log('set view mode 2 >>'+this.viewModeC);
+    },
+    openNewCont(v = 0){
+      if(v !== 1) {
+        this.setViewMode2('readOnly');
+      }else if(v !== 2) {
+        this.setViewMode2('editable');
+      }
+      this.newCont = true;
     },
     logOut(){
       this.$emit('log-out');
       console.log('logOut');
+    },
+    view(x){
+      this.setViewMode('readOnly');
+      this.setComponent(5);
+      this.Econtent = x;
     }
   },
   computed:{
@@ -139,8 +153,24 @@ export default {
       return this.viewMode;
     },
     getViewMode2(){
-      return this.viewMode2;
+      return this.viewModeC;
     },
+    email(){
+      /*return {
+        'from':'hello world',
+        'to':'my friend',
+        'subject':'assignment',
+        'body':'hello friend',
+        'priority':'one'
+      }*/
+      return this.Econtent;
+    },
+    contact(){
+      return{
+        'Cname':'user',
+        'address':'user1,user2,user3',
+      }
+    }
   }
 }
 </script>

@@ -23,7 +23,7 @@
       <button @click="reset" id="reset">Reset</button>
     </form>
   </div>
-  <button @click="goToSignIn" id="signIn"> have an account yet?</button>
+  <button @click="goToSignIn" id="signIn"> have an account ?</button>
   <button @click="submit" class="zr">Submit</button>
 </template>
 

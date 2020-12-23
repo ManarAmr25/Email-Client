@@ -26,6 +26,9 @@ export default {
       type: String,
       required:true,
     },
+    content:{
+
+    },
   },
   mounted() {
     if(this.mode === 'readOnly'){
@@ -33,6 +36,8 @@ export default {
     }else if(this.mode === 'editable'){
       this.enableInputField();
     }
+    this.contactName = this.content.Cname;
+    this.address = this.content.address;
   },
   methods:{
     add(){

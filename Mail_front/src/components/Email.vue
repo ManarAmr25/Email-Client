@@ -50,9 +50,8 @@
       <li><span><input id="nine" value="nine" type="checkbox" v-model="checkList" ></span> <label for="nine">9 list element</label></li>
       <li><span><input id="ten" value="ten" type="checkbox" v-model="checkList" ></span><label for="ten">10 list element</label></li>-->
     </ul>
-    <span><button class="check" @click="selectAll">all</button></span>
-    <span><button class="check" @click="deselectAll">remove</button></span>
-    <span>Checked: {{ checkList }}</span>
+    <span><button class="check" @click="selectAll">Select All</button></span>
+    <span><button class="check" @click="deselectAll">Deselect All</button></span>
   </div>
   <div id="editButtons">
     <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
@@ -63,11 +62,11 @@
   </div>
   <div id="container">
     <div id="pages">
-      <button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>
+      <!--<button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>-->
       <button @click="decreaseP" class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
       <p id="num">{{ pageNum }}</p>
       <button @click="increaseP" class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
-      <button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>
+      <!--<button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>-->
     </div>
   </div>
   </body>
@@ -145,7 +144,14 @@ export default {
         alert('only one email must be selected to view');
       }else {
         //send a request to the backend to set which email to be read
-        this.$emit('view');
+        var x = {
+          'from':'aaaa',
+          'to':'ssss',
+          'subject':'eee',
+          'body':'this is a message',
+          'priority':'one'
+        }
+        this.$emit('view',x);
         console.log('view event is emitted');
       }
     },
@@ -380,5 +386,46 @@ input[type=text]:focus{
   border: 2px solid black;
   outline: none;
 }
-
+.check {
+  -moz-box-shadow: 3px 4px 0px 0px #8a2a21;
+  -webkit-box-shadow: 3px 4px 0px 0px #8a2a21;
+  box-shadow: 3px 4px 0px 0px #8a2a21;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24437));
+  background: -moz-linear-gradient(top, #c62d1f 5%, #f24437 100%);
+  background: -webkit-linear-gradient(top, #c62d1f 5%, #f24437 100%);
+  background: -o-linear-gradient(top, #c62d1f 5%, #f24437 100%);
+  background: -ms-linear-gradient(top, #c62d1f 5%, #f24437 100%);
+  background: linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24437', GradientType=0);
+  background-color: #c62d1f;
+  -webkit-border-radius: 18px;
+  -moz-border-radius: 18px;
+  border-radius: 18px;
+  border: 1px solid #d02718;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 7px 25px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #810e05;
+  outline: none;
+  border: none;
+  margin-left: 10px;
+}
+.check:hover {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24437), color-stop(1, #c62d1f));
+  background:-moz-linear-gradient(top, #f24437 5%, #c62d1f 100%);
+  background:-webkit-linear-gradient(top, #f24437 5%, #c62d1f 100%);
+  background:-o-linear-gradient(top, #f24437 5%, #c62d1f 100%);
+  background:-ms-linear-gradient(top, #f24437 5%, #c62d1f 100%);
+  background:linear-gradient(to bottom, #f24437 5%, #c62d1f 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24437', endColorstr='#c62d1f',GradientType=0);
+  background-color:#f24437;
+}
+.check:active {
+  position:relative;
+  top:1px;
+}
 </style>
