@@ -18,7 +18,7 @@
       </ul>
     </div>
     <div class="c" id="contacts" v-if="show6"  >
-      <contact @new-cont="newCont = true; console.log('event listened');"></contact>
+      <contact @new-cont="newCont = true;" @editC="setViewMode2" @viewC="setViewMode2"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
       <compose :mode="getViewMode"></compose>
@@ -36,7 +36,7 @@
       <Email @view="setViewMode('readOnly');setComponent(5);" :folder = "getFolder" ></Email>
     </div>
     <div class="c" id="new_cont" v-if="newCont">
-      <new @close-window="newCont = false;" ></new>
+      <new :mode="getViewMode2" @close-window="newCont = false;" ></new>
     </div>
   </div>
   </body>
@@ -62,6 +62,7 @@ export default {
       folder:1,
       newCont:false,
       viewMode:'editable',
+      viewMode2:'editable',
     })
   },
   methods:{
@@ -79,6 +80,10 @@ export default {
       console.log(this.shown);
     },
     setViewMode(mode){
+      this.viewMode = mode;
+      console.log(this.viewMode);
+    },
+    setViewMode2(mode){
       this.viewMode = mode;
       console.log(this.viewMode);
     },
@@ -132,7 +137,10 @@ export default {
     },
     getViewMode(){
       return this.viewMode;
-    }
+    },
+    getViewMode2(){
+      return this.viewMode2;
+    },
   }
 }
 </script>

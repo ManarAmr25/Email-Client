@@ -3,9 +3,9 @@
   <div class="super">
     <h1 class="contact">New Contact</h1>
     <label for="name" class="l">Name</label>
-    <input type="text" id="name" placeholder="enter Name"><br>
+    <input v-model="contactName" type="text" id="name" placeholder="enter Name" ><br>
     <label for="email" class="l">E-mail</label>
-    <input type="text" id="email" placeholder="enter one or more addresses separated by single comma">
+    <input v-model="address" type="text" id="email" placeholder="enter one or more addresses separated by single comma" >
   </div>
   <button @click="add">Add</button>
   <button @click="close">close</button>
@@ -15,6 +15,25 @@
 <script>
 export default {
   name: "new",
+  data(){
+    return({
+      contactName:'',
+      address:'',
+    })
+  },
+  props:{
+    mode:{
+      type: String,
+      required:true,
+    },
+  },
+  mounted() {
+    if(this.mode === 'readOnly'){
+      this.disableInputField();
+    }else if(this.mode === 'editable'){
+      this.enableInputField();
+    }
+  },
   methods:{
     add(){
 
@@ -22,6 +41,14 @@ export default {
     close(){
       this.$emit('close-window');
       console.log('close window');
+    },
+    disableInputField(){
+      document.getElementById('name').disabled = true;
+      document.getElementById('email').disabled = true;
+    },
+    enableInputField(){
+      document.getElementById('name').disabled = false;
+      document.getElementById('email').disabled = false;
     },
   }
 }
@@ -45,7 +72,7 @@ body {
   margin-top:50px;
 }
 input[type=text],input[type=password],input[type=date]{
-  width: 25%;
+  width: 40%;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;

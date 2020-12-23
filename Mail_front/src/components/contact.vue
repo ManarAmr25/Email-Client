@@ -92,9 +92,28 @@ export default {
       console.log('new contact');
     },
     edit(){
-
+      if(this.checkList.length == 0){
+        alert('select an email to edit');
+      }else if(this.checkList.length > 1){
+        alert('only one email must be selected to edit');
+      }else {
+        //send a request to the backend to set which email to be read & edited
+        this.$emit('editC','editable');
+        this.$emit('new-cont');
+        console.log('edit event is emitted');
+      }
     },
     view() {
+      if(this.checkList.length == 0){
+        alert('select an email to view');
+      }else if(this.checkList.length > 1){
+        alert('only one email must be selected to view');
+      }else {
+        //send a request to the backend to set which email to be read
+        this.$emit('viewC','readOnly');
+        this.$emit('new-cont');
+        console.log('view event is emitted');
+      }
     },
     delete(){
 
