@@ -31,6 +31,8 @@ public class Main {
     public Main(){
         this.Logout();
     }
+
+
     public void Logout(){
         user=new User();
         page=0;
@@ -41,8 +43,10 @@ public class Main {
         a=new App();
         contactOp =new ContactManipulation(user);
     }
+
     //input (map >> email,password)
     //output(String:error,username)error>> true or false
+
     public String SignIn(Map<String, String> info) throws IOException {
         if(a.signIn(null,info.get("email"),info.get("password"))){
             String path="src\\main\\java\\com\\example\\emailclient\\App\\"+info.get("email")+"\\"+"info.json";
@@ -52,6 +56,7 @@ public class Main {
         }
         return "";
     }
+
     //input(map >> address,password,gender(1:male,2:female),date,firstname,lastname)
     //output(String:error,username) error>> true or false
     public String SignUp(Map<String, String> info) throws IOException {
@@ -77,6 +82,7 @@ public class Main {
         }
         return "false";
     }
+
     //input(String:name>>(split>>,)  >> index
     //output() >> ??
     public String[] RemoveContact(String names){
@@ -84,6 +90,7 @@ public class Main {
         contactOp.DeleteContact(arr);
         return contactOp.ListContacts();
     }
+
     //input(String:oldname,newname,adresses)
     //output(true or false)
     public String EditContact(String oldname,String newname,String adresses){
@@ -95,6 +102,7 @@ public class Main {
         }
         return "false";
     }
+
     //input(String:substring)
     //output(list)
     public String[] SearchContact(String name){
@@ -104,9 +112,11 @@ public class Main {
     public String[] listContacts(){
         return contactOp.ListContacts();
     }
+
     public String[] showContact(String name){
         return contactOp.ViewContact(name);
     }
+
     public String[] SortContacts(){
         contactOp.SortContact();
         return contactOp.ListContacts();
@@ -124,6 +134,8 @@ public class Main {
             e.printStackTrace();
         }
     }
+
+    // error in queue ??
     public void Senddraft(Map<String,String> m){
         m.put("from", user.getEmail());
         try {
@@ -139,6 +151,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
     public void listMails(){
         try {
             this.currentPage=op.getMails(page++,foldername, user.getEmail());
@@ -147,6 +160,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
     public Map<String, String> openMail(String index){
         Email current=this.currentPage.get(index);
         Map<String,String> res=new HashMap<>();
@@ -190,7 +204,7 @@ public class Main {
     }
     public void deleteMails(String[] index){
 
-            op.DeleteEmail(getByIndex(index),foldername, user.getEmail());
+        op.DeleteEmail(getByIndex(index),foldername, user.getEmail());
     }
 
     public Email[] getByIndex(String[] index){
@@ -261,7 +275,7 @@ public class Main {
                 return "false";
             }
         } catch (Exception e) {
-           return "false";
+            return "false";
         }
     }
 
