@@ -19,7 +19,7 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from "axios";
 export default {
   name: "sign_in",
   data(){
@@ -47,13 +47,10 @@ export default {
         alert('password missing');
         return;
       }else {
-        var user = new Map();
-        user['password'] = this.password;
-        user['email'] = this.email;
-        console.log(user);
-        /*axios.post("http://localhost:8085/", {
+        axios.get("http://localhost:8085/signIn", {
           params: {
-            user,
+            username:this.email,
+            password:this.password,
           }
         }).then(response => {
           if(response.data == ''){
@@ -62,10 +59,10 @@ export default {
             this.$emit('sign-in',response.data);
             console.log("event emitted");
           }
-        });*/
-        var x = {'user':"sign in name"};
+        });
+        /*var x = {'user':"sign in name"};
         this.$emit('sign-in',x);
-        console.log("event emitted");
+        console.log("event emitted");*/
       }
     },
     goToSignUp(){

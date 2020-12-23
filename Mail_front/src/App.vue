@@ -1,7 +1,7 @@
 <template>
   <body>
-  <sign_in v-if="show2" @submit="setCompenent(4);" @sign-in="signIn" @sign-up="signUp()"></sign_in>
-  <sign_up v-if="show3" @submit="setCompenent(4);" @sign-in="signIn" @sign="setCompenent(2)"></sign_up>
+  <sign_in v-if="show2" @submit="submit" @sign-in="signIn" @sign-up="signUp()"></sign_in>
+  <sign_up v-if="show3" @submit="submit" @sign-in="signIn" @sign="setCompenent(2)"></sign_up>
   <home :userName="getUname" v-if="show4" @log-out="logOut"></home>
   </body>
 </template>
@@ -20,6 +20,7 @@ export default {
   data(){
     return({
       shown: 2,
+      Uname:'',
       myString:'myName',
     })
   },
@@ -33,7 +34,7 @@ export default {
     },
     signIn(x){
       this.setCompenent(4);
-      this.Uname = x;
+      this.Uname = x.user;
       console.log("loaded name = "+x.user);
     },
     signUp(x){
@@ -42,6 +43,12 @@ export default {
     },
     logOut(){
       this.setCompenent(2);
+    },
+    submit(x){
+      this.Uname = x.name;
+      this.setCompenent(4);
+      console.log(x);
+      console.log("loaded name = "+x.name);
     }
   },
   computed:{
@@ -70,7 +77,7 @@ export default {
       return false;
     },
     getUname(){
-      return this.Uname.user;
+      return this.Uname;
     }
   }
 }

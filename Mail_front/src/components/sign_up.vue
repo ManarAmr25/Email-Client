@@ -59,7 +59,7 @@ export default {
         x.type = "password";
       }
     },
-    submit(){
+    async submit(){
       if(this.fname === ""){
         document.getElementById('fname').style.backgroundColor = '#ffe6e6';
         alert('first name missing');
@@ -90,14 +90,17 @@ export default {
         user['firstname'] = this.fname;
         user['lastname'] = this.lname;
         console.log(user);
-        axios.post("http://localhost:8085/",{
-          params:
-          user,
+        axios.post("http://localhost:8085/signUp",{
+            user
         }).then(response => {
           if(response.data == ''){
             alert('address already exists');
           }else {
-            this.$emit('submit',response.data);
+            var x = {
+              'name':response.data,
+            }
+            this.$emit('submit',x);
+            console.log(response.data);
             console.log("event emitted");
           }
         });
