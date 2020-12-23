@@ -129,8 +129,8 @@ public class UserBuilding implements UserBuilder {
     }
 
     @Override
-    public UserBuilder setContacts(ArrayList<Contact> contacts) {
-        user.contacts=contacts;
-        return this;
+    public ArrayList<Contact> getContacts() {
+        return user.contacts;
     }
+
 }
