@@ -72,21 +72,6 @@ public class EmailClientApplication {
         Email[] n=a.SortMails(m,"Date");
         System.out.println(n[0].getDate());
         System.out.println(n[1].getDate());*/
-        UserBuilding u= new UserBuilding();
-        ArrayList<String> l = new ArrayList<>();
-        l.add("nada@gmail.com");
-        u.setUsername("nada");
-        u.setPassword("jhhj");
-        u.setEmail("hkkhh@yahoo.com");
-        User user=u.build();
-
-        ContactManipulation m=new ContactManipulation(user);
-        m.AddContact("test",l);
-        System.out.println(u.getContacts().get(0).name);
-
-
-
-
 
 
     }

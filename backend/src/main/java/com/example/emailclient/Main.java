@@ -12,12 +12,15 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 
+@RestController
+@CrossOrigin
 public class Main {
     public User user ;
     public App a= new App();
@@ -47,32 +50,36 @@ public class Main {
     //input (map >> email,password)
     //output(String:error,username)error>> true or false
 
-    public String SignIn(Map<String, String> info) throws IOException {
-        if(a.signIn(null,info.get("email"),info.get("password"))){
-            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+info.get("email")+"\\"+"info.json";
+    @GetMapping("/signIn")
+    public String SignIn(@RequestParam(value="username") String username, @RequestParam(value = "password") String password) throws IOException {
+        if(a.signIn(null,username,password)){
+            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+username+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
             return user.getUsername();
         }
         return "";
+
     }
 
     //input(map >> address,password,gender(1:male,2:female),date,firstname,lastname)
     //output(String:error,username) error>> true or false
-    public String SignUp(Map<String, String> info) throws IOException {
-        info.put("username",info.get("firstname")+" "+info.get("lastname"));
+    @PostMapping("/signUp")
+    public String SignUp(@RequestBody String info) throws IOException {
+        /*info.put("username",info.get("firstname")+" "+info.get("lastname"));
         if(a.signUp(info)){
             String path="src\\main\\java\\com\\example\\emailclient\\App\\"+info.get("email")+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
             return user.getUsername();
-        }
-        return "";
+        }*/
+        System.out.println(info);
+        return "user";
     }
 
     //input(String:name,String:adresses(split>>,))
     //output(nameError: true or false)
-    public String AddContact(String name,String adresses){
+    public String AddContact(String name,String adresses) throws IOException {
 
         String [] arr = adresses.split(",");
         ArrayList<String> list1 = new ArrayList<>();
@@ -85,7 +92,7 @@ public class Main {
 
     //input(String:name>>(split>>,)  >> index
     //output() >> ??
-    public String[] RemoveContact(String names){
+    public String[] RemoveContact(String names) throws IOException {
         String [] arr = names.split(",");
         contactOp.DeleteContact(arr);
         return contactOp.ListContacts();
@@ -93,7 +100,7 @@ public class Main {
 
     //input(String:oldname,newname,adresses)
     //output(true or false)
-    public String EditContact(String oldname,String newname,String adresses){
+    public String EditContact(String oldname,String newname,String adresses) throws IOException {
         String [] arr = adresses.split(",");
         ArrayList<String> list1 = new ArrayList<>();
         Collections.addAll(list1, arr);

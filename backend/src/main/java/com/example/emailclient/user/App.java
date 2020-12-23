@@ -37,15 +37,16 @@ public class App {
             if(p2==null){
                 p2="";
             }
-            if (p1 == null  && p2==null ) {
-                return false;
-            }
-            else if(p1.compareTo(password)==0||p2.compareTo(password)==0){
+            if(p1.compareTo(password)==0||p2.compareTo(password)==0){
                 return true;
+            }
+            else{
+                return false;
             }
 
         }
-        return true;
+
+
     }
     public void writeTObase(){
         try {
