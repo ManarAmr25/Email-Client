@@ -87,7 +87,7 @@ public class Folder implements IFolder {
 
     @Override
     public String[] getNames(String email) {
-
-        return new String[0];
+            File x= new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email);
+        return x.list();
     }
 }
