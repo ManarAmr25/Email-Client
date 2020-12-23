@@ -40,13 +40,13 @@ public class Folder implements IFolder {
             System.out.println("Couldn't find folder with such name");
         }
 
-            if (deleteDirectory(sourceFile)) {
-                System.out.println("Folder deleted successfully");
-                return true;
-            }
-            else {
-                System.out.println("Failed to delete Folder");
-            }
+        if (deleteDirectory(sourceFile)) {
+            System.out.println("Folder deleted successfully");
+            return true;
+        }
+        else {
+            System.out.println("Failed to delete Folder");
+        }
 
         return false;
     }
@@ -87,7 +87,7 @@ public class Folder implements IFolder {
 
     @Override
     public String[] getNames(String email) {
-            File x= new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email);
+        File x= new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email);
         return x.list();
     }
 }
