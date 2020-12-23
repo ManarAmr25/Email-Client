@@ -1,9 +1,7 @@
 package com.example.emailclient.Email;
 
-import com.example.emailclient.Main;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,16 +45,18 @@ public class Operations extends Email {
         setBody(M.get("body"));
         setFrom(M.get("from"));
         setSubject(M.get("subject"));
-        setKey(Integer.parseInt(M.get("key")));
+        if(M.containsKey("key")){
+        setKey(Integer.parseInt(M.get("key")));}
         Date now = new Date();
         setDate(now);
+        if(M.containsKey("to")){
         String temp = M.get("to");
         String [] arr = temp.split(",");
         Queue reciever = new LinkedList();
         for(int i=0 ; i< arr.length ; i++){
             reciever.add(arr[i]);
         }
-        setTo(reciever);
+        setTo(reciever);}
 
         return getEmail();
     }
@@ -189,7 +189,7 @@ public class Operations extends Email {
             Email curr=mapper.readValue(Paths.get(path+"\\"+content[i]).toFile(),Operations.class);
             res.put(String.valueOf(curr.index),curr);
         }
-        
+
         return res;
     }
 
