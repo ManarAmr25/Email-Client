@@ -3,7 +3,7 @@
   <body>
   <div id="toContainer">
     <div class="comp" id="to">
-      <label class="fieldLabel" for="toInput">To</label>
+      <label class="fieldLabel" for="toInput">{{ toFrom }}</label>
       <input type="text" id="toInput" v-model="to" placeholder="enter one or more recievers separated by a single comma">
     </div>
   </div>
@@ -37,7 +37,7 @@
   <div id="attachsContainer">
     <div class="comp" id="attachs">
       <label class="fieldLabel" for="fileInput">Attachments</label>
-      <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
+      <input @change="uploadFiles" ref="file" type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
     </div>
   </div>
   <div id="submitContainer">
@@ -64,17 +64,22 @@ export default {
   },
   data(){
     return({
+      toFrom:'To',
       picked:'three',
       to:'',
       subject:'',
       mail:'',
+      file: [],
     })
   },
   mounted() {
     if(this.mode === 'readOnly'){
       this.disableInputField();
+      this.toFrom = 'From';
     }else if(this.mode === 'editable'){
       this.enableInputField();
+      this.toFrom = 'To';
+      console.log('fields enabled');
     }
     this.to = this.content.to;
     this.subject = this.content.subject;
@@ -134,6 +139,20 @@ export default {
       document.getElementById('mailInput').disabled = false;
       document.getElementById('fileInput').disabled =false;
     },
+    uploadFile(){
+      this.file.push(this.$refs.file.files[0]);
+    },
+    async sendFile(){
+      const formData=new FormData();
+      for (let i=0;i<this.file.length;i++) {
+        formData.append('file', this.file[i])
+      }
+      try {
+        await axios.post("http://localhost:8085/", formData)
+      }catch (err){
+        console.log(err)
+      }
+    }
   },
   computed:{
     canSend(){

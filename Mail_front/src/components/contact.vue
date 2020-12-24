@@ -50,24 +50,28 @@
       <li><span><input id="nine" value="nine" type="checkbox" v-model="checkList" ></span> <label for="nine">9 list element</label></li>
       <li><span><input id="ten" value="ten" type="checkbox" v-model="checkList" ></span><label for="ten">10 list element</label></li>-->
     </ul>
+
+  </div>
+  <div id="select">
     <span><button class="check" @click="selectAll">Select All</button></span>
     <span><button class="check" @click="deselectAll">Deselect All</button></span>
   </div>
+
   <div id="editButtons">
     <button @click="edit" class="op"><i class="material-icons">&#xe3c9;</i> <span>edit</span></button>
     <button class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
     <button @click="view" class="op"><i class="material-icons">&#xe89d;</i> <span>view</span></button>
     <button @click="newC" class="op"><i class="material-icons">&#xe7fe;</i> <span>add</span></button>
   </div>
-  <div id="container">
-    <div id="pages">
-      <!--<button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>-->
-      <button @click="decreaseP" class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
-      <p id="num">{{ pageNum }}</p>
-      <button @click="increaseP" class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
-      <!--<button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>-->
-    </div>
-  </div>
+<!--  <div id="container">-->
+<!--    <div id="pages">-->
+<!--      &lt;!&ndash;<button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>&ndash;&gt;-->
+<!--      <button @click="decreaseP" class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>-->
+<!--      <p id="num">{{ pageNum }}</p>-->
+<!--      <button @click="increaseP" class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>-->
+<!--      &lt;!&ndash;<button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>&ndash;&gt;-->
+<!--    </div>-->
+<!--  </div>-->
   </body>
 </template>
 
@@ -81,7 +85,7 @@ export default {
       searchInput : ' ',
       sort : '0',
       f : '0',
-      List:['one','two','three','four','five','six','seven','eight','nine','ten'],
+      List:['one','two','three','four','five','six','seven','eight','nine','ten','11','12','13'],
       pageNum:1,
       checkList:[],
     })
@@ -179,18 +183,25 @@ html {
 }
 body {
   display: grid;
-  grid-template-rows: 14% 15% 54% 7% 3% 6% 1%;
+  grid-template-rows: 14% 60% 9% 7% 3% 1%;
   border: solid red 3px;
   border-radius: 7px;
-  min-height: 97%;
+  min-height: 93%;
   margin-top: 5px;
+  overflow: hidden;
 }
 #list {
-  grid-row: 2/4;
+  grid-row: 2/3;
+  overflow: auto;
 }
-#container {
+
+#select{
+  grid-row: 3/4;
+}
+
+/*#container {
   grid-row: 6/7;
-}
+}*/
 li {
   margin: 10px;
   border-bottom: solid 0.5px black;
@@ -368,4 +379,20 @@ input[type=text]:focus{
   position:relative;
   top:1px;
 }
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(173, 2, 16);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #750202;
+}
+
 </style>

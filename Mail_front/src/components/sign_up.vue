@@ -20,8 +20,9 @@
         <option value="1">Male</option>
         <option value="2">Female</option>
       </select><br>
-      <button @click="reset" id="reset">Reset</button>
+
     </form>
+    <button @click="reset" id="reset">Reset</button>
   </div>
   <button @click="goToSignIn" id="signIn"> have an account ?</button>
   <button @click="submit" class="zr">Submit</button>
@@ -43,6 +44,7 @@ export default {
   },
   methods:{
     reset(){
+      console.log('start reset');
       document.getElementById("birthday").setAttribute("value","defaultValue");
       this.fname = "";
       this.lname = "";
@@ -50,6 +52,7 @@ export default {
       this.date = "2000-01-01";
       this.gender = "0";
       this.password = "";
+      console.log('end reset');
     },
     showPassword(){
       var x = document.getElementById("password");
