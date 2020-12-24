@@ -1,0 +1,13 @@
+{
+  "username" : "mariam",
+  "password" : "5500",
+  "email" : "mariam@yahoo.com",
+  "firstname" : null,
+  "lastname" : null,
+  "gender" : null,
+  "phoneNumber" : null,
+  "dateOfBirth" : null,
+  "address" : "alex",
+  "country" : "egypt",
+  "contacts" : null
+}

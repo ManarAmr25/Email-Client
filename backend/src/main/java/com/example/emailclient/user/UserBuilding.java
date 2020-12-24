@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserBuilding implements UserBuilder {
-    private  User user;
+    private User user;
     public UserBuilding(){
         user = new User();
     }
@@ -50,6 +50,7 @@ public class UserBuilding implements UserBuilder {
 
         String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+user.username+"\\";
         new File("src\\main\\java\\com\\example\\emailclient\\App\\"+user.username).mkdir();
+        new File(path+"attachment").mkdir();
         new File(path+"inbox").mkdir();
         new File(path+"inbox/index.txt").createNewFile();
         new File(path+"sent").mkdir();
@@ -129,8 +130,8 @@ public class UserBuilding implements UserBuilder {
     }
 
     @Override
-    public ArrayList<Contact> getContacts() {
-        return user.contacts;
+    public UserBuilder setContacts(ArrayList<Contact> contacts) {
+        user.contacts=contacts;
+        return this;
     }
-
 }

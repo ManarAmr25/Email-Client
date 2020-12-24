@@ -72,5 +72,5 @@ public abstract class Email implements Cloneable, Serializable {
     abstract int getIndex(String Foldername , String username);
     abstract void setIndex(String Foldername , String username) throws IOException;
     abstract Email[] Filtering(Email[] emails, String Key, String mode);
-    abstract Map<String,Email> getMails(int page, String foldername, String email) throws IOException;
+    abstract ArrayList<Email> getMails(int page, String foldername, String email) throws IOException;
 }

@@ -12,15 +12,14 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
-
-@RestController
-@CrossOrigin
 public class Main {
     public User user ;
     public App a= new App();
@@ -28,7 +27,7 @@ public class Main {
     public String foldername;
     public Folder folder;
     public Operations op;
-    public Map<String, Email> currentPage;
+    public ArrayList<Email> currentPage;
     public ContactManipulation contactOp;
     //operations of user
     public Main(){
@@ -42,20 +41,34 @@ public class Main {
         foldername=new String();
         folder=new Folder();
         op=new Operations();
-        currentPage=new HashMap<>();
+        currentPage=new ArrayList<Email>();
         a=new App();
         contactOp =new ContactManipulation(user);
     }
 
+    public void AutoDelete() throws IOException {
+        foldername="trash";
+        Email[] e =getAll();
+        ArrayList<Email> delete = new ArrayList<>();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateFormat.format(new Date()));
+        LocalDate returnvalue = date.minusDays(30);
+        for(int i=0;i<e.length;i++){
+            if(LocalDate.parse(dateFormat.format(e[i].getDate())).compareTo(returnvalue) < 0){
+                delete.add(e[i]);
+            }
+        }
+        op.DeleteEmail((Email[]) delete.toArray(),"trash", user.getEmail());
+    }
     //input (map >> email,password)
     //output(String:error,username)error>> true or false
 
-    @GetMapping("/signIn")
-    public String SignIn(@RequestParam(value="username") String username, @RequestParam(value = "password") String password) throws IOException {
-        if(a.signIn(null,username,password)){
-            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+username+"\\"+"info.json";
+    public String SignIn(String email,String password) throws IOException {
+        if(a.signIn(null,email,password)){
+            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
+            AutoDelete();
             return user.getUsername();
         }
         return "";
@@ -64,17 +77,17 @@ public class Main {
 
     //input(map >> address,password,gender(1:male,2:female),date,firstname,lastname)
     //output(String:error,username) error>> true or false
-    @PostMapping("/signUp")
-    public String SignUp(@RequestBody String info) throws IOException {
-        /*info.put("username",info.get("firstname")+" "+info.get("lastname"));
+
+    public String SignUp(Map<String,String> info) throws IOException {
+        info.put("username",info.get("firstname")+" "+info.get("lastname"));
         if(a.signUp(info)){
             String path="src\\main\\java\\com\\example\\emailclient\\App\\"+info.get("email")+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
             return user.getUsername();
-        }*/
-        System.out.println(info);
-        return "user";
+        }
+
+        return "";
     }
 
     //input(String:name,String:adresses(split>>,))
@@ -159,17 +172,18 @@ public class Main {
         }
     }
 
-    public void listMails(){
+    public String[] listMails(){
         try {
             this.currentPage=op.getMails(page++,foldername, user.getEmail());
-            Map<String,String>res=new HashMap<>();
+            return getDescription((Email[]) this.currentPage.toArray());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return new String[0];
     }
 
     public Map<String, String> openMail(String index){
-        Email current=this.currentPage.get(index);
+        Email current=this.currentPage.get(Integer.parseInt(index));
         Map<String,String> res=new HashMap<>();
         res.put("from",current.getFrom());
         res.put("date", String.valueOf(current.getDate()));
@@ -189,15 +203,17 @@ public class Main {
     }
     //input()
     //output()
-    public void Searching(String type,String key) throws IOException {
+    public String[] Searching(String type, String key) throws IOException {
         Email[] e =getAll();
         Email[]s =a.SearchMails(e,type,key);
+        return getDescription(s);
     }
     //input()
     //output()
-    public void sorting(String type) throws IOException {
+    public String[] sorting(String type) throws IOException {
         Email[] e =getAll();
         Email[] s=a.SortMails(e,type);
+        return getDescription(s);
     }
     //input()
     //output()
@@ -217,7 +233,7 @@ public class Main {
     public Email[] getByIndex(String[] index){
         Email[] e=new Email[index.length];
         for(int i=0;i<index.length;i++){
-            e[i]=this.currentPage.get(index[i]);
+            e[i]=this.currentPage.get(Integer.parseInt(index[i]));
         }
         return e;
     }
@@ -237,7 +253,13 @@ public class Main {
         }
         return res;
     }
-
+    public String[] getDescription(Email[] e){
+        String[] res=new String[e.length];
+        for(int i=0;i<e.length;i++){
+            res[i]=e[i].getSubject()+"  "+e[i].getFrom()+"  "+e[i].getTo();
+        }
+        return res;
+    }
     //operations on Folder
     public void openFolder(String name){
         this.foldername=name;

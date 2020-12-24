@@ -14,5 +14,5 @@ public interface UserBuilder {
     UserBuilder setDateofbirth(String date);
     UserBuilder setAddress(String address);
     UserBuilder setCountry(String country);
-    ArrayList<Contact> getContacts();
+    UserBuilder setContacts(ArrayList<Contact> contacts);
 }
