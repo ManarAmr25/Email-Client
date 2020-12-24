@@ -10,6 +10,7 @@ public class BannedFolders implements Access {
         banned.add("trash");
         banned.add("starred");
         banned.add("draft");
+        banned.add("attachment");
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.example.emailclient.Email;
 
+import com.example.emailclient.Main;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,18 +47,16 @@ public class Operations extends Email {
         setBody(M.get("body"));
         setFrom(M.get("from"));
         setSubject(M.get("subject"));
-        if(M.containsKey("key")){
-        setKey(Integer.parseInt(M.get("key")));}
+        setKey(Integer.parseInt(M.get("key")));
         Date now = new Date();
         setDate(now);
-        if(M.containsKey("to")){
         String temp = M.get("to");
         String [] arr = temp.split(",");
         Queue reciever = new LinkedList();
         for(int i=0 ; i< arr.length ; i++){
             reciever.add(arr[i]);
         }
-        setTo(reciever);}
+        setTo(reciever);
 
         return getEmail();
     }
@@ -168,11 +168,11 @@ public class Operations extends Email {
     }
 
     @Override
-    public Map<String,Email> getMails(int page, String foldername, String email) throws IOException {
+    public ArrayList<Email> getMails(int page, String foldername, String email) throws IOException {
         String[] content=new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+foldername).list();
         Collections.reverse(Arrays.asList(content));
         int len=content.length;
-        Map<String,Email> res=new HashMap<>();
+       ArrayList<Email> res=new ArrayList<Email>();
         int start =10*(page-1);
         int end=10+start;
 
@@ -187,9 +187,9 @@ public class Operations extends Email {
             }
             mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
             Email curr=mapper.readValue(Paths.get(path+"\\"+content[i]).toFile(),Operations.class);
-            res.put(String.valueOf(curr.index),curr);
+            res.add(curr);
         }
-
+        
         return res;
     }
 
