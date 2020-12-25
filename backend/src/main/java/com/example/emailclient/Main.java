@@ -4,8 +4,8 @@ import com.example.emailclient.Email.Email;
 import com.example.emailclient.Email.Operations;
 import com.example.emailclient.Folder.Folder;
 import com.example.emailclient.user.App;
+import com.example.emailclient.user.Contact;
 import com.example.emailclient.user.User;
-import com.example.emailclient.user.ContactManipulation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -29,7 +29,6 @@ public class Main {
     public Folder folder;
     public Operations op;
     public ArrayList<Email> currentPage;
-    public ContactManipulation contactOp;
     //operations of user
     public Main(){
         this.Logout();
@@ -44,7 +43,6 @@ public class Main {
         op=new Operations();
         currentPage=new ArrayList<Email>();
         a=new App();
-        contactOp =new ContactManipulation(user);
     }
 
     public void AutoDelete() throws IOException {
@@ -99,7 +97,10 @@ public class Main {
         String [] arr = adresses.split(",");
         ArrayList<String> list1 = new ArrayList<>();
         Collections.addAll(list1, arr);
-        if(contactOp.AddContact(name,list1)){
+        if(SearchContact(name) == null){
+            Contact c = new Contact(name,list1);
+            this.user.getContacts().add(c);
+            this.Update();
             return "true";
         }
         return "false";
@@ -109,8 +110,11 @@ public class Main {
     //output() >> ??
     public String[] RemoveContact(String names) throws IOException {
         String [] arr = names.split(",");
-        contactOp.DeleteContact(arr);
-        return contactOp.ListContacts();
+
+        for(int i=0;i<arr.length;i++){
+            this.user.getContacts().remove(SearchContact(arr[i]));}
+        this.Update();
+        return listContacts();
     }
 
     //input(String:oldname,newname,adresses)
@@ -119,29 +123,65 @@ public class Main {
         String [] arr = adresses.split(",");
         ArrayList<String> list1 = new ArrayList<>();
         Collections.addAll(list1, arr);
-        if(contactOp.EditContact(oldname,newname,list1)){
+        if(oldname.compareTo(newname)==0){
+            this.user.getContacts().set(this.user.getContacts().indexOf(SearchContact(oldname)),new Contact(oldname,list1));
+            this.Update();
             return "true";
+        }else{
+            if(SearchContact(newname)==null){
+                this.user.getContacts().set(this.user.getContacts().indexOf(SearchContact(oldname)),new Contact(newname,list1));
+                this.Update();
+                return "true";
+            }
+            else{
+                return "false";
+            }
         }
-        return "false";
+
+
+
     }
 
     //input(String:substring)
     //output(list)
-    public String[] SearchContact(String name){
-        return contactOp.SearchName(name);
+    public String[] SearchContactname(String sub){
+        ArrayList<String> names = new ArrayList<>();
+        for(int i=0; i< user.getContacts().size();i++){
+            if(user.getContacts().get(i).name.contains(sub)){
+                names.add(user.getContacts().get(i).name);
+            }
+        }
+        return (String[]) names.toArray();
     }
 
     public String[] listContacts(){
-        return contactOp.ListContacts();
+        int size = 0;
+        if(user.getContacts() != null){
+            size = user.getContacts().size();
+        }
+        String[] contacts= new String[size];
+        for (int i=0; i<size;i++){
+            contacts[i]=user.getContacts().get(i).name;
+        }
+        return contacts;
     }
 
     public String[] showContact(String name){
-        return contactOp.ViewContact(name);
+
+        Contact c = SearchContact(name);
+        return (String[]) c.emails.toArray();
     }
 
     public String[] SortContacts(){
-        contactOp.SortContact();
-        return contactOp.ListContacts();
+        int size = user.getContacts().size();
+        for(int i = 0; i<size-1; i++) {
+            for (int j = i + 1; j < user.getContacts().size(); j++) {
+                if (user.getContacts().get(i).name.compareTo(user.getContacts().get(j).name) > 0) {
+                    Contact temp = user.getContacts().get(i);
+                    user.getContacts().add(i,user.getContacts().get(j));
+                    user.getContacts().add(j,temp); } }
+        }
+        return listContacts();
     }
 
     //operations on Emails
@@ -321,6 +361,25 @@ public class Main {
         } catch (Exception e) {
             return "false";
         }
+    }
+    private Contact SearchContact(String name){
+        int size = 0;
+        if(user.getContacts() != null){
+            size = user.getContacts().size();
+        }
+        for(int i=0; i< size;i++){
+            if(user.getContacts().get(i).name.compareTo(name) == 0){
+                return user.getContacts().get(i);
+            }
+        }
+        return null;
+    }
+    public void Update() throws IOException {
+        String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+this.user.getEmail()+"\\";
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        writer.writeValue(Paths.get(path+"info.json").toFile(), this.user);
     }
 
 
