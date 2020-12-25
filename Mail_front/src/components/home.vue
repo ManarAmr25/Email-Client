@@ -14,7 +14,8 @@
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
         <li><button @click="setViewMode('editable');setComponent(5);clearEcontent();">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
-        <li><button>&#x2712; Your Folders</button></li>
+        <li><button @click="setComponent(7)">&#x2712; Your Folders</button></li>
+        <li v-for="(f,index) in folders" :key="index"><button @click="openF(f);setComponent(8)" >&#x2712; {{ f }}</button></li>
         <button @click="logOut" class="logout">&#x276E;&#x276E; Log Out</button>
       </ul>
     </div>
@@ -35,9 +36,12 @@
     </div>
     <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
       <Email @view="view" :folder = "getFolder" ></Email>
-    </div>
+    </div>     
+      <div class="c" id="email8" v-if="show8"> <!--trash : view, restore-->
+        <Email @view="view" :folder = "getFolder" ></Email>
+      </div>
     <div class="c" id="userF" v-if="show7">
-      <UserFolder></UserFolder>
+      <UserFolder @addF="addFolder" @renameF="renameFolder" @deleteF="deleteFolder"></UserFolder>
     </div>
     <div class="c" id="new_cont" v-if="newCont">
       <new :content="contact" :mode="getViewMode2" @close-window="newCont = false;" ></new>
@@ -72,7 +76,7 @@ export default {
     return({
       Uname:'',
       shown: 1,
-      folder:1,
+      folder:'sent',
       newCont:false,
       viewMode:'editable',
       viewModeC:'editable',
@@ -87,6 +91,7 @@ export default {
         'Cname':'',
         'address':'',
       },
+      folders:['nour'],
     })
   },
   mounted() {
@@ -96,8 +101,17 @@ export default {
   },
   methods:{
     setComponent(num, mode=''){
-      if(num === 1 || num === 2 || num === 3 || num === 4){
-        this.folder=num;
+      if(num === 1){
+        this.folder = 'sent';
+        this.newCont = false;
+      }else if (num === 2){
+        this.folder = 'inbox';
+        this.newCont = false;
+      }else if (num === 3){
+        this.folder = 'draft';
+        this.newCont = false;
+      }else if (num === 4){
+        this.folder = 'trash';
         this.newCont = false;
       }else if(num === 5){
         this.newCont = false;
@@ -161,7 +175,39 @@ export default {
         'Cname':'',
         'address':'',
       };
-    }
+    },
+    addFolder(x){
+      var index = this.folders.indexOf(x.namef);
+      if(index < 0){
+        this.folders.push(x.namef);
+      }else{
+        console.log('cannot add');
+      }
+
+    },
+    renameFolder(x){
+      console.log(x);
+      var index = this.folders.indexOf(x.nameo);
+      if(index >= 0){
+        this.folders.splice(index,1,x.namen);
+      }else {
+        console.log('cannot remove');
+      }
+
+    },
+    deleteFolder(x){
+      var index = this.folders.indexOf(x.named);
+      if(index >= 0){
+        this.folders.splice(index,1);
+      }else {
+        console.log('cannot delete');
+      }
+    },
+    openF(x){
+      this.newCont = false;
+      this.folder = x;
+      console.log('openF -> '+this.folder);
+    },
   },
   computed:{
     show1(){
@@ -202,6 +248,12 @@ export default {
     },
     show7(){
       if(this.shown == 7) {
+        return true;
+      }
+      return false;
+    },
+    show8(){
+      if(this.shown == 8) {
         return true;
       }
       return false;
@@ -276,7 +328,7 @@ ul {
   margin: 0;
   padding: 0;
   width: 15%;
-  height :720px;   /***********************************************************************/
+  height :98%;   /***********************************************************************/
   background-color: #f1f1f1;
 }
 li button,label{
@@ -330,7 +382,7 @@ img{
   text-shadow:0px 1px 0px #eb1729;
   margin-top:40%;
   margin-left:45px;
-  margin-bottom:20px;
+  margin-bottom:40px;
   border: none;
   outline: none;
 }

@@ -58,7 +58,8 @@
     <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
     <button @click="dlt"  v-if="showDlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
     <button @click="view" v-if="showView" id="v" class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
-    <button @click="send" v-if="showSend" id="s" class="op"><i class="material-icons">&#xe163;</i> <span>send</span></button>
+    <button @click="copy" v-if="showCM" id="c" class="op"><i class="material-icons">&#xe151;</i> <span>copy</span></button>
+    <button @click="move" v-if="showCM" id="m" class="op"><i class="material-icons">&#xe163;</i> <span>move</span></button>
   </div>
   <div id="container">
     <div id="pages">
@@ -78,7 +79,7 @@ export default {
   name: "Email",
   props:{
     folder:{
-      type: Number,
+      type: String,
       required:true,
     },
   },
@@ -110,11 +111,11 @@ export default {
     }).then(response => {this.list = response.data});*/
   },
   beforeUpdate() {
-    if(this.folder == 3){ //draft
+    /*if(this.folder == 3){ //draft
       //document.getElementById("e").style.visibility = "hidden";
       //document.getElementById("s").style.visibility = "hidden";
       console.log('updated method is called');
-    }
+    }*/
   },
   methods:{
     selectAll(){
@@ -161,7 +162,11 @@ export default {
         console.log('view event is emitted');
       }
     },
-    send(){
+    copy(){
+
+    },
+    move(){
+
     },
     setPageList(page){
       console.log(page);
@@ -197,33 +202,30 @@ export default {
     },
   },
   computed:{
-    showEdit(){
-      if(this.folder == 3){
+    showEdit(){//1>sent ,2> inbox, 3>draft, 4> trash
+      if(this.folder == 'draft'){
         return true;
       }
       return false;
     },
     showDlt(){
-      if(this.folder == 1 || this.folder == 2 || this.folder == 3){
-        return true;
+      if(this.folder == 'trash'){
+        return false;
       }
-      return false;
+      return true;
     },
     showView(){
-      if(this.folder == 1 || this.folder == 2 || this.folder == 4){
+      if(this.folder == 'draft'){
+        return false;
+      }
+      return true;
+    },
+    showCM(){
+      if(this.folder != 'draft'){
         return true;
       }
       return false;
     },
-    showSend(){
-      return false;
-    },
-    showRes(){
-      if(this.folder == 4){
-        return true;
-      }
-      return false;
-    }
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <body>
-  <form>
+    <div class="super">
     <label class="T">Add Folder</label>
     <label for="add" class="l">Name</label>
     <input v-model = "add" type="text" id="add" name="add" placeholder="Enter Folder Name">
-    <button>Add</button>
+    <button @click="addF" >Add</button>
     <br>
 
     <label class="T">Rename Folder</label>
@@ -12,15 +12,15 @@
     <input v-model = "old" type="text" id="old" name="old" placeholder="Enter Old Name"><br>
     <label for="newn" class="l">New Name</label>
     <input v-model = "newn" type="text" id="newn" name="newn" placeholder="Enter New Name">
-    <button>Rename</button>
+    <button @click="rename">Rename</button>
     <br>
 
     <label class="T">Delete Folder</label>
     <label for="delete" class="l">Name</label>
     <input v-model = "deletef" type="text" id="delete" name="delete" placeholder="Enter Folder Name">
-    <button>Delete</button>
-    <br>
-  </form>
+    <button @click="deleteF">Delete</button>
+    <br><br><br><br><br>
+    </div>
   </body>
 </template>
 
@@ -31,22 +31,59 @@ export default {
   name: "UserFolder",
   data(){
     return({
-
+      add:"",
+      old:"",
+      newn:"",
+      deletef:"",
     })
   },
   mounted(){
    // axios.get("http://localhost:8085/listCont").then(response => {this.List = response.data; console.log(response.data)});
   },
   methods:{
-    userF(){
-      this.$emit('user-folder');
-      console.log('user folder');
+    addF(){
+      if(this.add === ''){
+        alert("Enter folder name");
+      }else {
+        var x = {'namef' : this.add}
+        this.$emit('addF', x);
+        console.log('Add folder');
+      }
+    },
+    rename(){
+      if(this.old === '' || this.newn === ''){
+        alert("Enter folder name");
+      }else {
+        var x = {
+          'nameo' : this.old,
+          'namen' : this.newn,
+        }
+        this.$emit('renameF', x);
+        console.log('renamef folder');
+      }
+    },
+    deleteF(){
+      if(this.deletef === ''){
+        alert("Enter folder name");
+      }else {
+        var x = {
+          'named' : this.deletef,
+        }
+        this.$emit('deleteF', x);
+        console.log('deletef folder');
+      }
     },
   }
 }
 </script>
 
 <style scoped>
+
+.super{
+  width: 100%;
+  height: 100%;
+  background-color:whitesmoke;
+}
 
 input[type=text]{
   width: 25%;
