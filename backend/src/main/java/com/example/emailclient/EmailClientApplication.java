@@ -31,32 +31,19 @@ public class EmailClientApplication {
     public static void main(String[] args) throws CloneNotSupportedException, IOException {
         SpringApplication.run(EmailClientApplication.class, args);
 
-        Queue x=new LinkedList();
-        x.add("hi");
-        x.add("no");
-        System.out.println("me"+x.toString());
+    }
+    @PostMapping(value="/request",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void g(HttpServletRequest request,@RequestParam(name="file", required = false) MultipartFile file){
+        System.out.println(file.getOriginalFilename());
+        try {
+            Path filepath = Paths.get("src\\main\\java\\com\\example\\emailclient\\App\\", file.getOriginalFilename());
+            file.transferTo(filepath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
-
-
-
-
-
-
-//    @PostMapping(value="/request",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public void g(@RequestParam(name="file", required = false) MultipartFile[] file){
-//        if(file!=null) {
-//            System.out.println(file.length);
-//        }
-//        else {
-//            System.out.println("empty");
-//        }
-        //System.out.println(file[0].getOriginalFilename());
-//        for (int i=0;i<file.length;i++){
-//            System.out.println(file[i].getOriginalFilename());
-//        }
-     //   {"info":"{\"password\":\"ffffffffffffffff\",\"email\":\"fffff\",\"gender\":\"1\",\"date\":\"2000-01-01\",\"firstname\":\"ff\",\"lastname\":\"ff\"}"}
     }
 
 

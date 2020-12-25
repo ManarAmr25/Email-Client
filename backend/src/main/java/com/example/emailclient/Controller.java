@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
 @CrossOrigin
 public class Controller {
 Main app =new Main();
+Email temp;
     @GetMapping("/signIn")
     public String signin(@RequestParam(value="email") String email, @RequestParam(value = "password") String password) throws IOException {
         return app.SignIn(email,password);
@@ -67,7 +69,7 @@ Main app =new Main();
 
     //email
     @PostMapping(value="/compose",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void send(@RequestParam(value = "info") String content ){
+    public void compose(@RequestParam(value = "info") String content ){
 
         Map<String,String> information=new HashMap<>();
         System.out.println(content);
@@ -83,12 +85,19 @@ Main app =new Main();
         try {
             information= mapper.readValue(json, Map.class);
             System.out.println(information);
-            app.SendMail(information);
+            temp=app.ComposeMail(information);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
     }
+    @PostMapping(value="/file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void SendMail(@RequestParam(value = "file") MultipartFile[] file){
+        app.SendMail(temp, file);
+        temp=null;
+    }
+
+
     public void sendDraft(){}
     public void listmail(){}
     public void openmail(){}

@@ -8,17 +8,33 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class Operations extends Email {
     @Override
-    public Boolean sendEmail(Email e) throws IOException, CloneNotSupportedException {
+    public Boolean sendEmail(Email e, MultipartFile[] file) throws IOException, CloneNotSupportedException {
         if(e==null){
             return false;
         }
+        //attachment
+        ArrayList<String>sender=new ArrayList<>();
+        int size1=0;
+        if(file!=null){
+            size1=file.length;
+        }
+        for(int i=0;i<size1;i++){
+            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+e.getFrom()+"\\attachment\\";
+            Path filepath = Paths.get(path, file[i].getOriginalFilename());
+            file[i].transferTo(filepath);
+            sender.add(path+file[i].getOriginalFilename());
+        }
+
+        e.setAttach(sender);
         setIndex("sent", e.getFrom());
         e.setMailindex( getIndex("sent",e.getFrom()));
         String Sentpath = "src\\main\\java\\com\\example\\emailclient\\App\\" + e.getFrom()+"\\sent\\" + getIndex("sent",e.getFrom())+ ".json";
@@ -28,17 +44,30 @@ public class Operations extends Email {
         writer.writeValue(Paths.get(Sentpath).toFile(), e);
         while(0 < e.getTo().size()){
             String reciever =(String)e.getTo().remove();
-            File rec=new File("src\\main\\java\\com\\example\\emailclient\\App\\" + reciever);
-            if(rec.exists()) {
                 setIndex("inbox", reciever);
+
+                //attachment
+                ArrayList<String> rec=new ArrayList<>();
+                 size1=0;
+                if(file!=null){
+                    size1=file.length;
+                }
+                for(int i=0;i<size1;i++){
+                    String path="src\\main\\java\\com\\example\\emailclient\\App\\"+reciever+"\\attachment\\";
+                    Path filepath = Paths.get(path, file[i].getOriginalFilename());
+                    file[i].transferTo(filepath);
+                    rec.add(path+file[i].getOriginalFilename());
+                }
+
                 String inboxpath = "src\\main\\java\\com\\example\\emailclient\\App\\" + reciever + "\\inbox\\" + getIndex("inbox", reciever) + ".json";
                 Email copied = (Email) e.clone();
                 copied.setMailindex(getIndex("inbox", reciever));
+                copied.setAttach(rec);
                 Queue r = new LinkedList();
                 r.add(reciever);
                 copied.setTo(r);
                 writer.writeValue(Paths.get(inboxpath).toFile(), copied);
-            }
+
         }
 
 
@@ -60,7 +89,10 @@ public class Operations extends Email {
             String[] arr = temp.split(",");
             Queue reciever = new LinkedList();
             for (int i = 0; i < arr.length; i++) {
-                reciever.add(arr[i]);
+                File rec=new File("src\\main\\java\\com\\example\\emailclient\\App\\" + arr[i]);
+                if(rec.exists()) {
+                    reciever.add(arr[i]);
+                }
             }
             setTo(reciever);
         }

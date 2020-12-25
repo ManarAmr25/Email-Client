@@ -4,14 +4,15 @@ import com.example.emailclient.Email.Email;
 import com.example.emailclient.Email.Operations;
 import com.example.emailclient.Folder.Folder;
 import com.example.emailclient.user.App;
-import com.example.emailclient.user.ContactManipulation;
 import com.example.emailclient.user.User;
+import com.example.emailclient.user.ContactManipulation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,17 +147,29 @@ public class Main {
     //operations on Emails
     //input(map)  from >> ??
     //output()
-    public void SendMail(Map<String,String> m){
+    public Email ComposeMail(Map<String,String> m){
+
         try {
             m.put("from", user.getEmail());
             System.out.println(user.getEmail());
             Email x=op.composeEmail(m);
-            op.sendEmail(x);
-        } catch (CloneNotSupportedException | IOException e) {
+           // op.sendEmail(x);
+            return x;
+        } catch (CloneNotSupportedException e) {
             e.printStackTrace();
+            return null;
+        }
+
+    }
+    public void SendMail(Email e, MultipartFile[] file){
+        try {
+            op.sendEmail(e,file);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (CloneNotSupportedException cloneNotSupportedException) {
+            cloneNotSupportedException.printStackTrace();
         }
     }
-
     // error in queue ??
     public void Senddraft(Map<String,String> m){
         m.put("from", user.getEmail());

@@ -1,6 +1,7 @@
 package com.example.emailclient.Email;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,7 +16,14 @@ public abstract class Email implements Cloneable, Serializable {
     protected String subject;
     protected int index;
     protected int key;
+    protected ArrayList<String> attach=new ArrayList<>();
 
+    public void setAttach(ArrayList a){
+        attach=a;
+    }
+    public ArrayList<String> getAttach(){
+        return attach;
+    }
     public void setKey(int key) {
         this.key = key;
     }
@@ -65,7 +73,7 @@ public abstract class Email implements Cloneable, Serializable {
     protected Email getEmail() throws CloneNotSupportedException {
         return (Email)this.clone();
     }
-    public abstract Boolean sendEmail(Email e) throws CloneNotSupportedException, IOException;
+    public abstract Boolean sendEmail(Email e, MultipartFile[] file) throws CloneNotSupportedException, IOException;
     public abstract Email composeEmail(Map<String, String> M) throws CloneNotSupportedException;
     abstract Boolean Copy(Email [] e, String source, String destination,String email);
     abstract Boolean DeleteEmail(Email [] e, String source,String email);
