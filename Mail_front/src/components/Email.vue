@@ -57,7 +57,7 @@
   <div id="editButtons">
     <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
     <button @click="dlt"  v-if="showDlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
-    <button @click="view" v-if="showView" id="v" class="op"><i class="material-icons">&#xe151;</i> <span>view</span></button>
+    <button @click="view" v-if="showView" id="v" class="op"><i class="material-icons">&#xe417;</i> <span>view</span></button>
     <button @click="copy" v-if="showCM" id="c" class="op"><i class="material-icons">&#xe151;</i> <span>copy</span></button>
     <button @click="move" v-if="showCM" id="m" class="op"><i class="material-icons">&#xe163;</i> <span>move</span></button>
   </div>

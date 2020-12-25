@@ -1,6 +1,7 @@
 <template>
   <body>
-    <div class="super">
+  <div class="super">
+    <br><br><br>
     <label class="T">Add Folder</label>
     <label for="add" class="l">Name</label>
     <input v-model = "add" type="text" id="add" name="add" placeholder="Enter Folder Name">
@@ -19,8 +20,9 @@
     <label for="delete" class="l">Name</label>
     <input v-model = "deletef" type="text" id="delete" name="delete" placeholder="Enter Folder Name">
     <button @click="deleteF">Delete</button>
-    <br><br><br><br><br>
-    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+  </div>
   </body>
 </template>
 

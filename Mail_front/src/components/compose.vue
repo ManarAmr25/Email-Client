@@ -39,6 +39,13 @@
     <div class="comp" id="attachs">
       <label class="fieldLabel" for="fileInput">Attachments</label>
       <input @change="uploadFiles" ref="file" type="file" id="fileInput">
+      <div id="files">
+      <span v-for="(f,index) in file" :key="index">
+        <button @click="removeFile(index)">
+          <i id="x" class="material-icons">&#xe5c9;</i> {{f.name}}
+        </button>
+      </span>
+      </div>
     </div>
   </div>
   <div id="submitContainer">
@@ -157,6 +164,10 @@ export default {
       }catch (err){
         console.log(err)
       }
+    },
+    removeFile(index){
+      console.log(this.file.splice(index,1));
+      console.log('file removed');
     }
   },
   computed:{
@@ -330,6 +341,24 @@ input[type="radio"]{
 .radioLabel:hover{
   transition-duration: 0.5s;
   color: blue;
+}
+
+#files{
+  width: 300%;
+  overflow: auto;
+  
+}
+
+#files button{
+  margin: 5px;
+  padding: 0;
+  border: none;
+  color: black;
+  width:auto;
+}
+
+#files button:hover{
+  color: #dd2619;
 }
 
 </style>
