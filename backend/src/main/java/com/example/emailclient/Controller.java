@@ -52,7 +52,7 @@ Email temp;
         return app.EditContact(oldname,newname,adresses);
     }
     public String[] searchContact(String name){
-        return  app.SearchContact(name);
+        return  app.SearchContactname(name);
     }
     @GetMapping("/listCont")
     public String[] listContacts(){
