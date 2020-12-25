@@ -151,7 +151,7 @@ public class Main {
                 names.add(user.getContacts().get(i).name);
             }
         }
-        return (String[]) names.toArray();
+        return names.toArray(new String[names.size()]);
     }
 
     public String[] listContacts(){
@@ -169,7 +169,7 @@ public class Main {
     public String[] showContact(String name){
 
         Contact c = SearchContact(name);
-        return (String[]) c.emails.toArray();
+        return  c.emails.toArray(new String[c.emails.size()]);
     }
 
     public String[] SortContacts(){
