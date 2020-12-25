@@ -30,6 +30,6 @@ public class Reciever implements Strategy{
                     break;
                 } }
         }
-        return (Email[]) searched.toArray();
+        return searched.toArray(new Email[searched.size()]);
     }
 }

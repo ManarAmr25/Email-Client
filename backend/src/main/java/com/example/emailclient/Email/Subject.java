@@ -24,6 +24,6 @@ public class Subject implements Strategy{
                 searched.add(email[j]);
                  }}
 
-        return (Email[]) searched.toArray();
+        return searched.toArray(new Email[searched.size()]);
     }
 }

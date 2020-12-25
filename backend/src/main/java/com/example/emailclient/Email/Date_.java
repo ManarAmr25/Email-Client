@@ -28,6 +28,6 @@ public class Date_ implements Strategy{
                 searched.add(email[j]);
             }}
 
-        return (Email[]) searched.toArray();
+        return searched.toArray(new Email[searched.size()]);
     }
 }

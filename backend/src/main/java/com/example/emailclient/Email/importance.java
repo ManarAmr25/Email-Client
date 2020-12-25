@@ -24,6 +24,6 @@ public class importance implements Strategy{
             if (email[j].getKey() == Integer.parseInt(key)) {
                 searched.add(email[j]);
             }}
-        return (Email[]) searched.toArray();
+        return  searched.toArray(new Email[searched.size()]);
     }
 }
