@@ -20,12 +20,11 @@
         <option value="1">Male</option>
         <option value="2">Female</option>
       </select><br>
-
     </form>
     <button @click="reset" id="reset">Reset</button>
   </div>
-  <button @click="goToSignIn" id="signIn"> have an account ?</button>
   <button @click="submit" class="zr">Submit</button>
+  <button @click="goToSignIn" id="signIn"> have an account ?</button>
 </template>
 
 <script>
@@ -177,7 +176,7 @@ select{
   text-align: center;
 }
 .zr{
-  display: inline-block;
+  display:block;
   padding: 15px 25px;
   font-size: 24px;
   text-align: center;
@@ -186,7 +185,7 @@ select{
   border: none;
   border-radius: 15px;
   box-shadow: 0 9px #999;
-  margin-left: 100px;
+  margin-left: 500px;
   margin-top: 20px;
 }
 .zr:hover{background-color: #121412}
@@ -227,7 +226,8 @@ select{
   color: #0e0101;
   width: 300px;
   font-size : large;
-  margin-left: 100px;
+  margin-left: 420px;
+  margin-top: 20px;
   border: none;
   outline: none;
 }

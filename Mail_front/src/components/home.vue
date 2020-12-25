@@ -14,6 +14,7 @@
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
         <li><button @click="setViewMode('editable');setComponent(5);clearEcontent();">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
+        <li><button>&#x2712; Your Folders</button></li>
         <button @click="logOut" class="logout">&#x276E;&#x276E; Log Out</button>
       </ul>
     </div>
@@ -35,6 +36,9 @@
     <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
       <Email @view="view" :folder = "getFolder" ></Email>
     </div>
+    <div class="c" id="userF" v-if="show7">
+      <UserFolder></UserFolder>
+    </div>
     <div class="c" id="new_cont" v-if="newCont">
       <new :content="contact" :mode="getViewMode2" @close-window="newCont = false;" ></new>
     </div>
@@ -47,14 +51,17 @@ import compose from "@/components/compose";
 import Email from "@/components/Email";
 import contact from "@/components/contact";
 import New from "@/components/new";
+import UserFolder from "@/components/UserFolder";
 
 export default {
   name: "home",
   components:{
+    UserFolder,
     New,
     compose,
     Email,
     contact,
+
   },
   props:{
     userName:{
@@ -193,6 +200,12 @@ export default {
       }
       return false;
     },
+    show7(){
+      if(this.shown == 7) {
+        return true;
+      }
+      return false;
+    },
     getFolder(){
       return this.folder;
     },
@@ -238,18 +251,15 @@ body{
   grid-gap : 10px;
 }
 #bar{
-  /*grid-area: menu;*/
   grid-column-start: 1;
   grid-column-end: 4;
   grid-row-start: 1;
-  /*grid-row-end: 3;*/
+  overflow: auto; /*****************************************************/
 }
 .c{
-  /*grid-area: main;*/
   grid-column-start: 2;
   grid-column-end: 4;
   grid-row-start: 1;
-  /*grid-row-end: 3;*/
 }
 
 #email{
@@ -266,7 +276,7 @@ ul {
   margin: 0;
   padding: 0;
   width: 15%;
-  height :720px;
+  height :720px;   /***********************************************************************/
   background-color: #f1f1f1;
 }
 li button,label{
@@ -303,7 +313,6 @@ img{
   text-shadow: 2px 2px 8px #FF0000;
   margin-bottom:20px;
 }
-
 .logout{
   box-shadow:inset 0px 1px 0px 0px #efdcfb;
   background:linear-gradient(to bottom, #dfbdfa 5%, #d61111 100%);
@@ -319,8 +328,9 @@ img{
   padding:6px 24px;
   text-decoration:none;
   text-shadow:0px 1px 0px #eb1729;
-  margin-top:150px;
+  margin-top:40%;
   margin-left:45px;
+  margin-bottom:20px;
   border: none;
   outline: none;
 }
@@ -332,4 +342,19 @@ img{
   position:relative;
   top:1px;
 }
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(173, 2, 16);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #750202;
+}
+
 </style>

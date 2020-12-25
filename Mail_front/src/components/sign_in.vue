@@ -11,8 +11,8 @@
       <input type="checkbox" @click="showPassword"><br>
     </form>
     <div class="buttons">
-      <button @click="goToSignUp" id="signUp">don't have an account yet?</button>
       <button @click="signIn">Sign in</button>
+      <button @click="goToSignUp" id="signUp">don't have an account yet?</button>
     </div>
   </div>
   </body>
@@ -123,14 +123,13 @@ input {
   border-radius: 4px;
 }
 .buttons {
-  display: flex;
   flex-direction: row;
   justify-content: left;
 }
 button{
   width: 90px;
   height: 45px;
-  /*margin-left: 300px;*/
+  margin-left: 250px;
   margin-top: 20px;
   border: solid rgb(223, 18, 18) 2px;
   border-radius: 5px;
@@ -139,6 +138,7 @@ button{
   font-size: 20px;
   outline: none;
   cursor:pointer;
+  display: block;
 }
 button:hover {
   transition-duration: 0.4s;
@@ -165,6 +165,7 @@ button:hover {
   border: none;
   color: #0e0101;
   width: 300px;
+  margin-left: 150px;
 }
 
 #signUp:hover{
