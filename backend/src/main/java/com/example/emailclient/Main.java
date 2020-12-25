@@ -68,7 +68,7 @@ public class Main {
             String path="src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
-            AutoDelete();
+            //AutoDelete();
             return user.getUsername();
         }
         return "";
@@ -81,7 +81,8 @@ public class Main {
     public String SignUp(Map<String,String> info) throws IOException {
         info.put("username",info.get("firstname")+" "+info.get("lastname"));
         if(a.signUp(info)){
-            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+info.get("email")+"\\"+"info.json";
+            System.out.println("this is main " + info);
+            String path="src\\main\\java\\com\\example\\emailclient\\App\\"+info.get("address")+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
             return user.getUsername();
@@ -148,6 +149,7 @@ public class Main {
     public void SendMail(Map<String,String> m){
         try {
             m.put("from", user.getEmail());
+            System.out.println(user.getEmail());
             Email x=op.composeEmail(m);
             op.sendEmail(x);
         } catch (CloneNotSupportedException | IOException e) {

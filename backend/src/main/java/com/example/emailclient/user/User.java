@@ -13,7 +13,7 @@ public class User {
     protected String dateOfBirth;
     protected String address;
     protected String country;
-    protected ArrayList<Contact> contacts;
+    protected ArrayList<Contact> contacts=new ArrayList<>();
 
     public String getUsername() {
         return username;

@@ -17,8 +17,12 @@ public class ContactManipulation {
     }
 
     public String[] ListContacts(){
-        String[] contacts= new String[user.contacts.size()];
-        for (int i=0; i<user.contacts.size();i++){
+        int size = 0;
+        if(user.contacts != null){
+            size = user.contacts.size();
+        }
+        String[] contacts= new String[size];
+        for (int i=0; i<size;i++){
             contacts[i]=user.contacts.get(i).name;
         }
         return contacts;
@@ -66,7 +70,11 @@ public class ContactManipulation {
     }
 
     private Contact SearchContact(String name){
-        for(int i=0; i< user.contacts.size();i++){
+        int size = 0;
+        if(user.contacts != null){
+            size = user.contacts.size();
+        }
+        for(int i=0; i< size;i++){
             if(user.contacts.get(i).name.compareTo(name) == 0){
                 return user.contacts.get(i);
             }
@@ -95,7 +103,7 @@ public class ContactManipulation {
         }
     }
     public void Update() throws IOException {
-        String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+this.user.username+"\\";
+        String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+this.user.email+"\\";
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);

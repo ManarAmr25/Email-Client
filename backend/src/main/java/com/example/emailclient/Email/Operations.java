@@ -28,14 +28,17 @@ public class Operations extends Email {
         writer.writeValue(Paths.get(Sentpath).toFile(), e);
         while(0 < e.getTo().size()){
             String reciever =(String)e.getTo().remove();
-            setIndex("inbox", reciever);
-            String inboxpath = "src\\main\\java\\com\\example\\emailclient\\App\\" + reciever+"\\inbox\\" + getIndex("inbox",reciever)+ ".json";
-            Email copied = (Email)e.clone();
-            copied.setMailindex(getIndex("inbox",reciever));
-            Queue r = new LinkedList();
-            r.add(reciever);
-            copied.setTo(r);
-            writer.writeValue(Paths.get(inboxpath).toFile(), copied);
+            File rec=new File("src\\main\\java\\com\\example\\emailclient\\App\\" + reciever);
+            if(rec.exists()) {
+                setIndex("inbox", reciever);
+                String inboxpath = "src\\main\\java\\com\\example\\emailclient\\App\\" + reciever + "\\inbox\\" + getIndex("inbox", reciever) + ".json";
+                Email copied = (Email) e.clone();
+                copied.setMailindex(getIndex("inbox", reciever));
+                Queue r = new LinkedList();
+                r.add(reciever);
+                copied.setTo(r);
+                writer.writeValue(Paths.get(inboxpath).toFile(), copied);
+            }
         }
 
 
@@ -47,17 +50,20 @@ public class Operations extends Email {
         setBody(M.get("body"));
         setFrom(M.get("from"));
         setSubject(M.get("subject"));
-        setKey(Integer.parseInt(M.get("key")));
+        if(M.containsKey("key")) {
+            setKey(Integer.parseInt(M.get("key")));
+        }
         Date now = new Date();
         setDate(now);
-        String temp = M.get("to");
-        String [] arr = temp.split(",");
-        Queue reciever = new LinkedList();
-        for(int i=0 ; i< arr.length ; i++){
-            reciever.add(arr[i]);
+        if(M.containsKey("to")) {
+            String temp = M.get("to");
+            String[] arr = temp.split(",");
+            Queue reciever = new LinkedList();
+            for (int i = 0; i < arr.length; i++) {
+                reciever.add(arr[i]);
+            }
+            setTo(reciever);
         }
-        setTo(reciever);
-
         return getEmail();
     }
 

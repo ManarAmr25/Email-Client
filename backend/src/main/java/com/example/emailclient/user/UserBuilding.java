@@ -48,8 +48,8 @@ public class UserBuilding implements UserBuilder {
         }
         //add default folders  name: username
 
-        String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+user.username+"\\";
-        new File("src\\main\\java\\com\\example\\emailclient\\App\\"+user.username).mkdir();
+        String path ="src\\main\\java\\com\\example\\emailclient\\App\\"+user.email+"\\";
+        new File("src\\main\\java\\com\\example\\emailclient\\App\\"+user.email).mkdir();
         new File(path+"attachment").mkdir();
         new File(path+"inbox").mkdir();
         new File(path+"inbox/index.txt").createNewFile();

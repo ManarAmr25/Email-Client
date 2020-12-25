@@ -77,12 +77,14 @@ public class App {
         String email=info.get("email");
 
         if(!validate(username,email,null,1)){
+            System.out.println("false");
             return false;
         }
 
         //create new user
         UserBuilding builder=new UserBuilding();
         for (Map.Entry<String, String> curr : info.entrySet()) {
+            System.out.println();
             switch (curr.getKey()){
                 case "username":
                     builder.setUsername(curr.getValue());
@@ -119,10 +121,12 @@ public class App {
         try {
             user= builder.build();
             usernames.put(info.get("username"),info.get("password"));
-            emails.put(info.get("email"),info.get("password"));
+            emails.put(info.get("address"),info.get("password"));
             writeTObase();
             System.out.println("Signed up");
         } catch (Exception e) {
+            System.out.println("false2");
+            System.out.println(e);
             return false;
         }
 
