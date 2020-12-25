@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "new",
   data(){
@@ -41,7 +43,17 @@ export default {
   },
   methods:{
     add(){
-
+      axios.get("http://localhost:8085/addCont",{params:{
+        'name':this.contactName,
+          'adresses':this.address,
+        }}).then(response => {
+          if(response.data == 'true'){
+            alert('contact added successfully');
+          }else {
+            alert('contact name already exists');
+            this.disableInputField();
+          }
+      });
     },
     close(){
       this.$emit('close-window');

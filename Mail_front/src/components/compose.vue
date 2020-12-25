@@ -17,14 +17,15 @@
     <div class="comp" id="priority">
       <label class="fieldLabel"  for="priorityInput">Priority</label>
       <div id="priorityInput">
-        <input type="radio" name="priority" id="one" value="one" v-model="picked">
+        <input type="radio" name="priority" id="one" value="1" v-model="picked">
         <label class="radioLabel" for="one">Top </label>
-        <input type="radio" name="priority" id="two" value="two" v-model="picked">
+        <input type="radio" name="priority" id="two" value="2" v-model="picked">
         <label class="radioLabel" for="two">High </label>
-        <input type="radio" name="priority" id="three" value="three" v-model="picked">
+        <input type="radio" name="priority" id="three" value="3" v-model="picked">
         <label class="radioLabel" for="three">Normal </label>
-        <input type="radio" name="priority" id="four" value="four" v-model="picked">
+        <input type="radio" name="priority" id="four" value="4" v-model="picked">
         <label class="radioLabel" for="four">Low </label>
+        <span>{{file}}</span>
       </div>
     </div>
   </div>
@@ -37,7 +38,7 @@
   <div id="attachsContainer">
     <div class="comp" id="attachs">
       <label class="fieldLabel" for="fileInput">Attachments</label>
-      <input @change="uploadFiles" ref="file" type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
+      <input @change="uploadFiles" ref="file" type="file" id="fileInput">
     </div>
   </div>
   <div id="submitContainer">
@@ -65,7 +66,7 @@ export default {
   data(){
     return({
       toFrom:'To',
-      picked:'three',
+      picked:'1',
       to:'',
       subject:'',
       mail:'',
@@ -88,7 +89,7 @@ export default {
     console.log(this.content.from);
   },
   methods:{
-    send(){
+    async send(){
       if(this.to === ''){
         alert('enter one or more receivers');
         return;
@@ -96,20 +97,24 @@ export default {
         alert('enter body or attachments');
         return;
       }else {
+        const formData=new FormData();
+        for (let i=0;i<this.file.length;i++) {
+          formData.append('file', this.file[i])
+        }
         var email = new Map();
-        email['to'] = this.to; //why??
+        email['to'] = this.to;
         email['subject'] = this.subject;
         email['body'] = this.mail;
-        email['key'] = this.priority; //number or string ??
+        email['key'] = this.picked; //number or string ??
         //email['attachs'] = this.attachs;
         console.log(email);
-        axios.post("http://localhost:8085/",{
-          params:
-          email,
-        }).then(response => {return response.data;});
-        //create post request
-        // sent json containing >> name, address, password, date, gender (number or string ?)
-        // response >> go to another page or display an error message
+
+        await axios.post("http://localhost:8085/compose",{
+          info:JSON.stringify(email),
+        }
+        ).then(response => {return response.data;});
+
+        await axios.post("http://localhost:8085/file",formData);
         this.$emit('send');
         alert('email sent successfully');
         this.disableInputField();
@@ -139,7 +144,7 @@ export default {
       document.getElementById('mailInput').disabled = false;
       document.getElementById('fileInput').disabled =false;
     },
-    uploadFile(){
+    uploadFiles(){
       this.file.push(this.$refs.file.files[0]);
     },
     async sendFile(){

@@ -34,8 +34,8 @@ export default {
     },
     signIn(x){
       this.setCompenent(4);
-      this.Uname = x.user;
-      console.log("loaded name = "+x.user);
+      this.Uname = x.name;
+      console.log("loaded name = "+x.name);
     },
     signUp(x){
       this.setCompenent(3);

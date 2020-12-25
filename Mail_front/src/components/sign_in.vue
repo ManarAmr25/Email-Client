@@ -49,14 +49,18 @@ export default {
       }else {
         axios.get("http://localhost:8085/signIn", {
           params: {
-            username:this.email,
+            email:this.email,
             password:this.password,
           }
         }).then(response => {
           if(response.data == ''){
             alert('incorrect address or password');
           }else {
-            this.$emit('sign-in',response.data);
+            console.log(response.data);
+            var x = {
+              'name':response.data,
+            }
+            this.$emit('sign-in',x);
             console.log("event emitted");
           }
         });

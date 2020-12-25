@@ -87,14 +87,14 @@ export default {
         var user = new Map();
         //user['username'] = this.fname + ' ' + this.lname; //why??
         user['password'] = this.password;
-        user['email'] = this.address;
+        user['address'] = this.address;
         user['gender'] = this.gender; //number or string ??
         user['date'] = this.date; //check date format ??
         user['firstname'] = this.fname;
         user['lastname'] = this.lname;
         console.log(user);
         axios.post("http://localhost:8085/signUp",{
-            user
+            info:JSON.stringify(user),
         }).then(response => {
           if(response.data == ''){
             alert('address already exists');

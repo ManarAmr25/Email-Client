@@ -74,7 +74,7 @@ export default {
         'to':'',
         'subject':'',
         'body':'',
-        'priority':'three'
+        'priority':'4'
       },
       Ccontent:{
         'Cname':'',
@@ -146,7 +146,7 @@ export default {
         'to':'',
         'subject':'',
         'body':'',
-        'priority':'three'
+        'priority':'1',
       };
     },
     clearCcontent(){

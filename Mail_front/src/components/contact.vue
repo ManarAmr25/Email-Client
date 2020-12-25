@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "contact",
   data(){
@@ -89,6 +91,9 @@ export default {
       pageNum:1,
       checkList:[],
     })
+  },
+  mounted(){
+    axios.get("http://localhost:8085/listCont").then(response => {this.List = response.data; console.log(response.data)});
   },
   methods:{
     newC(){
