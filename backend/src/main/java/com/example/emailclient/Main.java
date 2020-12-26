@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,10 +26,11 @@ public class Main {
     public User user ;
     public App a= new App();
     public int page=1 ;
+    public int currentindex=0;
     public String foldername;
     public Folder folder;
     public Operations op;
-    public ArrayList<Email> currentPage;
+    public Email[] currentPage;
     //operations of user
     public Main(){
         this.Logout();
@@ -41,7 +43,7 @@ public class Main {
         foldername=new String();
         folder=new Folder();
         op=new Operations();
-        currentPage=new ArrayList<Email>();
+        currentPage=new Email[0];
         a=new App();
     }
 
@@ -57,7 +59,7 @@ public class Main {
                 delete.add(e[i]);
             }
         }
-        op.DeleteEmail((Email[]) delete.toArray(),"trash", user.getEmail());
+        op.DeleteEmail(delete.toArray(new Email[delete.size()]),"trash", user.getEmail());
     }
     //input (map >> email,password)
     //output(String:error,username)error>> true or false
@@ -67,7 +69,7 @@ public class Main {
             String path="src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+"info.json";
             ObjectMapper mapper = new ObjectMapper();
             user = mapper.readValue(Paths.get(path).toFile(), User.class);
-            //AutoDelete();
+            AutoDelete();
             return user.getUsername();
         }
         return "";
@@ -169,19 +171,26 @@ public class Main {
     public String[] showContact(String name){
 
         Contact c = SearchContact(name);
-        return  c.emails.toArray(new String[c.emails.size()]);
+        return c.emails.toArray(new String[c.emails.size()]);
     }
 
     public String[] SortContacts(){
         int size = user.getContacts().size();
+        Contact[] s=user.getContacts().toArray(new Contact[user.getContacts().size()]);
         for(int i = 0; i<size-1; i++) {
-            for (int j = i + 1; j < user.getContacts().size(); j++) {
-                if (user.getContacts().get(i).name.compareTo(user.getContacts().get(j).name) > 0) {
-                    Contact temp = user.getContacts().get(i);
-                    user.getContacts().add(i,user.getContacts().get(j));
-                    user.getContacts().add(j,temp); } }
+            for (int j = i + 1; j < size; j++) {
+                if (s[i].name.compareTo(s[j].name) > 0) {
+                    Contact temp = s[i];
+                    s[i]=s[j];
+                    s[j]=temp;
+                } }
         }
-        return listContacts();
+        String[] N = new String[s.length];
+        for(int i=0;i<s.length;i++){
+            N[i]=s[i].name;
+
+        }
+        return N;
     }
 
     //operations on Emails
@@ -193,7 +202,7 @@ public class Main {
             m.put("from", user.getEmail());
             System.out.println(user.getEmail());
             Email x=op.composeEmail(m);
-           // op.sendEmail(x);
+            // op.sendEmail(x);
             return x;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -203,42 +212,73 @@ public class Main {
     }
     public void SendMail(Email e, MultipartFile[] file){
         try {
+            //  System.out.println("in main "+file.length);
             op.sendEmail(e,file);
+            if(foldername != null && foldername.compareTo("draft")==0){
+                Email[]x=new Email[1];
+                x[0]=e;
+                x[0].setMailindex(currentindex);
+                System.out.println("after delete draft : "+x[0].getMailindex());
+                op.DeleteEmail(x,"draftd",user.getEmail());
+            }
         } catch (IOException ioException) {
             ioException.printStackTrace();
         } catch (CloneNotSupportedException cloneNotSupportedException) {
             cloneNotSupportedException.printStackTrace();
         }
     }
-    // error in queue ??
-    public void Senddraft(Map<String,String> m){
-        m.put("from", user.getEmail());
+
+    public void Senddraft(Email x,MultipartFile[] file){
+
         try {
-            Email x=op.composeEmail(m);
             op.setIndex("draft", x.getFrom());
             x.setMailindex( op.getIndex("draft",x.getFrom()));
             String Sentpath = "src\\main\\java\\com\\example\\emailclient\\App\\" + x.getFrom()+"\\draft\\" + op.getIndex("draft",x.getFrom())+ ".json";
+
+            //attach
+            ArrayList<String> rec=x.getAttach();
+            int size1=0;
+            if(file!=null){
+                size1=file.length;
+            }
+            for(int i=0;i<size1;i++){
+                String path="src\\main\\java\\com\\example\\emailclient\\App\\"+user.getEmail()+"\\attachment\\";
+                Path filepath = Paths.get(path, file[i].getOriginalFilename());
+                file[i].transferTo(filepath);
+                rec.add(path+file[i].getOriginalFilename());
+            }
+
             ObjectMapper mapper = new ObjectMapper();
             ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             writer.writeValue(Paths.get(Sentpath).toFile(), x);
-        } catch (CloneNotSupportedException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String[] listMails(){
-        try {
-            this.currentPage=op.getMails(page++,foldername, user.getEmail());
-            return getDescription((Email[]) this.currentPage.toArray());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new String[0];
     }
 
+    public void listMails(){
+        try {
+            this.currentPage=op.getMails(foldername, user.getEmail());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String[] getCurrentpage(){
+        int start=10*(page-1);
+        if(start>=currentPage.length){
+            return new String[0];
+        }
+        int end=start+10;
+        if(end>=currentPage.length){
+            end=currentPage.length;
+        }
+        return getDescription(Arrays.copyOfRange(currentPage,start,end));
+    }
     public Map<String, String> openMail(String index){
-        Email current=this.currentPage.get(Integer.parseInt(index));
+        Email current=this.currentPage[Integer.parseInt(index)];
+        currentindex=current.getMailindex();
         Map<String,String> res=new HashMap<>();
         res.put("from",current.getFrom());
         res.put("date", String.valueOf(current.getDate()));
@@ -260,35 +300,61 @@ public class Main {
     //output()
     public String[] Searching(String type, String key) throws IOException {
         Email[] e =getAll();
-        Email[]s =a.SearchMails(e,type,key);
-        return getDescription(s);
+        currentPage =a.SearchMails(e,type,key);
+        return getCurrentpage();
     }
     //input()
     //output()
     public String[] sorting(String type) throws IOException {
         Email[] e =getAll();
-        Email[] s=a.SortMails(e,type);
-        return getDescription(s);
+        currentPage=a.SortMails(e,type);
+        return getCurrentpage();
     }
     //input()
     //output()
-    public void filtering(String key,String mode,String dest) throws IOException {
+    public String filtering(String index,String mode,String dest) throws IOException {
+        String str="";
+        File d=new File("src\\main\\java\\com\\example\\emailclient\\App\\"+this.user.getEmail()+"\\"+dest);
+        if(!d.exists()){
+            d.mkdir();
+            new File(d+"\\index.txt").createNewFile();
+            str=dest;
+        }
         Email[] e =getAll();
+        String key;
+        if(mode.compareTo("subject")==0){
+            key=this.currentPage[Integer.parseInt(index)].getSubject();
+        }
+        else{
+            key=this.currentPage[Integer.parseInt(index)].getFrom();
+        }
         Email[] f=op.Filtering(e,key,mode);
         op.Copy(f,foldername,dest, user.getEmail());
+        return str;
     }
-    public void copyMails(String[] index,String dest){
+    public String copyMails(String[] index,String dest) throws IOException {
+        String str="";
+        File d=new File("src\\main\\java\\com\\example\\emailclient\\App\\"+this.user.getEmail()+"\\"+dest);
+        if(!d.exists()){
+            d.mkdir();
+            new File(d+"\\index.txt").createNewFile();
+            str=dest;
+        }
         op.Copy(getByIndex(index),foldername,dest, user.getEmail());
+        return str;
     }
-    public void deleteMails(String[] index){
+    public String[] deleteMails(String[] index){
 
         op.DeleteEmail(getByIndex(index),foldername, user.getEmail());
+        listMails();
+        page=1;
+        return getCurrentpage();
     }
 
     public Email[] getByIndex(String[] index){
         Email[] e=new Email[index.length];
         for(int i=0;i<index.length;i++){
-            e[i]=this.currentPage.get(Integer.parseInt(index[i]));
+            e[i]=this.currentPage[Integer.parseInt(index[i])];
         }
         return e;
     }
@@ -311,7 +377,24 @@ public class Main {
     public String[] getDescription(Email[] e){
         String[] res=new String[e.length];
         for(int i=0;i<e.length;i++){
-            res[i]=e[i].getSubject()+"  "+e[i].getFrom()+"  "+e[i].getTo();
+            String pri;
+            switch (e[i].getKey()){
+                case 1:
+                    pri = "Top";
+                    break;
+                case 2:
+                    pri = "High";
+                    break;
+                case 3:
+                    pri = "Normal";
+                    break;
+                case 4:
+                    pri = "Low";
+                    break;
+                default:
+                    pri = "";
+            }
+            res[i]=e[i].getSubject()+"\t From :  "+e[i].getFrom()+"\t To : "+e[i].getTo() + "\t Priority :" + pri + "\t Date : " + e[i].getDate();
         }
         return res;
     }

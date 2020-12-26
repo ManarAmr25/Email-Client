@@ -32,16 +32,6 @@ public class EmailClientApplication {
         SpringApplication.run(EmailClientApplication.class, args);
 
     }
-    @PostMapping(value="/request",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void g(HttpServletRequest request,@RequestParam(name="file", required = false) MultipartFile file){
-        System.out.println(file.getOriginalFilename());
-        try {
-            Path filepath = Paths.get("src\\main\\java\\com\\example\\emailclient\\App\\", file.getOriginalFilename());
-            file.transferTo(filepath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     }
