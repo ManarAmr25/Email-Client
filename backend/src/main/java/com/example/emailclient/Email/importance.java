@@ -19,9 +19,26 @@ public class importance implements Strategy{
 
     @Override
     public Email[] Search(Email[] email,String key) {
+        int pri;
+        switch (key){
+            case "Top":
+                pri=1;
+                break;
+            case "High":
+                pri=2;
+                break;
+            case "Normal":
+                pri=3;
+                break;
+            case "Low":
+                pri=4;
+                break;
+            default:
+                return new Email[0];
+        }
         ArrayList<Email> searched= new ArrayList<>();
         for (int j = 0; j < email.length; j++) {
-            if (email[j].getKey() == Integer.parseInt(key)) {
+            if (email[j].getKey() == pri) {
                 searched.add(email[j]);
             }}
         return  searched.toArray(new Email[searched.size()]);

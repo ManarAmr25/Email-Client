@@ -14,7 +14,7 @@ public abstract class Email implements Cloneable, Serializable {
     protected Date date;
     protected Queue to= new LinkedList();
     protected String subject;
-    protected int index;
+    protected int mailindex;
     protected int key;
     protected ArrayList<String> attach=new ArrayList<>();
 
@@ -37,9 +37,9 @@ public abstract class Email implements Cloneable, Serializable {
         return super.clone();
     }
     public void setMailindex(int b){
-        this.index=b;
+        this.mailindex=b;
     }
-    protected  int getMailindex(){return index;}
+    public int getMailindex(){return mailindex;}
     protected void setBody(String b){
         this.body=b;
     }
@@ -80,5 +80,5 @@ public abstract class Email implements Cloneable, Serializable {
     abstract int getIndex(String Foldername , String username);
     abstract void setIndex(String Foldername , String username) throws IOException;
     abstract Email[] Filtering(Email[] emails, String Key, String mode);
-    abstract ArrayList<Email> getMails(int page, String foldername, String email) throws IOException;
+    abstract Email[] getMails( String foldername, String email) throws IOException;
 }

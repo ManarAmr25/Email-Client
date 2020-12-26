@@ -12,6 +12,10 @@ public class BySubject implements IFilter{
                 res.add(emails[i]);
             }
         }
+        System.out.println("in filter");
+        System.out.println(res.size());
+        System.out.println(res.get(0).subject);
+        System.out.println(res.get(0).mailindex);
         return res.toArray(new Email[res.size()]);
     }
 }

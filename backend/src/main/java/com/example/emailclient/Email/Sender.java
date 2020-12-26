@@ -23,7 +23,7 @@ public class Sender implements Strategy{
     public Email[] Search(Email[] email,String key) {
             ArrayList<Email> searched= new ArrayList<>();
             for (int j = 0; j < email.length; j++) {
-                if (email[j].getFrom().compareTo(key) == 0) {
+                if (email[j].getFrom().contains(key)) {
                     searched.add(email[j]);
                 }}
 

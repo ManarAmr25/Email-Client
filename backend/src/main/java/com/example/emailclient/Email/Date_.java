@@ -24,10 +24,11 @@ public class Date_ implements Strategy{
         ArrayList<Email> searched= new ArrayList<>();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (int j = 0; j < email.length; j++) {
+            System.out.println("date code " + dateFormat.format(email[j].getDate()));
             if (dateFormat.format(email[j].getDate()).compareTo(key) == 0) {
                 searched.add(email[j]);
             }}
-
+        System.out.println("date search >> "+searched.size());
         return searched.toArray(new Email[searched.size()]);
     }
 }

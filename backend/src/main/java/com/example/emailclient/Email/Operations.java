@@ -1,6 +1,7 @@
 package com.example.emailclient.Email;
 
 import com.example.emailclient.Main;
+import com.example.emailclient.user.App;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,14 +20,16 @@ public class Operations extends Email {
     @Override
     public Boolean sendEmail(Email e, MultipartFile[] file) throws IOException, CloneNotSupportedException {
         if(e==null){
+            System.out.println("email is null");
             return false;
         }
         //attachment
-        ArrayList<String>sender=new ArrayList<>();
+        ArrayList<String>sender=e.getAttach();
         int size1=0;
         if(file!=null){
             size1=file.length;
         }
+
         for(int i=0;i<size1;i++){
             String path="src\\main\\java\\com\\example\\emailclient\\App\\"+e.getFrom()+"\\attachment\\";
             Path filepath = Paths.get(path, file[i].getOriginalFilename());
@@ -106,17 +109,25 @@ public class Operations extends Email {
             try {
                 //get index of source
                 int index1 =m[i].getMailindex();
-                var src = new RandomAccessFile("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+source+"\\"+index1+".json", "r");
+                System.out.println("inside op : "+m[i].subject+" "+m[i].mailindex+" "+index1);
+              //  var src = new RandomAccessFile("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+source+"\\"+index1+".json", "r");
                 //get index of destination
                 setIndex(destination,email);
                 int index2 =getIndex(destination,email);
-                new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+source+"\\"+index2+".json");
-                var dest = new RandomAccessFile("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+destination+"\\"+index2+".json", "rw");
-                try (var sfc = src.getChannel();
-                     var dfc = dest.getChannel()) {
+                String sentpath="src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+destination+"\\"+index2+".json";
+                m[i].setMailindex(index2);
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+                mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+                writer.writeValue(Paths.get(sentpath).toFile(), m[i]);
+                m[i].setMailindex(index1);
+//                var dest = new RandomAccessFile("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+destination+"\\"+index2+".json", "rw");
+//                try (var sfc = src.getChannel();
+//                     var dfc = dest.getChannel()) {
+//
+//                    dfc.transferFrom(sfc, 0, sfc.size());
+//                }
 
-                    dfc.transferFrom(sfc, 0, sfc.size());
-                }
             }catch(IOException e) {
                 e.printStackTrace();
             }
@@ -128,12 +139,17 @@ public class Operations extends Email {
     @Override
     public Boolean DeleteEmail(Email[] m, String source, String email) {
         if(m == null){return false;}
-        if(source.compareTo("trash")!=0) {
+        if( source.compareTo("draftd")==0){
+            source="draft";
+        }
+       else if(source.compareTo("trash")!=0 ) {
             Copy(m, source, "trash", email);
         }
+
         for(int i=0; i<m.length;i++){
             try {
                 int mailindex=m[i].getMailindex();
+                System.out.println("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+source+"\\"+mailindex+".json");
                 File sourceFile= new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+source+"\\"+mailindex+".json");
                 if (deleteDirectory(sourceFile)) {
                     System.out.println("Folder deleted successfully");
@@ -206,20 +222,15 @@ public class Operations extends Email {
     }
 
     @Override
-    public ArrayList<Email> getMails(int page, String foldername, String email) throws IOException {
+    public Email[] getMails( String foldername, String email) throws IOException {
         String[] content=new File("src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+foldername).list();
         Collections.reverse(Arrays.asList(content));
         int len=content.length;
-       ArrayList<Email> res=new ArrayList<Email>();
-        int start =10*(page-1);
-        int end=10+start;
-
-        //get all mails if mode is true
-
+        ArrayList<Email> res=new ArrayList<Email>();
 
         ObjectMapper mapper = new ObjectMapper();
         String path="src\\main\\java\\com\\example\\emailclient\\App\\"+email+"\\"+foldername;
-        for(int i=start;i<end&&i<len;i++){
+        for(int i=0;i<len;i++){
             if(content[i].compareTo("index.txt")==0){
                 continue;
             }
@@ -227,8 +238,9 @@ public class Operations extends Email {
             Email curr=mapper.readValue(Paths.get(path+"\\"+content[i]).toFile(),Operations.class);
             res.add(curr);
         }
-        
-        return res;
+        App a = new App();
+
+        return    a.SortMails(res.toArray(new Email[res.size()]),"Date");
     }
 
 }

@@ -21,15 +21,18 @@ public class Reciever implements Strategy{
 
     @Override
     public Email[] Search(Email[] email,String key) {
+
         ArrayList<Email> searched= new ArrayList<>();
         for (int j = 0; j < email.length; j++) {
             Queue receiver = email[j].getTo();
-            while(!receiver.isEmpty()){
-                if(((String)receiver.remove()).compareTo(key)==0){
+            String[] s = (String[]) receiver.toArray(new String[receiver.size()]);
+            for(int i=0; i<s.length;i++){
+                if((s[i]).contains(key)){
                     searched.add(email[j]);
                     break;
                 } }
         }
+
         return searched.toArray(new Email[searched.size()]);
     }
 }

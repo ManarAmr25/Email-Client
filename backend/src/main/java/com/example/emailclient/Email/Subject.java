@@ -20,7 +20,7 @@ public class Subject implements Strategy{
     public Email[] Search(Email[] email,String key) {
         ArrayList<Email> searched= new ArrayList<>();
         for (int j = 0; j < email.length; j++) {
-            if (email[j].getSubject().compareTo(key) == 0) {
+            if (email[j].getSubject().contains(key)) {
                 searched.add(email[j]);
                  }}
 
