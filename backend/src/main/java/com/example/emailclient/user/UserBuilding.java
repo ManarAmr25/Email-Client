@@ -56,8 +56,6 @@ public class UserBuilding implements UserBuilder {
         new File(path+"sent/index.txt").createNewFile();
         new File(path+"draft").mkdir();
         new File(path+"draft/index.txt").createNewFile();
-        new File(path+"starred").mkdir();
-        new File(path+"starred/index.txt").createNewFile();
         new File(path+"trash").mkdir();
         new File(path+"trash/index.txt").createNewFile();
         user.contacts=new ArrayList<>();

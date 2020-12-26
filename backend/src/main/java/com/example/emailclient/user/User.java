@@ -58,6 +58,9 @@ public class User {
     public ArrayList<Contact> getContacts() {
         return contacts;
     }
+    public void setContacts(ArrayList<Contact> c){
+        this.contacts=c;
+    }
 
 
 }

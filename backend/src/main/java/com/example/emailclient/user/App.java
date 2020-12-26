@@ -162,9 +162,6 @@ public class App {
             case "Body":
                 sorting=new Sort(new Body());
                 break;
-            case "Attachments":
-                sorting=new Sort(new Attachments());
-                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }
@@ -190,9 +187,6 @@ public class App {
                 break;
             case "Body":
                 searching=new Search(new Body());
-                break;
-            case "Attachments":
-                searching=new Search(new Attachments());
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
