@@ -1,14 +1,17 @@
 <template>
   <body>
+  <br>
   <div class="super">
-    <h1 class="contact">New Contact</h1>
+    <h1 v-if="isNewCont" class="contact">New Contact</h1>
     <label for="name" class="l">Name</label>
     <input v-model="contactName" type="text" id="name" placeholder="enter Name" ><br>
     <label for="email" class="l">E-mail</label>
     <input v-model="address" type="text" id="email" placeholder="enter one or more addresses separated by single comma" >
   </div>
-  <button @click="add">Add</button>
+  <button v-if="isNewCont" @click="add">Add</button>
+  <button v-if="isEdit" @click="edit">Edit</button>
   <button @click="close">close</button>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   </body>
 </template>
 
@@ -31,6 +34,10 @@ export default {
     content:{
 
     },
+    isNew:{
+      type : Boolean,
+      required: true,
+    }
   },
   mounted() {
     if(this.mode === 'readOnly'){
@@ -47,13 +54,32 @@ export default {
         'name':this.contactName,
           'adresses':this.address,
         }}).then(response => {
-          if(response.data == 'true'){
+          console.log(response.data);
+          if(response.data == true){
             alert('contact added successfully');
+            this.disableInputField();
           }else {
             alert('contact name already exists');
-            this.disableInputField();
           }
       });
+    },
+    edit(){
+      if(!(this.contactName == this.content.Cname && this.address == this.content.address)){
+        axios.get("http://localhost:8085/editCont",{
+          params:{
+            oldname: this.content.Cname,
+            newname: this.contactName,
+            adresses:this.address,
+          }
+        }).then(response => {
+          if(response.data == true){
+            alert('contact edited successfully');
+            this.disableInputField();
+          }else {
+            alert('contact name already exists');
+          }
+        })
+      }
     },
     close(){
       this.$emit('close-window');
@@ -67,6 +93,20 @@ export default {
       document.getElementById('name').disabled = false;
       document.getElementById('email').disabled = false;
     },
+  },
+  computed:{
+    isNewCont(){
+      if(this.mode === 'readOnly'){
+        return false;
+      }
+      return this.isNew;
+    },
+    isEdit(){
+      if(this.mode === 'readOnly'){
+        return false;
+      }
+      return !this.isNew;
+    }
   }
 }
 </script>
@@ -82,6 +122,7 @@ export default {
 body {
   border: solid red 3px;
   border-radius: 7px;
+  z-index: -1;
 }
 
 .super{

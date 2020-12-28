@@ -28,7 +28,7 @@
 
 <script>
 
-//import axios from "axios";
+import axios from "axios";
 export default {
   name: "UserFolder",
   data(){
@@ -47,32 +47,72 @@ export default {
       if(this.add === ''){
         alert("Enter folder name");
       }else {
-        var x = {'namef' : this.add}
-        this.$emit('addF', x);
-        console.log('Add folder');
+        axios.get("http://localhost:8085/createFolder",{
+          params:{
+            name:this.add,
+          }
+        }).then(response =>{
+          if(response.data == true){
+            var x = {'namef' : this.add}
+            this.$emit('addF', x);
+            console.log('Add folder');
+            this.add =  "";
+          }else {
+            alert('folder already exists');
+            this.add =  "";
+          }
+        });
       }
     },
     rename(){
       if(this.old === '' || this.newn === ''){
         alert("Enter folder name");
       }else {
-        var x = {
-          'nameo' : this.old,
-          'namen' : this.newn,
-        }
-        this.$emit('renameF', x);
-        console.log('renamef folder');
+        axios.get("http://localhost:8085/renameFolder",{
+          params:{
+            old:this.old,
+            n:this.newn,
+          }
+        }).then(response =>{
+          if(response.data == true){
+            var x = {
+              'nameo' : this.old,
+              'namen' : this.newn,
+            }
+            this.$emit('renameF', x);
+            console.log('renamef folder');
+            this.old =  "";
+            this.newn =  "";
+          }else {
+            alert('folder does not exist');
+            this.old =  "";
+            this.newn =  "";
+          }
+        });
       }
     },
     deleteF(){
       if(this.deletef === ''){
         alert("Enter folder name");
       }else {
-        var x = {
-          'named' : this.deletef,
-        }
-        this.$emit('deleteF', x);
-        console.log('deletef folder');
+        axios.get("http://localhost:8085/dltFolder",{
+          params:{
+            name:this.deletef,
+          }
+        }).then(response =>{
+          if(response.data == true){
+            var x = {
+              'named' : this.deletef,
+            }
+            this.$emit('deleteF', x);
+            console.log('deletef folder');
+            this.deletef =  "";
+          }else {
+            alert('folder does not exist');
+            this.deletef =  "";
+          }
+        });
+
       }
     },
   }
@@ -143,6 +183,8 @@ Button{
   text-decoration:none;
   text-shadow:0px 1px 0px #96150C;
   margin-left:20px;
+  outline: none;
+  border: none;
 }
 button:hover {
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24437), color-stop(1, #c62d1f));

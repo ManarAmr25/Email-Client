@@ -6,39 +6,27 @@
       <li><button @click="Search" class="zr">&#x219d; Search</button>
         <select v-model = "s">
           <option value="0" disabled>By</option>
-          <option value="sender" >Sender</option>
-          <option value="subject">Subject</option>
-          <option value="body" >Body</option>
-          <option value="date">Date</option>
-          <option value="attachment">Attachment</option>
-          <option value="receiver" >Receiver</option>
-          <option value="importance" >Importance</option>
+          <option value="sender" >name</option>
         </select>
         <input v-model="searchInput" name="search" type="text">
       </li>
       <li><button @click="Sort" class="zr">&#x219d; Sort</button>
         <select v-model = "sort">
           <option value="0" disabled>By</option>
-          <option value="sender" >Sender</option>
-          <option value="subject">Subject</option>
-          <option value="body" >Body</option>
-          <option value="date">Date</option>
-          <option value="attachment">Attachment</option>
-          <option value="receiver" >Receiver</option>
-          <option value="importance" >Importance</option>
+          <option value="sender" >name</option>
         </select>
       </li>
-      <li><button @click="filter" class="zr">&#x219d; Filter</button>
-        <select v-model = "f">
-          <option value="0" disabled>By</option>
-          <option value="sender" >Sender</option>
-          <option value="subject">Subject</option>
-        </select>
-      </li>
+<!--      <li><button @click="filter" class="zr">&#x219d; Filter</button>-->
+<!--        <select v-model = "f">-->
+<!--          <option value="0" disabled>By</option>-->
+<!--          <option value="sender" >Sender</option>-->
+<!--          <option value="subject">Subject</option>-->
+<!--        </select>-->
+<!--      </li>-->
     </ul></div>
   <div id="list">
     <ul>
-      <li v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="mail" v-model="checkList">{{index+1}} {{ mail }}</label></li>
+      <li v-for="(cont, index) in List" :key="index"><label><input type="checkbox" :id="cont" :value="cont" v-model="checkList">{{index+1}} {{ cont }}</label></li>
       <!--<li><span><input id="one" value="one" type="checkbox" v-model="checkList" ></span> <label for="one">1 list element</label></li>
       <li><span><input id="two" value="two" type="checkbox" v-model="checkList" ></span> <label for="two">2 list element</label></li>
       <li><span><input id="three" value="three" type="checkbox" v-model="checkList" ></span> <label for="three">3 list element</label></li>
@@ -55,11 +43,12 @@
   <div id="select">
     <span><button class="check" @click="selectAll">Select All</button></span>
     <span><button class="check" @click="deselectAll">Deselect All</button></span>
+<!--    <span>{{checkList}}</span>-->
   </div>
 
   <div id="editButtons">
     <button @click="edit" class="op"><i class="material-icons">&#xe3c9;</i> <span>edit</span></button>
-    <button class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
+    <button @click="Delete" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
     <button @click="view" class="op"><i class="material-icons">&#xe89d;</i> <span>view</span></button>
     <button @click="newC" class="op"><i class="material-icons">&#xe7fe;</i> <span>add</span></button>
   </div>
@@ -84,7 +73,7 @@ export default {
     return({
       showNewCont:true,
       s : '0',
-      searchInput : ' ',
+      searchInput : '',
       sort : '0',
       f : '0',
       List:['one','two','three','four','five','six','seven','eight','nine','ten','11','12','13'],
@@ -92,10 +81,40 @@ export default {
       checkList:[],
     })
   },
-  mounted(){
-    axios.get("http://localhost:8085/listCont").then(response => {this.List = response.data; console.log(response.data)});
+  async mounted(){
+    await axios.get("http://localhost:8085/listCont").then(response => {
+      //console.log('start');
+      //console.log(this.List);
+      this.List = response.data;
+      //console.log('end');
+      //console.log(this.List);
+      // console.log(response.data);
+      // console.log('this is contact response');
+    });
+  },
+  async watch() {
+    await axios.get("http://localhost:8085/listCont").then(response => {
+      // console.log('start');
+      // console.log(this.List);
+      this.List = response.data;
+      // console.log('end');
+      // console.log(this.List);
+      // console.log(response.data);
+      // console.log('this is contact response');
+    });
   },
   methods:{
+    async Refresh(){
+      await axios.get("http://localhost:8085/listCont").then(response => {
+        console.log('start');
+        console.log(this.List);
+        this.List = response.data;
+        console.log('end');
+        console.log(this.List);
+        console.log(response.data);
+        console.log('this is contact response');
+      });
+    },
     newC(){
       this.$emit('new-cont');
       console.log('new contact');
@@ -106,13 +125,29 @@ export default {
       }else if(this.checkList.length > 1){
         alert('only one contact must be selected to edit');
       }else {
-        //send a request to the backend to set which email to be read & edited
-        var x = {
-          'Cname':'user',
-          'address':'user1,user2,user3',
-        }
-        this.$emit('editC',x);
-        console.log('edit event is emitted');
+        axios.get("http://localhost:8085/showCont",{
+          params:{
+            user:this.checkList[0],
+          }
+        }).then(response => {
+          var temp;
+          temp = response.data;
+          console.log(temp);
+          var str = "";
+          for(var y in temp){
+            console.log(temp[y]);
+            str += temp[y] + ","
+          }
+          console.log(str);
+          str = str.substr(0,str.length-1);
+          var x = {
+            'Cname':this.checkList[0],
+            'address':str,
+          }
+          console.log(x);
+          this.$emit('editC',x);
+          console.log('edit event is emitted');
+        });
       }
     },
     view() {
@@ -121,17 +156,51 @@ export default {
       }else if(this.checkList.length > 1){
         alert('only one contact must be selected to view');
       }else {
-        //send a request to the backend to set which email to be read
-        var x = {
-          'Cname':'user',
-          'address':'user1,user2,user3',
-        }
-        this.$emit('viewC',x);
-        console.log('view event is emitted');
+        var temp;
+        axios.get("http://localhost:8085/showCont",{
+          params:{
+            user:this.checkList[0],
+          }
+        }).then(response => {
+          temp = response.data;
+          console.log(temp);
+          var str = "";
+          for(var y in temp){
+            console.log(temp[y]);
+            str += temp[y] + ","
+          }
+          console.log(str);
+          str = str.substr(0,str.length-1);
+          var x = {
+            'Cname':this.checkList[0],
+            'address':str,
+          }
+          this.$emit('viewC',x);
+          console.log('view event is emitted');
+        });
       }
     },
-    delete(){
-
+    Delete(){
+      if(this.checkList.length == 0){
+        alert('select one or more contacts');
+      }else {
+        var x = "";
+        for(var y in this.checkList){
+          console.log(y);
+          x += this.checkList[y] + ",";
+        }
+        console.log(this.checkList);
+        x = x.substr(0,x.length-1);
+        console.log('this is delete method');
+        console.log(x);
+        axios.get("http://localhost:8085/dltCont",{
+          params:{
+            names : x,
+          }
+        }).then(response => {
+          this.List = response.data;
+        });
+      }
     },
     selectAll(){
       this.checkList = this.List;
@@ -141,12 +210,6 @@ export default {
     },
     setPageList(page){
       console.log(page);
-      //send a get request to backend to get a new list of emails
-      /*axios.get("http://localhost:8085/",{
-        params:
-
-      }).then(response => {return response.data;});*/
-      //return false if there is no such page or set list and return true
       return true;
     },
     decreaseP(){
@@ -160,17 +223,18 @@ export default {
       }
     },
     Search(){
-      if(this.s === 'date'){
-        if(!this.searchInput.match("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|(1|2)[0-9]|3[0-1])")){
-          alert('Invalid date format. enter date as yyyy-mm-dd');
+      axios.get("http://localhost:8085/searchCont",{
+        params:{
+          name:this.searchInput,
         }
-      }
+      }).then(response => {
+        this.List = response.data;
+      });
     },
     Sort(){
-
-    },
-    filter(){
-
+      axios.get("http://localhost:8085/sortCont").then(response => {
+        this.List = response.data;
+      });
     },
   }
 }

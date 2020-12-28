@@ -1,5 +1,6 @@
 <template>
   <body>
+  <br><br><br><br>
   <div class="signIn">
     <form>
       <legend class="title">Sign In</legend>
@@ -10,11 +11,12 @@
       <label class="sp">Show password</label>
       <input type="checkbox" @click="showPassword"><br>
     </form>
-    <div class="buttons">
-      <button @click="signIn">Sign in</button>
-      <button @click="goToSignUp" id="signUp">don't have an account yet?</button>
-    </div>
   </div>
+  <div class="buttons">
+    <button @click="signIn">Sign in</button>
+    <button @click="goToSignUp" id="signUp">don't have an account yet?</button>
+  </div>
+  <br><br><br><br><br>
   </body>
 </template>
 
@@ -91,9 +93,8 @@ body {
   background-position: right;
 }
 .signIn{
-  margin: 250px;
-  display: flex;
-  flex-direction: column;
+  margin-left:110px;
+  margin-top:92px;
 }
 .signIn .l,.sp{
   background-color: #DD162D;
@@ -129,8 +130,8 @@ input {
 button{
   width: 90px;
   height: 45px;
-  margin-left: 250px;
-  margin-top: 20px;
+  margin-left: 500px;
+  margin-top: 40px;
   border: solid rgb(223, 18, 18) 2px;
   border-radius: 5px;
   background-color: rgb(223, 18, 18);
@@ -165,7 +166,7 @@ button:hover {
   border: none;
   color: #0e0101;
   width: 300px;
-  margin-left: 150px;
+  margin-left: 400px;
 }
 
 #signUp:hover{

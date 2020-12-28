@@ -1,16 +1,22 @@
 <template>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <body>
+  <div id="fromContainer">
+    <div v-if="mode != 'editable'" class="comp" id="from">
+      <label class="fieldLabel" for="fromInput">from</label>
+      <input type="text" id="fromInput" v-model="From" placeholder="From">
+    </div>
+  </div>
   <div id="toContainer">
     <div class="comp" id="to">
-      <label class="fieldLabel" for="toInput">{{ toFrom }}</label>
-      <input type="text" id="toInput" v-model="to" placeholder="enter one or more recievers separated by a single comma">
+      <label class="fieldLabel" for="toInput">to</label>
+      <input type="text" id="toInput" v-model="to" placeholder="enter one or more receivers separated by a single comma">
     </div>
   </div>
   <div id="subjectContainer">
     <div class="comp" id="subject">
       <label class="fieldLabel" for="subInput">Subject</label>
-      <input type="text" id="subInput" v-model="subject" placeholder="enter subjest">
+      <input type="text" id="subInput" v-model="subject" placeholder="enter subject">
     </div>
   </div>
   <div id="priorityContainer">
@@ -25,7 +31,6 @@
         <label class="radioLabel" for="three">Normal </label>
         <input type="radio" name="priority" id="four" value="4" v-model="picked">
         <label class="radioLabel" for="four">Low </label>
-        <span>{{file}}</span>
       </div>
     </div>
   </div>
@@ -37,8 +42,10 @@
   </div>
   <div id="attachsContainer">
     <div class="comp" id="attachs">
-      <label class="fieldLabel" for="fileInput">Attachments</label>
-      <input @change="uploadFiles" ref="file" type="file" id="fileInput">
+      <form @submit.prevent="send" method = "POST" action enctype = "multipart/form-data">
+        <label class="fieldLabel" for="fileInput">Attachments</label>
+        <input @change="uploadFiles" ref="file" type="file" id="fileInput">
+      </form>
       <div id="files">
       <span v-for="(f,index) in file" :key="index">
         <button @click="removeFile(index)">
@@ -72,66 +79,97 @@ export default {
   },
   data(){
     return({
-      toFrom:'To',
+      //toFrom:'To',
       picked:'1',
+      From:'',
       to:'',
       subject:'',
       mail:'',
       file: [],
+      enableSend: true,
     })
   },
   mounted() {
     if(this.mode === 'readOnly'){
       this.disableInputField();
-      this.toFrom = 'From';
+      //this.toFrom = 'From';
     }else if(this.mode === 'editable'){
       this.enableInputField();
-      this.toFrom = 'To';
+      //this.toFrom = 'To';
       console.log('fields enabled');
     }
+    this.From = this.content.from;
     this.to = this.content.to;
     this.subject = this.content.subject;
     this.mail = this.content.body;
     this.picked = this.content.priority;
-    console.log(this.content.from);
+    //console.log(this.content.from);
   },
   methods:{
+    refreshContent(){
+      if(this.mode === 'readOnly'){
+        this.disableInputField();
+      }else if(this.mode === 'editable'){
+        this.enableInputField();
+        console.log('fields enabled');
+      }
+      this.to = this.content.to;
+      this.subject = this.content.subject;
+      this.mail = this.content.body;
+      this.picked = this.content.priority;
+    },
     async send(){
       if(this.to === ''){
         alert('enter one or more receivers');
         return;
-      }else if(this.mail === ''){
+      }else if(this.mail === '' && this.file.length == 0){
         alert('enter body or attachments');
         return;
       }else {
-        const formData=new FormData();
-        for (let i=0;i<this.file.length;i++) {
-          formData.append('file', this.file[i])
-        }
         var email = new Map();
         email['to'] = this.to;
         email['subject'] = this.subject;
         email['body'] = this.mail;
-        email['key'] = this.picked; //number or string ??
-        //email['attachs'] = this.attachs;
-        console.log(email);
-
-        await axios.post("http://localhost:8085/compose",{
-          info:JSON.stringify(email),
+        email['key'] = this.picked;
+        await axios.get("http://localhost:8085/compose",{
+          params:{
+            info:JSON.stringify(email),
+          }
         }
         ).then(response => {return response.data;});
-
-        await axios.post("http://localhost:8085/file",formData);
+        console.log("attach list")
+        this.sendFile();
         this.$emit('send');
         alert('email sent successfully');
         this.disableInputField();
+        this.enableSend = false;
         console.log("event emitted");
       }
     },
     draft(){
+      var email = new Map();
+      email['to'] = this.to;
+      email['subject'] = this.subject;
+      email['body'] = this.mail;
+      email['key'] = this.picked;
+      console.log('email map' );
+      console.log(email);
+      console.log(JSON.stringify(email));
+      axios.get("http://localhost:8085/sendDraft",{
+            params:{
+              info:JSON.stringify(email),
+            }
+          }
+      ).then(response => {return response.data;});
 
+      console.log("attach list")
+      this.sendFile();
+      alert('email saved to draft successfully');
+      this.disableInputField();
+      this.enableSend = false;
     },
     disableInputField(){
+      console.log('start disable');
       document.getElementById('toInput').disabled = true;
       document.getElementById('subInput').disabled = true;
       document.getElementById('one').disabled = true;
@@ -140,8 +178,13 @@ export default {
       document.getElementById('four').disabled = true;
       document.getElementById('mailInput').disabled = true;
       document.getElementById('fileInput').disabled =true;
+      if(document.getElementById('fromInput') != null){
+        document.getElementById('fromInput').disabled = true;
+      }
+      console.log('end disable');
     },
     enableInputField(){
+      console.log('start enable');
       document.getElementById('toInput').disabled = false;
       document.getElementById('subInput').disabled = false;
       document.getElementById('one').disabled = false;
@@ -150,8 +193,14 @@ export default {
       document.getElementById('four').disabled = false;
       document.getElementById('mailInput').disabled = false;
       document.getElementById('fileInput').disabled =false;
+      if(document.getElementById('fromInput') != null){
+        document.getElementById('fromInput').disabled = false;
+      }
+      console.log('end enable');
     },
     uploadFiles(){
+      console.log("chose file>>")
+      console.log(this.$refs.file.files[0]);
       this.file.push(this.$refs.file.files[0]);
     },
     async sendFile(){
@@ -160,7 +209,9 @@ export default {
         formData.append('file', this.file[i])
       }
       try {
-        await axios.post("http://localhost:8085/", formData)
+        console.log('attachs list : ');
+        console.log(this.file);
+        await axios.post("http://localhost:8085/file", formData)
       }catch (err){
         console.log(err)
       }
@@ -172,7 +223,7 @@ export default {
   },
   computed:{
     canSend(){
-      if(this.mode === 'readOnly'){
+      if(this.mode === 'readOnly' || !this.enableSend){
         return false;
       }
       return true;
@@ -199,31 +250,35 @@ body {
   min-height: 97%;
   margin-top: 5px;
   display: grid;
-  grid-template-rows: 5% 5% 5% 68% 7% 10%;
+  grid-template-rows: 5% 5% 5% 5% 63% 7% 10%;
 }
 
 i{
   background: whitesmoke;
 }
 
-#toContainer {
+#fromContainer{
   grid-row: 1/2;
 }
 
-#subjectContainer {
+#toContainer {
   grid-row: 2/3;
 }
 
-#mailContainer {
-  grid-row: 4/5;
+#subjectContainer {
+  grid-row: 3/4;
 }
 
-#attachsContainer {
+#mailContainer {
   grid-row: 5/6;
 }
 
-#submitContainer {
+#attachsContainer {
   grid-row: 6/7;
+}
+
+#submitContainer {
+  grid-row: 7/8;
 }
 
 label {
@@ -237,6 +292,8 @@ label {
 label[for="toInput"],
 label[for="subInput"],
 label[for="priorityInput"],
+label[for="fromInput"],
+#fromInput,
 #toInput,
 #subInput,
 #priorityInput{
@@ -276,7 +333,7 @@ textarea {
   width: 93%;
   margin: 8px 0px;
   border: none;
-  height: 150%;
+  height: 120%;
 }
 
 #mail {

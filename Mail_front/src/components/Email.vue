@@ -6,26 +6,24 @@
       <li><button @click="Search" class="zr">&#x219d; Search</button>
         <select v-model = "s">
           <option value="0" disabled>By</option>
-          <option value="sender" >Sender</option>
-          <option value="subject">Subject</option>
-          <option value="body" >Body</option>
-          <option value="date">Date</option>
-          <option value="attachment">Attachment</option>
-          <option value="receiver" >Receiver</option>
-          <option value="importance" >Importance</option>
+          <option value="Sender" >Sender</option>
+          <option value="Subject">Subject</option>
+          <option value="Body" >Body</option>
+          <option value="Date">Date</option>
+          <option value="Receiver" >Receiver</option>
+          <option value="Importance" >Importance</option>
         </select>
-        <input v-model="searchInput" name="search" type="text">
+        <input v-model="searchInput" name="search" type="text" placeholder="enter search key">
       </li>
       <li><button @click="Sort" class="zr">&#x219d; Sort</button>
         <select v-model = "sort">
           <option value="0" disabled>By</option>
-          <option value="sender" >Sender</option>
-          <option value="subject">Subject</option>
-          <option value="body" >Body</option>
-          <option value="date">Date</option>
-          <option value="attachment">Attachment</option>
-          <option value="receiver" >Receiver</option>
-          <option value="importance" >Importance</option>
+          <option value="Sender" >Sender</option>
+          <option value="Subject">Subject</option>
+          <option value="Body" >Body</option>
+          <option value="Date">Date</option>
+          <option value="Receiver" >Receiver</option>
+          <option value="Importance" >Importance</option>
         </select>
       </li>
       <li><button @click="filter" class="zr">&#x219d; Filter</button>
@@ -34,47 +32,35 @@
           <option value="sender" >Sender</option>
           <option value="subject">Subject</option>
         </select>
+        <input v-model="filterInput" name="search" type="text" placeholder="enter name of destination folder">
       </li>
     </ul></div>
   <div id="list">
     <ul>
-      <li v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="index" v-model="checkList">{{index+1}} {{ mail }}</label></li>
-      <!--<li><span><input id="one" value="one" type="checkbox" v-model="checkList" ></span> <label for="one">1 list element</label></li>
-      <li><span><input id="two" value="two" type="checkbox" v-model="checkList" ></span> <label for="two">2 list element</label></li>
-      <li><span><input id="three" value="three" type="checkbox" v-model="checkList" ></span> <label for="three">3 list element</label></li>
-      <li><span><input id="four" value="four" type="checkbox" v-model="checkList" ></span> <label for="four">4 list element</label></li>
-      <li><span><input id="five" value="five" type="checkbox" v-model="checkList" ></span> <label for="five">5 list element</label></li>
-      <li><span><input id="six" value="six" type="checkbox" v-model="checkList" ></span> <label for="six">6 list element</label></li>
-      <li><span><input id="seven" value="seven" type="checkbox" v-model="checkList" ></span> <label for="seven">7 list element</label></li>
-      <li><span><input id="eight" value="eight" type="checkbox" v-model="checkList" ></span> <label for="eight">8 list element</label></li>
-      <li><span><input id="nine" value="nine" type="checkbox" v-model="checkList" ></span> <label for="nine">9 list element</label></li>
-      <li><span><input id="ten" value="ten" type="checkbox" v-model="checkList" ></span><label for="ten">10 list element</label></li>-->
+      <li class="elist" v-for="(mail, index) in List" :key="index"><label><input type="checkbox" :id="mail" :value="index" v-model="checkList">{{index+1}} {{ mail }}</label></li>
     </ul>
     <span><button class="check" @click="selectAll">Select All</button></span>
     <span><button class="check" @click="deselectAll">Deselect All</button></span>
-    <span>{{checkList}}</span>
+    <span><button class="check" @click="refreshList">refresh</button></span>
   </div>
   <div id="editButtons">
     <button @click="edit" v-if="showEdit" id="e" class="op"><i class="material-icons" >&#xe3c9;</i> <span>edit</span></button>
     <button @click="dlt"  v-if="showDlt" id="d" class="op"><i class="material-icons">&#xe872;</i> <span>delete</span></button>
     <button @click="view" v-if="showView" id="v" class="op"><i class="material-icons">&#xe417;</i> <span>view</span></button>
     <button @click="copy" v-if="showCM" id="c" class="op"><i class="material-icons">&#xe151;</i> <span>copy</span></button>
-    <button @click="move" v-if="showCM" id="m" class="op"><i class="material-icons">&#xe163;</i> <span>move</span></button>
   </div>
   <div id="container">
     <div id="pages">
-      <!--<button @click="getFirstP" class="browse" id="firstP"><i class="material-icons">&#xe045;</i></button>-->
       <button @click="decreaseP" class="browse" id="leftB"><i class="material-icons">&#xe5cb;</i></button>
       <p id="num">{{ pageNum }}</p>
       <button @click="increaseP" class="browse" id="rightB"><i class="material-icons">&#xe5cc;</i></button>
-      <!--<button @click="getLastP" class="browse" id="lastP"><i class="material-icons">&#xe044;</i></button>-->
     </div>
   </div>
   </body>
 </template>
 
 <script>
-//import axios from 'axios';
+import axios from 'axios';
 export default {
   name: "Email",
   props:{
@@ -86,9 +72,10 @@ export default {
   data(){
     return({
       s : '0',
-      searchInput : ' ',
+      searchInput : '',
       sort : '0',
       f : '0',
+      filterInput:'',
       List:['one','two','three','four','five','six','seven','eight','nine','ten'],
       /*list:[],*/
       pageNum:1,
@@ -96,33 +83,69 @@ export default {
     })
   },
   created(){
-    //send request to backend depending on folder type
-    //response should be a list
     console.log(this.folder);
-    /*axios.get("http://localhost:8085/",{
-      params:
-      this.folder,
-    }).then(response => {return response.data;});*/
   },
-  mounted(){
-    /*axios.get("http://localhost:8085/",{
-      params:
-      this.folder,
-    }).then(response => {this.list = response.data});*/
+  async mounted(foldername){
+    var f;
+    if(this.folder === undefined){
+      f = foldername;
+      this.pageNum = 1;
+    }else {
+      f = this.folder;
+    }
+    console.log("mounted " + this.folder);
+    console.log("f" + f);
+    await axios.get("http://localhost:8085/listMails",{
+      params:{
+        foldername:f,
+        page:this.pageNum,
+      }
+    }).then(response => {
+      this.List = response.data;
+      console.log(this.List);
+    });
+    console.log('after request');
+    console.log(this.List);
   },
-  beforeUpdate() {
-    /*if(this.folder == 3){ //draft
-      //document.getElementById("e").style.visibility = "hidden";
-      //document.getElementById("s").style.visibility = "hidden";
-      console.log('updated method is called');
-    }*/
+  async watch(){
+      console.log("update " + this.folder);
+      await axios.get("http://localhost:8085/listMails", {
+        params: {
+          foldername: this.folder,
+          page: this.pageNum,
+        }
+      }).then(response => {
+        this.List = response.data;
+        console.log(this.List);
+      });
+
   },
   methods:{
     selectAll(){
-      this.checkList = [0,1,2,3,4,5,6,7,8,9];
+      this.checkList = [];
+      for(var i = 0; i < this.List.length; i++){
+        this.checkList.push(i);
+      }
     },
     deselectAll(){
       this.checkList = [];
+    },
+    async refreshList(){
+      this.s = '0';
+      this.sort = '0';
+      this.f = '0';
+      this.searchInput = '';
+      this.filterInput = '';
+      await axios.get("http://localhost:8085/listMails",{
+        params:{
+          foldername:this.folder,
+          page:this.pageNum,
+        }
+      }).then(response => {
+        this.List = response.data;
+        console.log('on refresh');
+        console.log(this.List);
+      });
     },
     edit(){//view an email in editable mode, only one email should be selected
       if(this.checkList.length == 0){
@@ -130,19 +153,44 @@ export default {
       }else if(this.checkList.length > 1){
         alert('only one email must be selected to edit');
       }else {
-        //send a request to the backend to set which email to be read & edited
-        var x = {
-          'from':'manar',
-          'to':'nour',
-          'subject':'eee',
-          'body':'this is a message',
-          'priority':'one'
-        }
+        axios.get("http://localhost:8085/openMail",{
+          params:{
+            index:this.checkList[0],
+          }
+        }).then(response => {
+          console.log(response.data);
+          var x = {
+            'to':response.data['to'],
+            'from':response.data['from'],
+            'subject':response.data['subject'],
+            'body':response.data['body'],
+            'priority':response.data['key'],
+          }
         this.$emit('edit',x);
         console.log('edit event is emitted');
+        });
       }
     },
     dlt(){
+      if(this.checkList.length == 0){
+        alert('select one or more emails');
+      }else {
+        var str = "";
+        for (var y in this.checkList){
+          str += y + ",";
+        }
+        str = str.substr(0,str.length-1);
+        axios.get("http://localhost:8085/dltMails",{
+          params:{
+            index:str,
+          }
+        }).then(response => {
+          console.log(response.data);
+          this.List = response.data;
+          this.pageNum = 1;
+          this.checkList = [];
+        });
+      }
     },
     view(){ //view an email in read only mode, only one email should be selected
       if(this.checkList.length == 0){
@@ -151,54 +199,170 @@ export default {
         alert('only one email must be selected to view');
       }else {
         //send a request to the backend to set which email to be read
-        var x = {
-          'from':'aaaa',
-          'to':'ssss',
-          'subject':'eee',
-          'body':'this is a message',
-          'priority':'one'
-        }
-        this.$emit('view',x);
-        console.log('view event is emitted');
+        axios.get("http://localhost:8085/openMail",{
+          params:{
+            index:this.checkList[0],
+          }
+        }).then(response => {
+          console.log(response.data);
+          var x = {
+            'to':response.data['to'],
+            'from':response.data['from'],
+            'subject':response.data['subject'],
+            'body':response.data['body'],
+            'priority':response.data['key'],
+          }
+          this.$emit('view',x);
+          console.log('view event is emitted');
+        })
+
       }
     },
     copy(){
-
+      var dest = prompt("enter destination folder");
+      if(dest != null){
+        var str = "";
+        for (var y in this.checkList){
+          str += y + ",";
+        }
+        str = str.substr(0,str.length-1);
+        axios.get("http://localhost:8085/copyMails",{
+          params:{
+            index:str,
+            des:dest,
+          }
+        }).then(response => {
+          console.log('copy response');
+          console.log(response.data);
+          if(response.data != ''){
+            var x = {
+              namef:response.data,
+            }
+            this.$emit('crt-folder',x);
+          }
+          this.checkList = [];
+        });
+      }
     },
     move(){
 
     },
-    setPageList(page){
+    async setPageList(page){
       console.log(page);
       //send a get request to backend to get a new list of emails
-      /*axios.get("http://localhost:8085/",{
-        params:
-      }).then(response => {return response.data;});*/
+      await axios.get("http://localhost:8085/listMails",{
+        params:{
+          foldername:this.folder,
+          page:this.pageNum+1,
+        }
+      }).then(response => {
+        if(response.data.length != 0){
+          this.List = response.data;
+          console.log(this.List);
+        }
+
+      });
       //return false if there is no such page or set list and return true
       return true;
     },
-    decreaseP(){
-      if(this.setPageList()) {
-        this.pageNum--;
+    async decreaseP(){
+      if(this.pageNum == 1){
+        return;
       }
+      await axios.get("http://localhost:8085/listMails",{
+        params:{
+          foldername:this.folder,
+          page:this.pageNum-1,
+        }
+      }).then(response => {
+        if(response.data.length != 0){
+          this.List = response.data;
+          console.log(this.List);
+          this.pageNum--;
+        }
+      });
     },
-    increaseP(){
-      if(this.setPageList()) {
-        this.pageNum++;
-      }
+    async increaseP(){
+      //send a get request to backend to get a new list of emails
+      await axios.get("http://localhost:8085/listMails",{
+        params:{
+          foldername:this.folder,
+          page:this.pageNum+1,
+        }
+      }).then(response => {
+        if(response.data.length != 0){
+          this.List = response.data;
+          console.log(this.List);
+          this.pageNum++;
+        }
+      });
     },
     Search(){
-      if(this.s === 'date'){
-        if(!this.searchInput.match("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|(1|2)[0-9]|3[0-1])")){
-          alert('Invalid date format. enter date as yyyy-mm-dd');
+      if (this.s == 0){
+          alert('select search category');
+      }else {
+        if(this.s === 'Date'){
+          if(!this.searchInput.match("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|(1|2)[0-9]|3[0-1])")){
+            alert('Invalid date format. enter date as yyyy-mm-dd');
+            return ;
+          }
         }
+        axios.get("http://localhost:8085/searchMails",{
+          params:{
+            type:this.s,
+            key:this.searchInput,
+          }
+        }).then(response => {
+          console.log("search response");
+          console.log(response.data);
+          this.List = response.data;
+          this.pageNum = 1;
+        })
       }
     },
     Sort(){
-
+      if (this.sort == 0){
+        alert('select sort category');
+      }else {
+        axios.get("http://localhost:8085/sortMails",{
+          params:{
+            type:this.sort,
+          }
+        }).then(response => {
+          console.log("sort response");
+          console.log(response.data);
+          this.List = response.data;
+          this.pageNum = 1;
+        })
+      }
     },
     filter(){
-
+      if(this.f == 0){
+        alert('enter filter category');
+      }else if(this.filterInput == ''){
+        alert('enter destination folder');
+      }else if(this.checkList.length == 0){
+        alert('select an email to filter');
+      }else if(this.checkList.length > 1){
+        alert('only one email must be selected to filter');
+      }else{
+        axios.get("http://localhost:8085/filterMails",{
+          params:{
+            index:this.checkList[0],
+            mode:this.f,
+            dest:this.filterInput,
+          }
+        }).then(response => {
+          console.log('response');
+          console.log(response.data);
+          if(response.data != ''){
+            var x = {
+              namef:response.data,
+            }
+            this.$emit('crt-folder',x);
+          }
+        })
+      }
     },
   },
   computed:{
@@ -209,9 +373,9 @@ export default {
       return false;
     },
     showDlt(){
-      if(this.folder == 'trash'){
-        return false;
-      }
+      // if(this.folder == 'trash'){
+      //   return false;
+      // }
       return true;
     },
     showView(){
@@ -272,6 +436,20 @@ input[type="checkbox"] {
   /* margin-top: 10px; */
   justify-content: center;
 }
+
+#pages button:active{
+  color: red;
+  transition-duration: 0s;
+}
+
+#pages button i{
+  font-size: 30px;
+}
+
+#pages p{
+  font-size: large;
+}
+
 #num {
   margin: 0 8px;
 }
@@ -443,4 +621,9 @@ input[type=text]:focus{
   position:relative;
   top:1px;
 }
+
+.elist{
+  overflow-x: auto;
+}
+
 </style>

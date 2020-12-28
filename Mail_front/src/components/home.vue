@@ -12,39 +12,39 @@
         <li><button @click="setComponent(2)">&#x2712; Inbox</button></li>
         <li><button @click="setComponent(3)">&#x2712; Drafts</button></li>
         <li><button @click="setComponent(4)">&#x2712; Trash</button></li>
-        <li><button @click="setViewMode('editable');setComponent(5);clearEcontent();">&#x2712; Compose</button></li>
+        <li><button @click="compose">&#x2712; Compose</button></li>
         <li><button @click="setComponent(6)">&#x2712; Contact</button></li>
         <li><button @click="setComponent(7)">&#x2712; Your Folders</button></li>
-        <li v-for="(f,index) in folders" :key="index"><button @click="openF(f);setComponent(8)" >&#x2712; {{ f }}</button></li>
+        <li v-for="(f,index) in folders" :key="index"><button @click="openF(f)" >&#x2712; {{ f }}</button></li>
         <button @click="logOut" class="logout">&#x276E;&#x276E; Log Out</button>
       </ul>
     </div>
-    <div class="c" id="contacts" v-if="show6"  >
-      <contact @new-cont="openNewCont(1);clearCcontent();" @editC="editNew" @viewC="viewNew"></contact>
+    <div class="c" id="contacts" v-if="show6">
+      <contact @new-cont="createNewCont" @editC="editNew" @viewC="viewNew"></contact>
     </div>
     <div class="c" id="compose" v-if="show5">
       <compose :mode="getViewMode" :content="email"></compose>
     </div>
     <div class="c" id="email1" v-if="show1"> <!--sent : view-->
-      <Email @view="view" :folder = "getFolder" ></Email>
+      <Email @view="view" :folder = "getFolder" @crt-folder="addFolder"></Email>
     </div>
     <div class="c" id="email2" v-if="show2"> <!--inbox : view, delete-->
-      <Email @view="view" :folder = "getFolder" ></Email>
+      <Email @view="view" :folder = "getFolder" @crt-folder="addFolder"></Email>
     </div>
     <div class="c" id="email3" v-if="show3"> <!--draft : edit, delete-->
-      <Email @edit="edit" :folder = "getFolder" ></Email>
+      <Email @edit="edit" :folder = "getFolder" @crt-folder="addFolder"></Email>
     </div>
     <div class="c" id="email4" v-if="show4"> <!--trash : view, restore-->
-      <Email @view="view" :folder = "getFolder" ></Email>
+      <Email @view="view" :folder = "getFolder" @crt-folder="addFolder"></Email>
     </div>     
-      <div class="c" id="email8" v-if="show8"> <!--trash : view, restore-->
-        <Email @view="view" :folder = "getFolder" ></Email>
-      </div>
+    <div class="c" id="email8" v-if="show8"> <!--custom folder-->
+      <Email @view="view" :folder = "getFolder" @crt-folder="addFolder"></Email>
+    </div>
     <div class="c" id="userF" v-if="show7">
       <UserFolder @addF="addFolder" @renameF="renameFolder" @deleteF="deleteFolder"></UserFolder>
     </div>
     <div class="c" id="new_cont" v-if="newCont">
-      <new :content="contact" :mode="getViewMode2" @close-window="newCont = false;" ></new>
+      <new :content="contact" :mode="getViewMode2" :isNew="isNew" @close-window="close" ></new>
     </div>
   </div>
   </body>
@@ -56,6 +56,7 @@ import Email from "@/components/Email";
 import contact from "@/components/contact";
 import New from "@/components/new";
 import UserFolder from "@/components/UserFolder";
+import axios from 'axios';
 
 export default {
   name: "home",
@@ -91,16 +92,21 @@ export default {
         'Cname':'',
         'address':'',
       },
-      folders:['nour'],
+      folders:[],
+      isNewCont:true,
     })
   },
   mounted() {
-    console.log(this.userName);
+    document.getElementById("home").style.backgroundImage=null;
+    //console.log(this.userName);
     this.Uname = this.userName;
-    console.log("current = " + this.Uname);
+    axios.get("http://localhost:8085/listFolders").then(response => {
+      this.folders = response.data;
+    })
+    //console.log("current = " + this.Uname);
   },
   methods:{
-    setComponent(num, mode=''){
+    setComponent(num, mode='',x=''){
       if(num === 1){
         this.folder = 'sent';
         this.newCont = false;
@@ -114,11 +120,13 @@ export default {
         this.folder = 'trash';
         this.newCont = false;
       }else if(num === 5){
-        this.newCont = false;
         if(mode !== ''){
           this.setViewMode(mode);
         }
+      }else if(num === 8){
+        this.folder = x;
       }
+      this.newCont = false;
       this.shown = num;
       console.log(this.shown);
     },
@@ -137,10 +145,17 @@ export default {
         this.setViewMode2('editable');
       }
       this.newCont = true;
+      this.shown = 0;
     },
     logOut(){
       this.$emit('log-out');
       console.log('logOut');
+    },
+    compose(){
+      this.setViewMode('editable');
+      this.setComponent(5);
+      this.clearEcontent();
+      //compose.methods.refreshContent();
     },
     view(x){
       this.setViewMode('readOnly');
@@ -153,11 +168,18 @@ export default {
       this.Econtent = x;
       console.log(x);
     },
+    createNewCont(){
+      this.openNewCont(1);
+      this.clearCcontent();
+      this.isNewCont = true;
+      console.log('this is new contact');
+    },
     viewNew(x){
       this.openNewCont(2);
       this.Ccontent = x;
     },
     editNew(x){
+      this.isNewCont = false;
       this.openNewCont(1);
       this.Ccontent = x;
     },
@@ -206,8 +228,16 @@ export default {
     openF(x){
       this.newCont = false;
       this.folder = x;
-      console.log('openF -> '+this.folder);
+      console.log(x);
+      console.log('openF -> '+x);
+      this.setComponent(8,'',x);
+      Email.mounted(this.folder);
     },
+    close(){
+      this.newCont = false;
+      this.shown = 6;
+      //contact.methods.Refresh();
+    }
   },
   computed:{
     show1(){
@@ -286,6 +316,9 @@ export default {
         'address':'user1,user2,user3',
       }*/
       return this.Ccontent;
+    },
+    isNew(){
+      return this.isNewCont;
     }
   }
 }
