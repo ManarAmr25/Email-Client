@@ -1,5 +1,5 @@
 <template>
-  <body>
+  <body id="home">
   <sign_in v-if="show2" @submit="submit" @sign-in="signIn" @sign-up="signUp()"></sign_in>
   <sign_up v-if="show3" @submit="submit" @sign-in="signIn" @sign="setCompenent(2)"></sign_up>
   <home :userName="getUname" v-if="show4" @log-out="logOut"></home>
@@ -88,7 +88,7 @@ export default {
   margin: 0;
   padding: 0;
 }
-body {
+#home {
   background-image: url("./assets/logo-icon.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
